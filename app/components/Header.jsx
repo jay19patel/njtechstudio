@@ -11,7 +11,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-black text-white sticky top-4 z-50 my-4 max-w-6xl mx-auto rounded-lg" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
+    <nav className="bg-black text-white sticky top-4 z-50 my-4 max-w-6xl mx-auto rounded-lg">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-12">
           {/* Logo - Left Side */}

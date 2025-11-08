@@ -144,7 +144,7 @@ export default function SkillsSection() {
 
           {/* Feature Pills */}
           <TabsContent value={activeTab} className="mt-0">
-            <div className="flex flex-wrap justify-center gap-3 pt-4" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
+            <div className="flex flex-wrap justify-center gap-3 pt-4">
               {getCurrentData().map((item, index) => (
                 <span 
                   key={index}

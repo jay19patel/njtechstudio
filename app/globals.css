@@ -114,11 +114,15 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    font-family: var(--font-ibm-plex-sans-condensed), sans-serif;
+  }
   body {
     @apply bg-background text-foreground;
-    font-family: var(--font-fraunces), serif;
+    font-family: var(--font-ibm-plex-sans-condensed), sans-serif;
   }
-  html {
+  /* Headings use Fraunces font */
+  h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-fraunces), serif;
   }
 }

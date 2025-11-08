@@ -140,11 +140,11 @@ export default function HeroSection() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">
           <div className="grid grid-cols-1 gap-14 items-center lg:grid-cols-12 lg:gap-32 overflow-visible">
             <div className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0 overflow-visible">
-              <div className="flex items-center text-sm font-medium text-gray-500 justify-center lg:justify-start" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
-                <span className="bg-indigo-600 py-1 px-3 rounded-2xl text-xs font-medium text-white mr-3">
-                  #1
-                </span>
-                IT & Web Development Agency
+              <div className="inline-flex items-center space-x-2.5 border border-gray-500/30 rounded-full bg-gray-500/10 p-1 text-sm text-gray-800">
+                <div className="bg-white border border-gray-500/30 rounded-2xl px-3 py-1">
+                  <p className="text-xs font-medium">#1</p>
+                </div>
+                <p className="pr-3 text-xs">IT & Web Development Agency</p>
               </div>
 
               <h1 className="py-8 text-center text-gray-900 font-extrabold text-4xl lg:text-5xl lg:text-left leading-tight" >
@@ -153,13 +153,13 @@ export default function HeroSection() {
                 <span className="text-indigo-600">powerful web solutions</span>
               </h1>
 
-              <p className="text-gray-500 text-lg text-center lg:text-left" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
+              <p className="text-gray-500 text-lg text-center lg:text-left">
                 We create modern, scalable websites and web applications tailored to your business needs. From design to deployment, we deliver excellence with smooth communication and fast delivery.
               </p>
 
               <div className="relative my-10">
                 <form onSubmit={handleEmailSubmit}>
-                  <div className="relative p-1.5 flex items-center gap-y-4 h-auto md:h-16 flex-col md:flex-row justify-between rounded-full md:shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] border border-transparent md:bg-white transition-all duration-500 hover:border-indigo-600 focus-within:border-indigo-600">
+                  <div className="relative p-1.5 flex items-center gap-y-4 h-auto md:h-16 flex-col md:flex-row justify-between rounded-full md:shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] border md:bg-white transition-all duration-500 border-indigo-600 hover:border-indigo-200 focus-within:border-indigo-600">
                     <input
                       type="email"
                       name="email"
@@ -167,13 +167,11 @@ export default function HeroSection() {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Just send me your email, I'll create content and send you a summary"
                       className="text-base rounded-full text-gray-900 flex-1 py-4 px-6 shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] md:shadow-none bg-white md:bg-transparent placeholder:text-gray-400 focus:outline-none md:w-fit w-full"
-                      style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
                     />
                     <button
                       type="submit"
                       disabled={isSubmitting}
                       className="bg-indigo-600 rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-indigo-700 cursor-pointer transition-all duration-500 md:w-fit w-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                      style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
                     >
                       {isSubmitting ? "Sending..." : "Send Summary"}
                     </button>
@@ -197,7 +195,7 @@ export default function HeroSection() {
                       <div className="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-sm"></div>
                       <div className="w-3.5 h-3.5 rounded-full bg-green-500 shadow-sm"></div>
                       <div className="flex-1 ml-4 bg-gray-100 rounded-lg px-4 py-1.5">
-                        <p className="text-xs text-gray-400" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>njtechstudio.com/contact</p>
+                        <p className="text-xs text-gray-400">njtechstudio.com/contact</p>
                       </div>
                     </div>
                     
@@ -219,7 +217,7 @@ export default function HeroSection() {
                                 m.align === "right"
                                   ? "max-w-[85%] bg-indigo-600 text-white rounded-2xl rounded-br-sm px-3 py-2 text-sm"
                                   : "max-w-[85%] bg-white text-gray-800 border border-gray-200 rounded-2xl rounded-bl-sm px-3 py-2 text-sm"
-                              } style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
+                              }>
                                 {m.pending ? (
                                   <span className="inline-flex items-center gap-1">
                                     Designing

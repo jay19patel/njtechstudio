@@ -26,7 +26,6 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={`${fraunces.variable} ${ibmPlexSansCondensed.variable} antialiased`}
-        style={{ fontFamily: 'var(--font-fraunces), serif' }}
       >
         <div 
           className="min-h-screen w-full relative flex flex-col"
