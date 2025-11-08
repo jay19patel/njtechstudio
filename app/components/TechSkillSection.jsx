@@ -99,33 +99,37 @@ export default function TechSkillSection() {
   };
 
   return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
       <div className="text-center">
         {/* Tabs */}
         <Tabs defaultValue="backend" className="w-full" onValueChange={setActiveTab}>
-          <div className="flex justify-center mb-4">
-            <TabsList className="inline-flex items-center gap-0 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-gray-200 p-1">
+          <div className="flex justify-center mb-6">
+            <TabsList className="inline-flex items-center gap-0 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-gray-200 p-1" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
             <TabsTrigger 
               value="backend"
-              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 data-[state=active]:border data-[state=active]:border-purple-300"
+              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300"
+              style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
             >
               Backend
             </TabsTrigger>
             <TabsTrigger 
               value="frontend"
-              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 data-[state=active]:border data-[state=active]:border-purple-300"
+              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300"
+              style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
             >
               Frontend
             </TabsTrigger>
             <TabsTrigger 
               value="database"
-              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 data-[state=active]:border data-[state=active]:border-purple-300"
+              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300"
+              style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
             >
               Database
             </TabsTrigger>
             <TabsTrigger 
               value="other-tools"
-              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-purple-100 data-[state=active]:text-purple-700 data-[state=active]:border data-[state=active]:border-purple-300"
+              className="px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300"
+              style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
             >
               Other Tools
             </TabsTrigger>
@@ -134,21 +138,21 @@ export default function TechSkillSection() {
 
           {/* Heading */}
           <div className="space-y-2 pt-4">
-            <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold">
-              Our Skills & Expertise
+            <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900" >
+              Our Skills & <span className="text-indigo-600">Expertise</span>
             </h2>
-            <p className="text-xl lg:text-2xl text-gray-600">
+            <p className="text-lg lg:text-xl text-gray-500 pt-2" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
               {getSubtitle()}
             </p>
           </div>
 
           {/* Feature Pills */}
-          <TabsContent value={activeTab} className="mt-0">
+          <TabsContent value={activeTab} className="mt-6">
             <div className="flex flex-wrap justify-center gap-3 pt-4" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
               {getCurrentData().map((item, index) => (
                 <span 
                   key={index}
-                  className="px-5 py-1.5 bg-purple-50 border border-purple-300 rounded-md text-base font-medium text-gray-700"
+                  className="px-5 py-2 bg-indigo-50 border border-indigo-200 rounded-md text-base font-semibold text-indigo-700 hover:bg-indigo-100 hover:border-indigo-300 transition-colors"
                 >
                   {item}
                 </span>

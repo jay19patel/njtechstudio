@@ -1,25 +1,15 @@
-import Link from "next/link";
-import Image from "next/image";
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-auto" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          {/* Brand and Description */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          {/* Copyright */}
           <div className="text-center md:text-left">
-            <Link href="/" className="inline-block mb-2">
-              <Image
-                src="/Logo.png"
-                alt="NJ Tech Studio Logo"
-                width={220}
-                height={60}
-                className="h-14 w-auto object-contain"
-              />
-            </Link>
-            <p className="text-sm text-gray-600 max-w-md">
-              Create, share, and explore amazing blogs. Join our community of writers and readers today.
+            <p className="text-gray-600 text-xs">
+              © {new Date().getFullYear()} <span className="font-bold ml-2"><a href="#" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">NJTechStudio</a></span>. All rights reserved. | 
+              <span className="font-bold ml-2">Developed by <a href="#" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">Jay Patel</a></span>
             </p>
           </div>
 
@@ -54,14 +44,6 @@ export default function Footer() {
               <Linkedin size={20} />
             </a>
           </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="mt-6 pt-6 border-t border-gray-200">
-          <p className="text-center text-gray-600 text-xs">
-            © {new Date().getFullYear()} <span className="font-bold"><span className="text-purple-600">N</span>J <span className="text-purple-600">T</span>ech <span className="text-purple-600">S</span>tudio</span>. All rights reserved. | 
-            <span className="font-bold ml-2">Developed by <a href="https://njstudio.com" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">NJTechStudio</a></span>
-          </p>
         </div>
       </div>
     </footer>

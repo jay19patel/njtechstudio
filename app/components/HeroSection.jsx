@@ -1,53 +1,249 @@
-import Link from "next/link";
+"use client";
+
+import { useState, useEffect, useRef, useMemo } from "react";
+
+// Mock API - Replace with your actual API
+const api = {
+  getProjects: async (query = null, offset = 0, limit = 10, filter = null) => {
+    // Mock implementation - replace with actual API call
+    return { projects: [] };
+  },
+  getStats: async () => {
+    // Mock implementation - replace with actual API call
+    return {
+      total_clients: 0,
+      total_projects: 0,
+      satisfaction_rate: 0
+    };
+  }
+};
 
 export default function HeroSection() {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [displayedMessages, setDisplayedMessages] = useState([]);
+  const [currentTypingIndex, setCurrentTypingIndex] = useState(-1);
+  const [typingProgress, setTypingProgress] = useState("");
+  const messagesRef = useRef(null);
+
+  // Website development conversation flow
+  const scriptedConversation = useMemo(() => ([
+    { role: "user", content: "Hey Jay, can you help me to create website?" },
+    { role: "assistant", content: "Sure! I'd be happy to help you create a website. What kind of design do you need? And what functionality are you looking for?" },
+    { role: "user", content: "I need a modern e-commerce website with payment integration." },
+    { role: "assistant", content: "Perfect! I'll create a modern, responsive e-commerce site with secure payment gateway, product catalog, and admin dashboard." },
+    { role: "assistant", content: "Designing your website...", pending: true },
+    { role: "assistant", content: "Great! Your website is ready. Modern design with mobile responsiveness, secure checkout, and full admin panel. Project delivered!" },
+    { role: "user", content: "Thank you! Your services are quite good. The communication was smooth and the project was delivered quickly." },
+  ]), []);
+
+  // Auto-scroll to latest message
+  useEffect(() => {
+    const el = messagesRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [displayedMessages, currentTypingIndex, typingProgress]);
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    if (!email.trim()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    try {
+      // Handle email submission here
+      console.log("Email submitted:", email);
+      // You can add your API call here
+      setEmail("");
+    } catch (error) {
+      console.error("Error submitting email:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Auto-play the scripted conversation one-by-one (deterministic, no polling)
+  useEffect(() => {
+    let isCancelled = false;
+
+    const typeMessage = (fullText, role, pending = false) => new Promise((resolve) => {
+      const align = role === "user" ? "right" : "left";
+      
+      // Add message in typing state at the end
+      setDisplayedMessages(prev => {
+        const next = [...prev, { role, align, content: fullText, displayedContent: "", isTyping: true, pending }];
+        setCurrentTypingIndex(next.length - 1);
+        setTypingProgress("");
+        return next;
+      });
+      
+      // If pending, show loading animation for 2 seconds
+      if (pending) {
+        setTimeout(() => {
+          setDisplayedMessages(prev => {
+            const lastIndex = prev.length - 1;
+            return prev.map((m, idx) => idx === lastIndex ? { ...m, isTyping: false, displayedContent: fullText, pending: false } : m)
+          });
+          setCurrentTypingIndex(-1);
+          setTypingProgress("");
+          resolve();
+        }, 2000);
+        return;
+      }
+      
+      // Drive typing with a local interval independent of render cycles
+      let i = 0;
+      const speed = 20; // ms per char
+      const tick = () => {
+        if (isCancelled) return resolve();
+        i += 1;
+        const slice = fullText.slice(0, i);
+        setTypingProgress(slice);
+        if (i >= fullText.length) {
+          // Commit final state
+          setDisplayedMessages(prev => {
+            const lastIndex = prev.length - 1;
+            return prev.map((m, idx) => idx === lastIndex ? { ...m, isTyping: false, displayedContent: fullText, pending: false } : m)
+          });
+          setCurrentTypingIndex(-1);
+          setTypingProgress("");
+          return resolve();
+        }
+        setTimeout(tick, speed);
+      };
+      setTimeout(tick, speed);
+    });
+
+    const play = async () => {
+      // Reset
+      setDisplayedMessages([]);
+      setCurrentTypingIndex(-1);
+      setTypingProgress("");
+
+      for (let i = 0; i < scriptedConversation.length; i++) {
+        if (isCancelled) break;
+        const msg = scriptedConversation[i];
+        await typeMessage(msg.content, msg.role, msg.pending);
+        await new Promise(r => setTimeout(r, 350));
+      }
+    };
+
+    const start = setTimeout(() => play(), 350);
+    return () => { isCancelled = true; clearTimeout(start); };
+  }, [scriptedConversation]);
+
   return (
-    <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-20 lg:pt-12 lg:pb-32">
-      <div className="grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
-        <div className="space-y-8">
-          <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold leading-tight">
-            Simple and Better
-            <br />
-            <span className="block mt-2">Move to Digitalization</span>
-          </h1>
-          
-          <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed max-w-2xl" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
-            We provide comprehensive digital solutions to transform
-            your business with cutting-edge technology and innovation.
-          </p>
-
-        </div>
-
-        {/* Right Content - Placeholder for Image/Video */}
-        <div className="relative">
-          <div className="aspect-square bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center">
-            <div className="text-center space-y-4 p-8">
-              <div className="w-32 h-32 mx-auto bg-white rounded-full flex items-center justify-center shadow-lg">
-                <svg className="w-16 h-16 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
-                </svg>
+    <section className="pt-0 lg:pt-8 lg:px-8 h-full overflow-visible">
+      <div className="rounded-2xl py-10 overflow-visible m-5 lg:m-0 2xl:py-16 xl:py-8 lg:rounded-tl-2xl lg:rounded-bl-2xl relative">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">
+          <div className="grid grid-cols-1 gap-14 items-center lg:grid-cols-12 lg:gap-32 overflow-visible">
+            <div className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0 overflow-visible">
+              <div className="flex items-center text-sm font-medium text-gray-500 justify-center lg:justify-start" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
+                <span className="bg-indigo-600 py-1 px-3 rounded-2xl text-xs font-medium text-white mr-3">
+                  #1
+                </span>
+                IT & Web Development Agency
               </div>
-              <div className="bg-white rounded-lg shadow-lg p-6 inline-block">
-                <div className="text-sm font-semibold text-gray-600 mb-3">
-                  NJ Tech Studio Updates status
-                </div>
-                <div className="grid grid-cols-4 gap-4 text-center">
-                  <div>
-                    <div className="text-3xl font-bold">12</div>
-                    <div className="text-xs text-gray-500">Successful</div>
+
+              <h1 className="py-8 text-center text-gray-900 font-extrabold text-4xl lg:text-5xl lg:text-left leading-tight" >
+                Transform your business with{" "}
+                <br className="hidden lg:block" />
+                <span className="text-indigo-600">powerful web solutions</span>
+              </h1>
+
+              <p className="text-gray-500 text-lg text-center lg:text-left" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
+                We create modern, scalable websites and web applications tailored to your business needs. From design to deployment, we deliver excellence with smooth communication and fast delivery.
+              </p>
+
+              <div className="relative my-10">
+                <form onSubmit={handleEmailSubmit}>
+                  <div className="relative p-1.5 flex items-center gap-y-4 h-auto md:h-16 flex-col md:flex-row justify-between rounded-full md:shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] border border-transparent md:bg-white transition-all duration-500 hover:border-indigo-600 focus-within:border-indigo-600">
+                    <input
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Just send me your email, I'll create content and send you a summary"
+                      className="text-base rounded-full text-gray-900 flex-1 py-4 px-6 shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] md:shadow-none bg-white md:bg-transparent placeholder:text-gray-400 focus:outline-none md:w-fit w-full"
+                      style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="bg-indigo-600 rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-indigo-700 cursor-pointer transition-all duration-500 md:w-fit w-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
+                      style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}
+                    >
+                      {isSubmitting ? "Sending..." : "Send Summary"}
+                    </button>
                   </div>
-                  <div>
-                    <div className="text-3xl font-bold">0</div>
-                    <div className="text-xs text-gray-500">Failed</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold">32</div>
-                    <div className="text-xs text-gray-500">No updates</div>
-                  </div>
-                  <div>
-                    <div className="text-3xl font-bold">2</div>
-                    <div className="text-xs text-gray-500">Excluded</div>
+                </form>
+              </div>
+            </div>
+            
+            <div className="w-full lg:col-span-6 flex justify-center lg:justify-end">
+              <div className="relative w-full max-w-2xl">
+                {/* Floating elements */}
+                <div className="absolute -top-6 -left-6 w-20 h-20 bg-indigo-400/20 rounded-full blur-2xl animate-pulse"></div>
+                <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-purple-400/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
+                
+                {/* Main Card */}
+                <div className="relative rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-1 shadow-2xl">
+                  <div className="bg-white rounded-3xl p-8 shadow-inner">
+                    {/* Browser Header */}
+                    <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-gray-200">
+                      <div className="w-3.5 h-3.5 rounded-full bg-red-500 shadow-sm"></div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-sm"></div>
+                      <div className="w-3.5 h-3.5 rounded-full bg-green-500 shadow-sm"></div>
+                      <div className="flex-1 ml-4 bg-gray-100 rounded-lg px-4 py-1.5">
+                        <p className="text-xs text-gray-400" style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>njtechstudio.com/contact</p>
+                      </div>
+                    </div>
+                    
+                    {/* Chat-like generator */}
+                    <div className="flex flex-col gap-4">
+                      {/* Messages */}
+                      <div ref={messagesRef} className="bg-gray-50 rounded-xl p-4 border-2 border-indigo-100 h-[280px] overflow-y-auto flex flex-col gap-3">
+                        {displayedMessages.map((m, idx) => {
+                          // Determine what to display
+                          let displayText = m.displayedContent;
+                          const isTypingThisMessage = idx === currentTypingIndex && m.isTyping;
+                          if (isTypingThisMessage) {
+                            displayText = typingProgress;
+                          }
+
+                          return (
+                            <div key={idx} className={m.align === "right" ? "flex justify-end" : "flex justify-start"}>
+                              <div className={
+                                m.align === "right"
+                                  ? "max-w-[85%] bg-indigo-600 text-white rounded-2xl rounded-br-sm px-3 py-2 text-sm"
+                                  : "max-w-[85%] bg-white text-gray-800 border border-gray-200 rounded-2xl rounded-bl-sm px-3 py-2 text-sm"
+                              } style={{ fontFamily: 'var(--font-ibm-plex-sans-condensed), sans-serif' }}>
+                                {m.pending ? (
+                                  <span className="inline-flex items-center gap-1">
+                                    Designing
+                                    <span className="inline-flex gap-1">
+                                      <span className="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:-0.2s]"></span>
+                                      <span className="w-1 h-1 bg-current rounded-full animate-bounce"></span>
+                                      <span className="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                                    </span>
+                                  </span>
+                                ) : (
+                                  <span>
+                                    {displayText}
+                                    {isTypingThisMessage && displayText.length < m.content.length && (
+                                      <span className="inline-block w-0.5 h-4 bg-current ml-1 animate-pulse"></span>
+                                    )}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {/* No input — pure simulation */}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -58,4 +254,3 @@ export default function HeroSection() {
     </section>
   );
 }
-
