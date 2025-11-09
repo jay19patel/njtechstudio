@@ -30,11 +30,11 @@ const FAQSection = () => {
     };
 
     return (
-        <section className="py-12 lg:py-20 bg-white">
+        <section className="py-12 lg:py-20">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex flex-col md:flex-row items-start justify-center gap-8 lg:gap-12">
+                <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 lg:gap-12">
                     {/* Image on Left */}
-                    <div className="w-full md:w-auto">
+                    <div className="w-full md:w-auto flex justify-center">
                         <img
                             className="max-w-sm w-full rounded-xl h-auto shadow-lg"
                             src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=830&h=844&auto=format&fit=crop"

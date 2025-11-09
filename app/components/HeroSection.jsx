@@ -159,14 +159,14 @@ export default function HeroSection() {
 
               <div className="relative my-10">
                 <form onSubmit={handleEmailSubmit}>
-                  <div className="relative p-1.5 flex items-center gap-y-4 h-auto md:h-16 flex-col md:flex-row justify-between rounded-full md:shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] border md:bg-white transition-all duration-500 border-indigo-600 hover:border-indigo-200 focus-within:border-indigo-600">
+                  <div className="relative p-1.5 flex items-center gap-y-4 h-auto md:h-16 flex-col md:flex-row justify-between rounded-full md:shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] md:border md:bg-white transition-all duration-500 md:border-indigo-600 md:hover:border-indigo-200 md:focus-within:border-indigo-600">
                     <input
                       type="email"
                       name="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="Just send me your email, I'll create content and send you a summary"
-                      className="text-base rounded-full text-gray-900 flex-1 py-4 px-6 shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] md:shadow-none bg-white md:bg-transparent placeholder:text-gray-400 focus:outline-none md:w-fit w-full"
+                      className="text-base rounded-full text-gray-900 flex-1 py-4 px-6 shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] md:shadow-none bg-white md:bg-transparent border border-indigo-600 md:border-0 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-0 md:focus:ring-0 md:w-fit w-full"
                     />
                     <button
                       type="submit"
