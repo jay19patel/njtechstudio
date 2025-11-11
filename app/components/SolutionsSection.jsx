@@ -86,7 +86,7 @@ export default function SolutionsSection() {
   };
 
   return (
-    <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 overflow-hidden">
+    <section className="relative w-full px-4 sm:px-6 lg:px-8 pt-20 lg:pt-32 pb-12 lg:pb-20 overflow-hidden bg-gray-50 mt-12 lg:mt-20">
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
         {/* Dotted Pattern */}
@@ -112,7 +112,7 @@ export default function SolutionsSection() {
         <div className="absolute top-1/2 right-1/4 w-14 h-14 border-2 border-indigo-300 opacity-10 rotate-30"></div>
       </div>
 
-      <div className="relative text-center">
+      <div className="relative text-center max-w-7xl mx-auto">
         {/* Heading */}
         <div className="space-y-2 mb-8">
           <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900">
@@ -168,7 +168,7 @@ export default function SolutionsSection() {
 
           {/* Content */}
           <TabsContent value={activeTab} className="mt-8">
-            <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100">
+            <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
               <div className="flex flex-col lg:flex-row gap-0">
                 {/* Image Section - 30% */}
                 <div className="relative w-full lg:w-[30%] h-64 lg:h-auto min-h-[300px] overflow-hidden">
@@ -181,25 +181,28 @@ export default function SolutionsSection() {
                 </div>
 
                 {/* Content Section - 70% */}
-                <div className="w-full lg:w-[70%] p-8 lg:p-10 flex flex-col justify-center">
-                  <h3 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                    {getCurrentSolution().title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed text-base lg:text-lg mb-6">
-                    {getCurrentSolution().description}
-                  </p>
-                  
-                  {/* Benefits List */}
-                  <div className="space-y-3">
-                    <h4 className="text-lg font-semibold text-gray-900 mb-3">Key Benefits:</h4>
-                    <ul className="space-y-2">
-                      {getCurrentSolution().benefits.map((benefit, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <span className="text-indigo-600 mt-1">✓</span>
-                          <span className="text-gray-600 text-sm lg:text-base">{benefit}</span>
-                        </li>
-                      ))}
-                    </ul>
+                <div className="w-full lg:w-[70%] p-8 lg:p-10 flex flex-col justify-center bg-gradient-to-r from-purple-600 to-indigo-600 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
+                  <div className="relative z-10">
+                    <h3 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+                      {getCurrentSolution().title}
+                    </h3>
+                    <p className="text-white/90 leading-relaxed text-base lg:text-lg mb-6">
+                      {getCurrentSolution().description}
+                    </p>
+                    
+                    {/* Benefits List */}
+                    <div className="space-y-3">
+                      <h4 className="text-lg font-semibold text-white mb-3">Key Benefits:</h4>
+                      <ul className="space-y-2">
+                        {getCurrentSolution().benefits.map((benefit, index) => (
+                          <li key={index} className="flex items-start gap-3">
+                            <span className="text-purple-200 mt-1">✓</span>
+                            <span className="text-white/90 text-sm lg:text-base">{benefit}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
