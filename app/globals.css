@@ -126,3 +126,7 @@
     font-family: var(--font-fraunces), serif;
   }
 }
+
+.highlight-text {
+  font-weight: bold;
+}

@@ -86,8 +86,33 @@ export default function SolutionsSection() {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 ">
-      <div className="text-center">
+    <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 overflow-hidden">
+      {/* Decorative Elements */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        {/* Dotted Pattern */}
+        <div className="absolute top-10 left-20 w-32 h-32 opacity-10">
+          <svg width="100%" height="100%" className="text-indigo-600">
+            <circle cx="10" cy="10" r="2" fill="currentColor" />
+            <circle cx="30" cy="10" r="2" fill="currentColor" />
+            <circle cx="50" cy="10" r="2" fill="currentColor" />
+            <circle cx="10" cy="30" r="2" fill="currentColor" />
+            <circle cx="30" cy="30" r="2" fill="currentColor" />
+            <circle cx="50" cy="30" r="2" fill="currentColor" />
+            <circle cx="10" cy="50" r="2" fill="currentColor" />
+            <circle cx="30" cy="50" r="2" fill="currentColor" />
+            <circle cx="50" cy="50" r="2" fill="currentColor" />
+          </svg>
+        </div>
+        {/* Circles */}
+        <div className="absolute top-1/4 right-10 w-40 h-40 bg-indigo-100 rounded-full opacity-15 blur-3xl"></div>
+        <div className="absolute bottom-1/4 left-10 w-36 h-36 bg-purple-100 rounded-full opacity-15 blur-2xl"></div>
+        {/* Squares */}
+        <div className="absolute top-20 right-1/3 w-16 h-16 border-2 border-indigo-200 opacity-15 rotate-45"></div>
+        <div className="absolute bottom-20 left-1/3 w-10 h-10 border-2 border-purple-200 opacity-20 rotate-12"></div>
+        <div className="absolute top-1/2 right-1/4 w-14 h-14 border-2 border-indigo-300 opacity-10 rotate-30"></div>
+      </div>
+
+      <div className="relative text-center">
         {/* Heading */}
         <div className="space-y-2 mb-8">
           <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900">

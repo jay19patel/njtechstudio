@@ -30,8 +30,32 @@ const FAQSection = () => {
     };
 
     return (
-        <section className="py-12 lg:py-20">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="relative py-12 lg:py-20 overflow-hidden">
+            {/* Decorative Elements */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                {/* Dotted Pattern */}
+                <div className="absolute bottom-20 right-20 w-28 h-28 opacity-10">
+                    <svg width="100%" height="100%" className="text-indigo-600">
+                        <circle cx="8" cy="8" r="1.5" fill="currentColor" />
+                        <circle cx="24" cy="8" r="1.5" fill="currentColor" />
+                        <circle cx="40" cy="8" r="1.5" fill="currentColor" />
+                        <circle cx="8" cy="24" r="1.5" fill="currentColor" />
+                        <circle cx="24" cy="24" r="1.5" fill="currentColor" />
+                        <circle cx="40" cy="24" r="1.5" fill="currentColor" />
+                        <circle cx="8" cy="40" r="1.5" fill="currentColor" />
+                        <circle cx="24" cy="40" r="1.5" fill="currentColor" />
+                        <circle cx="40" cy="40" r="1.5" fill="currentColor" />
+                    </svg>
+                </div>
+                {/* Circles */}
+                <div className="absolute top-10 left-10 w-36 h-36 bg-indigo-100 rounded-full opacity-15 blur-3xl"></div>
+                <div className="absolute bottom-10 right-10 w-28 h-28 bg-purple-100 rounded-full opacity-15 blur-2xl"></div>
+                {/* Squares */}
+                <div className="absolute top-1/3 left-1/4 w-14 h-14 border-2 border-indigo-200 opacity-15 rotate-45"></div>
+                <div className="absolute bottom-1/3 right-1/4 w-10 h-10 border-2 border-purple-200 opacity-20 rotate-12"></div>
+            </div>
+
+            <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-8 lg:gap-12">
                     {/* Image on Left */}
                     <div className="w-full md:w-auto flex justify-center">

@@ -249,6 +249,52 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
+
+      {/* Trusted Clients Marquee */}
+      <style>{`
+        .marquee-inner {
+          animation: marqueeScroll 20s linear infinite;
+        }
+        @keyframes marqueeScroll {
+          0% {
+            transform: translateX(0%);
+          }
+          100% {
+            transform: translateX(-50%);
+          }
+        }
+      `}</style>
+      <div className="mt-4 lg:mt-6 pb-4 lg:pb-6 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div 
+          className="overflow-hidden w-full relative select-none"
+          style={{
+            maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)'
+          }}
+        >
+          <div className="flex marquee-inner will-change-transform items-center">
+            {[
+              { name: "Framer", logo: "https://saasly.prebuiltui.com/assets/companies-logo/framer.svg" },
+              { name: "Huawei", logo: "https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg" },
+              { name: "Instagram", logo: "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg" },
+              { name: "Microsoft", logo: "https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg" },
+              { name: "Walmart", logo: "https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg" },
+              { name: "Framer", logo: "https://saasly.prebuiltui.com/assets/companies-logo/framer.svg" },
+              { name: "Huawei", logo: "https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg" },
+              { name: "Instagram", logo: "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg" },
+              { name: "Microsoft", logo: "https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg" },
+              { name: "Walmart", logo: "https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg" }
+            ].map((company, index) => (
+              <img 
+                key={index} 
+                className="mx-4 lg:mx-6 h-6 lg:h-8 object-contain opacity-60 hover:opacity-100 transition-opacity flex-shrink-0" 
+                src={company.logo} 
+                alt={company.name} 
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
