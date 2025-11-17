@@ -1,6 +1,5 @@
 import { Fraunces, IBM_Plex_Sans_Condensed } from "next/font/google";
 import "./globals.css";
-import DashedGrid from "./components/DashedGrid";
 import Header from "./components/Header";
 import Footer from "./components/Footer.jsx";
 
@@ -27,23 +26,12 @@ export default function RootLayout({ children }) {
       <body
         className={`${fraunces.variable} ${ibmPlexSansCondensed.variable} antialiased`}
       >
-        <div 
-          className="min-h-screen w-full relative flex flex-col"
-          style={{
-            backgroundImage: `
-              linear-gradient(to right, rgba(139, 92, 246, 0.08) 0%, transparent 30%),
-              linear-gradient(to left, rgba(139, 92, 246, 0.08) 0%, transparent 30%)
-            `,
-          }}
-        >
-          <DashedGrid />
-          <div className="relative z-10 flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
-          </div>
+        <div className="min-h-screen w-full flex flex-col">
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
         </div>
       </body>
     </html>
