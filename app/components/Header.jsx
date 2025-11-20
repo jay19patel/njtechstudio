@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import MovingTextBg from "./MovingTextBg";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -131,7 +132,8 @@ export default function Navbar() {
             className="fixed inset-0 bg-black z-[90]"
             style={{ transformStyle: "preserve-3d" }}
           >
-            <div className="relative w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-0">
+            <MovingTextBg text="MENU ">
+              <div className="relative w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-0">
 
               {/* Left Side - Preview Image */}
               <div className="hidden lg:flex items-center justify-center p-12 xl:p-16 border-r border-white/10">
@@ -241,7 +243,8 @@ export default function Navbar() {
                   </div>
                 </div>
               </div>
-            </div>
+              </div>
+            </MovingTextBg>
           </motion.div>
         )}
       </AnimatePresence>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
+import MovingTextBg from "./MovingTextBg";
 
 const DURATION = 0.25;
 const STAGGER = 0.025;
@@ -160,8 +161,9 @@ export default function HeroSection() {
   }, [scriptedConversation]);
 
   return (
-    <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
-      <div className="w-full h-full flex items-center justify-center relative">
+    <MovingTextBg text="NJTECHSTUDIO ">
+      <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
+        <div className="w-full h-full flex items-center justify-center relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">
           <div className="grid grid-cols-1 gap-14 items-center lg:grid-cols-12 lg:gap-32 overflow-visible">
             <div className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0 overflow-visible">
@@ -315,8 +317,8 @@ export default function HeroSection() {
             `}</style>
           </div>
         </div>
-      </div>
-
-    </section>
+        </div>
+      </section>
+    </MovingTextBg>
   );
 }
