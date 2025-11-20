@@ -1,216 +1,133 @@
 "use client";
+import { motion, useTransform, useScroll } from "framer-motion";
+import { useRef } from "react";
 
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useState } from "react";
-
-const solutionsData = {
-  "web-development": {
-    title: "Web Development",
-    description: "Custom websites and web applications built with modern technologies. From responsive designs to complex web platforms, we deliver scalable solutions that drive your business forward.",
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=1000&h=600&auto=format&fit=crop",
-    benefits: [
-      "Responsive and mobile-first designs",
-      "Modern frameworks (React, Next.js, Vue.js)",
-      "SEO optimized websites",
-      "Fast loading and performance",
-      "Scalable architecture"
-    ]
+const solutionsData = [
+  { 
+    id: 1, 
+    title: "Web Development", 
+    description: "Build stunning, responsive websites with cutting-edge technologies and frameworks.",
+    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6" 
   },
-  "erpnext-flows": {
-    title: "ERPNext Flows for Business",
-    description: "Streamline your business operations with custom ERPNext workflows. We design and implement automated processes that enhance productivity and reduce manual work.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&h=600&auto=format&fit=crop",
-    benefits: [
-      "Custom workflow automation",
-      "Business process optimization",
-      "Integration with existing systems",
-      "Real-time reporting and analytics",
-      "Reduced manual work"
-    ]
+  { 
+    id: 2, 
+    title: "ERPNext Flows for Business", 
+    description: "Streamline your business operations with powerful ERP solutions and workflows.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71" 
   },
-  "ai-automation": {
-    title: "AI Integrations & Automation",
-    description: "Leverage artificial intelligence to automate tasks, analyze data, and enhance decision-making. Smart integrations that transform how your business operates.",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=1000&h=600&auto=format&fit=crop",
-    benefits: [
-      "AI-powered automation solutions",
-      "Data analysis and insights",
-      "Chatbot and virtual assistants",
-      "Predictive analytics",
-      "Smart decision-making tools"
-    ]
+  { 
+    id: 3, 
+    title: "AI Integrations & Automation", 
+    description: "Leverage AI to automate processes and gain intelligent insights for your business.",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995" 
   },
-  "custom-scripts-iot": {
-    title: "Custom Scripts & IoT Applications",
-    description: "Tailored scripting solutions and IoT applications that connect devices, collect data, and enable smart automation for your specific business needs.",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1000&h=600&auto=format&fit=crop",
-    benefits: [
-      "Custom script development",
-      "IoT device integration",
-      "Real-time data collection",
-      "Smart automation systems",
-      "Device connectivity solutions"
-    ]
+  { 
+    id: 4, 
+    title: "Custom Scripts & IoT Applications", 
+    description: "Create custom automation scripts and IoT solutions tailored to your needs.",
+    image: "https://images.unsplash.com/photo-1518770660439-4636190af475" 
   },
-  "mobile-app": {
-    title: "Mobile App Development",
-    description: "Native and cross-platform mobile applications for iOS and Android. User-friendly interfaces with seamless performance and modern design principles.",
-    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1000&h=600&auto=format&fit=crop",
-    benefits: [
-      "Native iOS and Android apps",
-      "Cross-platform solutions",
-      "Modern UI/UX design",
-      "App store optimization",
-      "Performance optimization"
-    ]
+  { 
+    id: 5, 
+    title: "Mobile App Development", 
+    description: "Design and develop native and cross-platform mobile applications.",
+    image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c" 
   },
-  "cloud-devops": {
-    title: "Cloud Solutions & DevOps",
-    description: "Scalable cloud infrastructure and DevOps practices. We help you deploy, manage, and scale your applications efficiently with modern cloud technologies.",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1000&h=600&auto=format&fit=crop",
-    benefits: [
-      "Cloud infrastructure setup",
-      "CI/CD pipeline implementation",
-      "Containerization and orchestration",
-      "Auto-scaling solutions",
-      "Monitoring and maintenance"
-    ]
-  }
-};
+  { 
+    id: 6, 
+    title: "Cloud Solutions & DevOps", 
+    description: "Scale your infrastructure with cloud services and modern DevOps practices.",
+    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa" 
+  },
+];
 
 export default function SolutionsSection() {
-  const [activeTab, setActiveTab] = useState("web-development");
+  const targetRef = useRef(null);
 
-  const getCurrentSolution = () => {
-    return solutionsData[activeTab] || solutionsData["web-development"];
-  };
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end end"],
+  });
+
+  const x = useTransform(
+    scrollYProgress,
+    [0, 1],
+    ["0%", `-${(solutionsData.length - 1) * 100}%`]
+  );
 
   return (
-    <section className="relative w-full px-4 sm:px-6 lg:px-8 pt-20 lg:pt-32 pb-12 lg:pb-20 overflow-hidden bg-gray-50 mt-12 lg:mt-20">
-      {/* Decorative Elements */}
-      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-        {/* Dotted Pattern */}
-        <div className="absolute top-10 left-20 w-32 h-32 opacity-10">
-          <svg width="100%" height="100%" className="text-indigo-600">
-            <circle cx="10" cy="10" r="2" fill="currentColor" />
-            <circle cx="30" cy="10" r="2" fill="currentColor" />
-            <circle cx="50" cy="10" r="2" fill="currentColor" />
-            <circle cx="10" cy="30" r="2" fill="currentColor" />
-            <circle cx="30" cy="30" r="2" fill="currentColor" />
-            <circle cx="50" cy="30" r="2" fill="currentColor" />
-            <circle cx="10" cy="50" r="2" fill="currentColor" />
-            <circle cx="30" cy="50" r="2" fill="currentColor" />
-            <circle cx="50" cy="50" r="2" fill="currentColor" />
-          </svg>
-        </div>
-        {/* Circles */}
-        <div className="absolute top-1/4 right-10 w-40 h-40 bg-indigo-100 rounded-full opacity-15 blur-3xl"></div>
-        <div className="absolute bottom-1/4 left-10 w-36 h-36 bg-purple-100 rounded-full opacity-15 blur-2xl"></div>
-        {/* Squares */}
-        <div className="absolute top-20 right-1/3 w-16 h-16 border-2 border-indigo-200 opacity-15 rotate-45"></div>
-        <div className="absolute bottom-20 left-1/3 w-10 h-10 border-2 border-purple-200 opacity-20 rotate-12"></div>
-        <div className="absolute top-1/2 right-1/4 w-14 h-14 border-2 border-indigo-300 opacity-10 rotate-30"></div>
-      </div>
-
-      <div className="relative text-center max-w-7xl mx-auto">
-        {/* Heading */}
-        <div className="space-y-2 mb-8">
-          <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900">
-            Our <span className="text-indigo-600">Solutions</span>
-          </h2>
-          <p className="text-lg lg:text-xl text-gray-500 pt-2 max-w-2xl mx-auto">
-            Comprehensive technology solutions tailored to transform your business and drive growth
-          </p>
+    <section
+      ref={targetRef}
+      className="relative bg-gradient-to-br from-purple-900 via-purple-800 to-indigo-900"
+      style={{ height: `${100 + (solutionsData.length - 1) * 100}vh` }}
+    >
+      <div className="sticky top-0 h-screen flex flex-col">
+        {/* Top 30% - Header Section */}
+        <div className="h-[30vh] flex items-center justify-center relative z-10 px-6 py-12">
+          <div className="text-center max-w-4xl">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+              Find, enrich, & reach qualified leads
+              <br />
+              <span className="text-purple-300">from one platform.</span>
+            </h1>
+          </div>
         </div>
 
-        {/* Tabs */}
-        <Tabs defaultValue="web-development" className="w-full" onValueChange={setActiveTab}>
-          <div className="flex justify-center mb-8 overflow-x-auto">
-            <TabsList className="inline-flex items-center gap-0 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-gray-200 p-1 flex-wrap lg:flex-nowrap">
-              <TabsTrigger 
-                value="web-development"
-                className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
-              >
-                Web Development
-              </TabsTrigger>
-              <TabsTrigger 
-                value="erpnext-flows"
-                className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
-              >
-                ERPNext Flows
-              </TabsTrigger>
-              <TabsTrigger 
-                value="ai-automation"
-                className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
-              >
-                AI & Automation
-              </TabsTrigger>
-              <TabsTrigger 
-                value="custom-scripts-iot"
-                className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
-              >
-                Scripts & IoT
-              </TabsTrigger>
-              <TabsTrigger 
-                value="mobile-app"
-                className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
-              >
-                Mobile Apps
-              </TabsTrigger>
-              <TabsTrigger 
-                value="cloud-devops"
-                className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
-              >
-                Cloud & DevOps
-              </TabsTrigger>
-            </TabsList>
+        {/* Bottom 70% - Horizontal Scroll Cards */}
+        <div className="h-[70vh] flex items-center justify-center overflow-hidden relative">
+          {/* Background decorations */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            <div className="absolute top-10 left-20 w-32 h-32 bg-purple-500 rounded-full opacity-20 blur-3xl"></div>
+            <div className="absolute bottom-10 right-20 w-36 h-36 bg-indigo-500 rounded-full opacity-20 blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/3 w-28 h-28 bg-pink-500 rounded-full opacity-15 blur-2xl"></div>
           </div>
 
-          {/* Content */}
-          <TabsContent value={activeTab} className="mt-8">
-            <div className="bg-white rounded-2xl overflow-hidden shadow-lg">
-              <div className="flex flex-col lg:flex-row gap-0">
-                {/* Image Section - 30% */}
-                <div className="relative w-full lg:w-[30%] h-64 lg:h-auto min-h-[300px] overflow-hidden">
-                  <img
-                    src={getCurrentSolution().image}
-                    alt={getCurrentSolution().title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-                </div>
-
-                {/* Content Section - 70% */}
-                <div className="w-full lg:w-[70%] p-8 lg:p-10 flex flex-col justify-center bg-gradient-to-r from-purple-600 to-indigo-600 relative overflow-hidden">
-                  <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
-                  <div className="relative z-10">
-                    <h3 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-                      {getCurrentSolution().title}
-                    </h3>
-                    <p className="text-white/90 leading-relaxed text-base lg:text-lg mb-6">
-                      {getCurrentSolution().description}
-                    </p>
-                    
-                    {/* Benefits List */}
-                    <div className="space-y-3">
-                      <h4 className="text-lg font-semibold text-white mb-3">Key Benefits:</h4>
-                      <ul className="space-y-2">
-                        {getCurrentSolution().benefits.map((benefit, index) => (
-                          <li key={index} className="flex items-start gap-3">
-                            <span className="text-purple-200 mt-1">✓</span>
-                            <span className="text-white/90 text-sm lg:text-base">{benefit}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
+          <motion.div style={{ x }} className="flex w-full h-full items-center">
+            {solutionsData.map((solution) => (
+              <Card key={solution.id} solution={solution} />
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
 }
 
+const Card = ({ solution }) => {
+  return (
+    <div className="min-w-full h-full flex items-center justify-center px-6 md:px-12 py-8">
+      <div className="w-full max-w-5xl">
+        <div
+          className="bg-gradient-to-br from-gray-50 to-white rounded-3xl shadow-2xl overflow-hidden
+          p-6 md:p-8 lg:p-10"
+        >
+          <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-center">
+            {/* Left side - Text content */}
+            <div className="w-full lg:w-[45%] space-y-4">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight">
+                {solution.title}
+              </h2>
+              <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+                {solution.description}
+              </p>
+            </div>
+
+            {/* Right side - Image with purple background */}
+            <div className="w-full lg:w-[55%]">
+              <div className="bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl p-4 shadow-xl">
+                <div
+                  className="w-full h-[240px] md:h-[280px] lg:h-[320px] rounded-xl overflow-hidden shadow-lg"
+                  style={{
+                    backgroundImage: `url(${solution.image})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                ></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

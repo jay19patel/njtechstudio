@@ -9,8 +9,9 @@ import FAQSection from "./components/faqSection";
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
+    <div>
       <HeroSection />
+      <SolutionsSection/>
       <AboutSection />
       <TechSkillSection />
       <WhyChooseUs />

@@ -1,26 +1,70 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
+import { motion } from "framer-motion";
 
-// Mock API - Replace with your actual API
-const api = {
-  getProjects: async (query = null, offset = 0, limit = 10, filter = null) => {
-    // Mock implementation - replace with actual API call
-    return { projects: [] };
-  },
-  getStats: async () => {
-    // Mock implementation - replace with actual API call
-    return {
-      total_clients: 0,
-      total_projects: 0,
-      satisfaction_rate: 0
-    };
-  }
+const DURATION = 0.25;
+const STAGGER = 0.025;
+
+const FlipLink = ({ children }) => {
+  return (
+    <motion.div
+      initial="initial"
+      whileHover="hovered"
+      className="relative inline-block overflow-hidden cursor-pointer select-none"
+      style={{ lineHeight: 1.2 }}
+    >
+      <div>
+        {children.split("").map((l, i) => (
+          <motion.span
+            variants={{
+              initial: {
+                y: 0,
+              },
+              hovered: {
+                y: "-100%",
+              },
+            }}
+            transition={{
+              duration: DURATION,
+              ease: "easeInOut",
+              delay: STAGGER * i,
+            }}
+            className="inline-block"
+            key={i}
+          >
+            {l}
+          </motion.span>
+        ))}
+      </div>
+      <div className="absolute inset-0">
+        {children.split("").map((l, i) => (
+          <motion.span
+            variants={{
+              initial: {
+                y: "100%",
+              },
+              hovered: {
+                y: 0,
+              },
+            }}
+            transition={{
+              duration: DURATION,
+              ease: "easeInOut",
+              delay: STAGGER * i,
+            }}
+            className="inline-block"
+            key={i}
+          >
+            {l}
+          </motion.span>
+        ))}
+      </div>
+    </motion.div>
+  );
 };
 
 export default function HeroSection() {
-  const [email, setEmail] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [displayedMessages, setDisplayedMessages] = useState([]);
   const [currentTypingIndex, setCurrentTypingIndex] = useState(-1);
   const [typingProgress, setTypingProgress] = useState("");
@@ -45,32 +89,13 @@ export default function HeroSection() {
     }
   }, [displayedMessages, currentTypingIndex, typingProgress]);
 
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    if (!email.trim()) {
-      return;
-    }
-    
-    setIsSubmitting(true);
-    try {
-      // Handle email submission here
-      console.log("Email submitted:", email);
-      // You can add your API call here
-      setEmail("");
-    } catch (error) {
-      console.error("Error submitting email:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   // Auto-play the scripted conversation one-by-one (deterministic, no polling)
   useEffect(() => {
     let isCancelled = false;
 
     const typeMessage = (fullText, role, pending = false) => new Promise((resolve) => {
       const align = role === "user" ? "right" : "left";
-      
+
       // Add message in typing state at the end
       setDisplayedMessages(prev => {
         const next = [...prev, { role, align, content: fullText, displayedContent: "", isTyping: true, pending }];
@@ -78,7 +103,7 @@ export default function HeroSection() {
         setTypingProgress("");
         return next;
       });
-      
+
       // If pending, show loading animation for 2 seconds
       if (pending) {
         setTimeout(() => {
@@ -92,7 +117,7 @@ export default function HeroSection() {
         }, 2000);
         return;
       }
-      
+
       // Drive typing with a local interval independent of render cycles
       let i = 0;
       const speed = 20; // ms per char
@@ -135,76 +160,90 @@ export default function HeroSection() {
   }, [scriptedConversation]);
 
   return (
-    <section className="pt-0 lg:pt-8 lg:px-8 h-full overflow-visible">
-      <div className="rounded-2xl py-10 overflow-visible m-5 lg:m-0 2xl:py-16 xl:py-8 lg:rounded-tl-2xl lg:rounded-bl-2xl relative">
+    <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
+      <div className="w-full h-full flex items-center justify-center relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">
           <div className="grid grid-cols-1 gap-14 items-center lg:grid-cols-12 lg:gap-32 overflow-visible">
             <div className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0 overflow-visible">
-              <div className="inline-flex items-center space-x-2.5 border border-gray-500/30 rounded-full bg-gray-500/10 p-1 text-sm text-gray-800">
-                <div className="bg-white border border-gray-500/30 rounded-2xl px-3 py-1">
-                  <p className="text-xs font-medium">#1</p>
-                </div>
-                <p className="pr-3 text-xs">IT & Web Development Agency</p>
-              </div>
+              <motion.div
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="mb-4 w-fit rounded-full bg-zinc-600"
+              >
+                <a
+                  href="#"
+                  className="flex origin-top-left items-center rounded-full border border-zinc-900 bg-white p-0.5 text-sm transition-transform hover:-rotate-2"
+                >
+                  <span className="rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-3 py-0.5 font-medium text-white">
+                    HEY!
+                  </span>
+                  <span className="ml-2 mr-1 inline-block font-medium text-gray-900">
+                    Development & Content Creation Studio
+                  </span>
+                  <svg
+                    stroke="currentColor"
+                    fill="none"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 inline-block text-gray-700"
+                    height="1em"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </a>
+              </motion.div>
 
-              <h1 className="py-8 text-center text-gray-900 font-extrabold text-4xl lg:text-5xl lg:text-left leading-tight" >
-                Transform your business with{" "}
-                <br className="hidden lg:block" />
-                <span className="text-indigo-600">powerful web solutions</span>
-              </h1>
-
-              <p className="text-gray-500 text-lg text-center lg:text-left">
-                We create modern, scalable websites and web applications tailored to your business needs. From design to deployment, we deliver excellence with smooth communication and fast delivery.
-              </p>
-
-              <div className="relative my-10">
-                <form onSubmit={handleEmailSubmit}>
-                  <div className="relative p-1.5 flex items-center gap-y-4 h-auto md:h-16 flex-col md:flex-row justify-between rounded-full md:shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] md:border md:bg-white transition-all duration-500 md:border-indigo-600 md:hover:border-indigo-200 md:focus-within:border-indigo-600">
-                    <input
-                      type="email"
-                      name="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="Just send me your email, I'll create content and send you a summary"
-                      className="text-base rounded-full text-gray-900 flex-1 py-4 px-6 shadow-[0px_15px_30px_-4px_rgba(16,24,40,0.03)] md:shadow-none bg-white md:bg-transparent border border-indigo-600 md:border-0 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-0 md:focus:ring-0 md:w-fit w-full"
-                    />
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="bg-indigo-600 rounded-full py-3 px-7 text-base font-semibold text-white hover:bg-indigo-700 cursor-pointer transition-all duration-500 md:w-fit w-full text-center disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isSubmitting ? "Sending..." : "Send Summary"}
-                    </button>
-                  </div>
-                </form>
+              <div className="py-8 text-center lg:text-left">
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4 }}
+                  className="text-gray-900 font-extrabold text-4xl lg:text-5xl xl:text-6xl leading-tight flex flex-col gap-2"
+                >
+                  <FlipLink>Transform your</FlipLink>
+                  <FlipLink>business with</FlipLink>
+                  <FlipLink>powerful web</FlipLink>
+                  <FlipLink>solutions</FlipLink>
+                </motion.div>
               </div>
             </div>
             
             <div className="w-full lg:col-span-6 flex justify-center lg:justify-end">
               <div className="relative w-full max-w-2xl">
-                {/* Floating elements */}
-                <div className="absolute -top-6 -left-6 w-20 h-20 bg-indigo-400/20 rounded-full blur-2xl animate-pulse"></div>
-                <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-purple-400/20 rounded-full blur-2xl animate-pulse delay-1000"></div>
-                
-                {/* Main Card */}
-                <div className="relative rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-1 shadow-2xl">
-                  <div className="bg-white rounded-3xl p-8 shadow-inner">
-                    {/* Browser Header */}
+                {/* Animated floating orbs */}
+                <div className="absolute -top-10 -left-10 w-32 h-32 bg-gradient-to-br from-indigo-400 to-purple-500 opacity-20 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-gradient-to-br from-purple-400 to-pink-500 opacity-20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+                <div className="absolute top-1/2 left-0 w-24 h-24 bg-gradient-to-br from-pink-400 to-indigo-500 opacity-15 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}}></div>
+
+                {/* Main Card with enhanced design */}
+                <div className="relative rounded-3xl bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-[2px] shadow-2xl overflow-hidden">
+                  {/* Animated gradient border */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-75 animate-pulse"></div>
+
+                  <div className="relative bg-white rounded-3xl p-6 sm:p-8 shadow-inner">
+                    {/* Enhanced Browser Header */}
                     <div className="flex items-center gap-2.5 mb-6 pb-4 border-b border-gray-200">
-                      <div className="w-3.5 h-3.5 rounded-full bg-red-500 shadow-sm"></div>
-                      <div className="w-3.5 h-3.5 rounded-full bg-yellow-500 shadow-sm"></div>
-                      <div className="w-3.5 h-3.5 rounded-full bg-green-500 shadow-sm"></div>
-                      <div className="flex-1 ml-4 bg-gray-100 rounded-lg px-4 py-1.5">
-                        <p className="text-xs text-gray-400">njtechstudio.com/contact</p>
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-red-500 shadow-sm hover:scale-110 transition-transform cursor-pointer"></div>
+                        <div className="w-3 h-3 rounded-full bg-yellow-500 shadow-sm hover:scale-110 transition-transform cursor-pointer"></div>
+                        <div className="w-3 h-3 rounded-full bg-green-500 shadow-sm hover:scale-110 transition-transform cursor-pointer"></div>
+                      </div>
+                      <div className="flex-1 ml-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg px-4 py-2 border border-gray-200">
+                        <p className="text-xs text-gray-500 font-medium">🔒 njtechstudio.com/chat</p>
                       </div>
                     </div>
-                    
-                    {/* Chat-like generator */}
+
+                    {/* Enhanced Chat Interface */}
                     <div className="flex flex-col gap-4">
-                      {/* Messages */}
-                      <div ref={messagesRef} className="bg-gray-50 rounded-xl p-4 border-2 border-indigo-100 h-[280px] overflow-y-auto flex flex-col gap-3">
+                      {/* Messages Container */}
+                      <div ref={messagesRef} className="bg-gradient-to-br from-gray-50 to-indigo-50/30 rounded-2xl p-4 border border-indigo-100/50 h-[280px] overflow-y-auto flex flex-col gap-3 custom-scrollbar">
                         {displayedMessages.map((m, idx) => {
-                          // Determine what to display
                           let displayText = m.displayedContent;
                           const isTypingThisMessage = idx === currentTypingIndex && m.isTyping;
                           if (isTypingThisMessage) {
@@ -212,23 +251,23 @@ export default function HeroSection() {
                           }
 
                           return (
-                            <div key={idx} className={m.align === "right" ? "flex justify-end" : "flex justify-start"}>
+                            <div key={idx} className={`flex ${m.align === "right" ? "justify-end" : "justify-start"} animate-slideIn`}>
                               <div className={
                                 m.align === "right"
-                                  ? "max-w-[85%] bg-indigo-600 text-white rounded-2xl rounded-br-sm px-3 py-2 text-sm"
-                                  : "max-w-[85%] bg-white text-gray-800 border border-gray-200 rounded-2xl rounded-bl-sm px-3 py-2 text-sm"
+                                  ? "max-w-[85%] bg-gradient-to-br from-indigo-600 to-indigo-700 text-white rounded-2xl rounded-br-md px-4 py-2.5 text-sm shadow-lg shadow-indigo-500/30 transform hover:scale-[1.02] transition-transform"
+                                  : "max-w-[85%] bg-white text-gray-800 border border-gray-200 rounded-2xl rounded-bl-md px-4 py-2.5 text-sm shadow-md hover:shadow-lg transition-shadow"
                               }>
                                 {m.pending ? (
-                                  <span className="inline-flex items-center gap-1">
-                                    Designing
+                                  <span className="inline-flex items-center gap-2">
+                                    <span className="text-sm font-medium">Designing your website</span>
                                     <span className="inline-flex gap-1">
-                                      <span className="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:-0.2s]"></span>
-                                      <span className="w-1 h-1 bg-current rounded-full animate-bounce"></span>
-                                      <span className="w-1 h-1 bg-current rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                                      <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce" style={{animationDelay: '-0.3s'}}></span>
+                                      <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce" style={{animationDelay: '-0.15s'}}></span>
+                                      <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce"></span>
                                     </span>
                                   </span>
                                 ) : (
-                                  <span>
+                                  <span className="leading-relaxed">
                                     {displayText}
                                     {isTypingThisMessage && displayText.length < m.content.length && (
                                       <span className="inline-block w-0.5 h-4 bg-current ml-1 animate-pulse"></span>
@@ -240,61 +279,44 @@ export default function HeroSection() {
                           );
                         })}
                       </div>
-                      {/* No input — pure simulation */}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
+
+            <style jsx>{`
+              .custom-scrollbar::-webkit-scrollbar {
+                width: 6px;
+              }
+              .custom-scrollbar::-webkit-scrollbar-track {
+                background: transparent;
+              }
+              .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #c7d2fe;
+                border-radius: 10px;
+              }
+              .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #a5b4fc;
+              }
+              @keyframes slideIn {
+                from {
+                  opacity: 0;
+                  transform: translateY(10px);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0);
+                }
+              }
+              .animate-slideIn {
+                animation: slideIn 0.3s ease-out;
+              }
+            `}</style>
           </div>
         </div>
       </div>
 
-      {/* Trusted Clients Marquee */}
-      <style>{`
-        .marquee-inner {
-          animation: marqueeScroll 20s linear infinite;
-        }
-        @keyframes marqueeScroll {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
-        }
-      `}</style>
-      <div className="mt-4 lg:mt-6 pb-4 lg:pb-6 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div 
-          className="overflow-hidden w-full relative select-none"
-          style={{
-            maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)'
-          }}
-        >
-          <div className="flex marquee-inner will-change-transform items-center">
-            {[
-              { name: "Framer", logo: "https://saasly.prebuiltui.com/assets/companies-logo/framer.svg" },
-              { name: "Huawei", logo: "https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg" },
-              { name: "Instagram", logo: "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg" },
-              { name: "Microsoft", logo: "https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg" },
-              { name: "Walmart", logo: "https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg" },
-              { name: "Framer", logo: "https://saasly.prebuiltui.com/assets/companies-logo/framer.svg" },
-              { name: "Huawei", logo: "https://saasly.prebuiltui.com/assets/companies-logo/huawei.svg" },
-              { name: "Instagram", logo: "https://saasly.prebuiltui.com/assets/companies-logo/instagram.svg" },
-              { name: "Microsoft", logo: "https://saasly.prebuiltui.com/assets/companies-logo/microsoft.svg" },
-              { name: "Walmart", logo: "https://saasly.prebuiltui.com/assets/companies-logo/walmart.svg" }
-            ].map((company, index) => (
-              <img 
-                key={index} 
-                className="mx-4 lg:mx-6 h-6 lg:h-8 object-contain opacity-60 hover:opacity-100 transition-opacity flex-shrink-0" 
-                src={company.logo} 
-                alt={company.name} 
-              />
-            ))}
-          </div>
-        </div>
-      </div>
     </section>
   );
 }
