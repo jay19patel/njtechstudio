@@ -161,7 +161,7 @@ export default function HeroSection() {
   }, [scriptedConversation]);
 
   return (
-    <MovingTextBg text="NJTECHSTUDIO ">
+    <MovingTextBg text="NJTECHSTUDIO" textColor="text-gray-400">
       <section className="relative w-full h-screen overflow-hidden flex items-center justify-center">
         <div className="w-full h-full flex items-center justify-center relative">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">

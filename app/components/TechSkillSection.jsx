@@ -3,7 +3,7 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useState } from "react";
 import toolsData from "../data/tools.json";
-
+import MovingTextBg from "./MovingTextBg";
 export default function TechSkillSection() {
   const [activeTab, setActiveTab] = useState("backend");
 
@@ -43,6 +43,7 @@ export default function TechSkillSection() {
   };
 
   return (
+    <MovingTextBg text="TECHSTACK">
     <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 overflow-hidden">
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
@@ -175,33 +176,44 @@ export default function TechSkillSection() {
           </Tabs>
         </div>
 
-        {/* Right Side - Content Description */}
-        <div className="w-full lg:sticky lg:top-8">
-          <div className="max-w-md mx-auto">
-            <div className="relative overflow-hidden bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl shadow-2xl p-8 text-white">
-              <div className="absolute top-0 left-0 w-full h-full bg-white opacity-10 transform -skew-x-12"></div>
-              <div className="relative z-10">
-                <svg className="w-12 h-12 mb-4 text-purple-300" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
-                <h3 className="text-xl font-semibold mb-3 text-white">
-                  {getContent().title}
-                </h3>
-                <p className="text-lg font-medium mb-4 leading-relaxed">
-                  "{getContent().quote}"
-                </p>
-                <div className="flex items-center pt-4 border-t border-purple-300/30">
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-white">Expert Solutions</h4>
-                    <p className="text-purple-200 text-sm">{getContent().subtitle}</p>
-                  </div>
+{/* Right Side - Content Description (Updated Styling) */}
+      <div className="w-full lg:sticky lg:top-8">
+        <div className="max-w-md mx-auto">
+          <div className="relative overflow-hidden bg-linear-to-b from-black via-gray-900 to-gray-800 rounded-xl shadow-2xl p-8 text-white">
+            {/* Subtle Purple Glow Layer */}
+            
+
+            {/* Soft Skew Highlight */}
+            <div className="absolute top-0 left-0 w-full h-full bg-gray-200/5 transform -skew-x-12"></div>
+
+            <div className="relative z-10">
+              <svg className="w-12 h-12 mb-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+              </svg>
+
+              <h3 className="text-xl font-semibold mb-3 text-gray-100">
+                {getContent().title}
+              </h3>
+
+              <p className="text-lg font-medium mb-4 leading-relaxed text-gray-300">
+                "{getContent().quote}"
+              </p>
+
+              <div className="flex items-center pt-4 border-t border-gray-500/30">
+                <div className="flex-1">
+                  <h4 className="font-semibold text-white">Expert Solutions</h4>
+                  <p className="text-gray-400 text-sm">{getContent().subtitle}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+
+      </div>
     </section>
+    </MovingTextBg>
   );
 }
 

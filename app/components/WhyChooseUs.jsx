@@ -1,82 +1,115 @@
+// Updated WhyChooseUs Component (new layout: left-aligned title, subtitle, 4 cards in 2 rows)
 "use client";
-import { CheckCircle2, Zap, Users, Shield, TrendingUp, Award } from "lucide-react";
-
 export default function WhyChooseUs() {
-  const reasons = [
-    {
-      icon: <Zap className="w-8 h-8" />,
-      title: "Fast Development",
-      description: "Agile methodology ensures quick turnaround times without compromising quality."
-    },
-    {
-      icon: <Users className="w-8 h-8" />,
-      title: "Expert Team",
-      description: "Skilled developers with years of experience in cutting-edge technologies."
-    },
-    {
-      icon: <Shield className="w-8 h-8" />,
-      title: "Secure Solutions",
-      description: "Security-first approach with industry best practices and standards."
-    },
-    {
-      icon: <TrendingUp className="w-8 h-8" />,
-      title: "Scalable Architecture",
-      description: "Build solutions that grow with your business needs and user base."
-    },
-    {
-      icon: <Award className="w-8 h-8" />,
-      title: "Quality Assured",
-      description: "Rigorous testing and quality control for bug-free, reliable software."
-    },
-    {
-      icon: <CheckCircle2 className="w-8 h-8" />,
-      title: "24/7 Support",
-      description: "Dedicated support team available round the clock for your needs."
-    }
-  ];
-
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Why Choose <span className="text-blue-600">Us</span>
+    <section class="team-section py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4">
+
+        {/* Heading Section */}
+        <div class="mb-10 text-left">
+          <h2 class="text-5xl font-extrabold text-gray-900 leading-tight">
+            Wins from teams just like yours
           </h2>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            We deliver excellence through innovation, expertise, and dedication
+          <p class="text-lg text-gray-600 mt-2 max-w-xl">
+            Real stories from real teams achieving massive results using our platform.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {reasons.map((reason, index) => (
-            <div
-              key={index}
-              className="group p-8 bg-gradient-to-br from-gray-50 to-white border border-gray-200 rounded-xl hover:shadow-xl hover:border-blue-300 transition-all duration-300"
-            >
-              <div className="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mb-6 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                {reason.icon}
+        {/* Cards Grid — 4 cards, 2 rows of 2 */}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+
+          {/* Card 1 */}
+          <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white shadow-sm hover:shadow-xl hover:border-purple-400 transition-all duration-300 p-8">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <div class="text-3xl font-bold text-gray-900">+26%</div>
+                <div class="text-gray-500 text-lg font-medium">Reply Rate</div>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">
-                {reason.title}
-              </h3>
-              <p className="text-gray-600 leading-relaxed">
-                {reason.description}
-              </p>
+              <img src="https://cdn.prod.website-files.com/5de921a1902d8d8b7a99f774/68270cebaafece348310b086_irev.svg" class="w-14 h-14" />
             </div>
-          ))}
-        </div>
 
-        <div className="mt-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-12 text-center text-white">
-          <h3 className="text-3xl font-bold mb-4">
-            Ready to Start Your Project?
-          </h3>
-          <p className="text-xl mb-8 opacity-90">
-            Let's build something amazing together
-          </p>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300 shadow-lg">
-            Get Started Today
-          </button>
+            <p class="text-lg text-gray-700 italic mb-6">
+              “We chose lemlist for its seamless email and LinkedIn outreach combo. The interface saves us time and the support team is always helpful.”
+            </p>
+
+            <div class="flex items-center gap-4">
+              <img src="https://cdn.prod.website-files.com/5de921a1902d8d8b7a99f774/6827145849d9c20ad87b2da2_Deborah_Strougo.png" class="w-14 h-14 rounded-full" />
+              <div>
+                <div class="text-sm font-semibold text-gray-900">Deborah Strougo</div>
+                <div class="text-sm text-gray-500">Business Growth Manager at IREV</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 2 */}
+          <div class="rounded-2xl border border-purple-300 bg-gradient-to-br from-purple-50 to-white shadow-sm hover:shadow-xl hover:border-purple-500 transition-all duration-300 p-8">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <div class="text-3xl font-bold text-gray-900">10x</div>
+                <div class="text-gray-500 text-lg font-medium">Meetings Booked</div>
+              </div>
+              <img src="https://cdn.prod.website-files.com/5de921a1902d8d8b7a99f774/68271e2eff22e128f42a83be_rightmarket.svg" class="w-14 h-14" />
+            </div>
+
+            <p class="text-lg text-gray-700 italic mb-6">
+              “Dropping a profile visit, following up with an email, and sending a connection request adds a human touch at scale.”
+            </p>
+
+            <div class="flex items-center gap-4">
+              <img src="https://cdn.prod.website-files.com/5de921a1902d8d8b7a99f774/68271c21c24b3f9cee3f9863_Dave_Shillingford.png" class="w-14 h-14 rounded-full" />
+              <div>
+                <div class="text-sm font-semibold text-gray-900">Dave Shillingford</div>
+                <div class="text-sm text-gray-500">Sales Manager at RightMarket</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 3 */}
+          <div class="rounded-2xl border border-purple-300 bg-gradient-to-br from-purple-50 to-white shadow-sm hover:shadow-xl hover:border-purple-500 transition-all duration-300 p-8">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <div class="text-3xl font-bold text-gray-900">3x</div>
+                <div class="text-gray-500 text-lg font-medium">Sales Productivity</div>
+              </div>
+              <img src="https://cdn.prod.website-files.com/5de921a1902d8d8b7a99f774/68271fed709f6fa49708abb7_secret.svg" class="w-14 h-14" />
+            </div>
+
+            <p class="text-lg text-gray-700 italic mb-6">
+              “Staying organized is key in sales, and this platform helps me manage outreach effectively and personally.”
+            </p>
+
+            <div class="flex items-center gap-4">
+              <img src="https://cdn.prod.website-files.com/5de921a1902d8d8b7a99f774/6827204ca20b2756d67297bc_Khushi_Mehta.png" class="w-14 h-14 rounded-full" />
+              <div>
+                <div class="text-sm font-semibold text-gray-900">Khushi Mehta</div>
+                <div class="text-sm text-gray-500">Partnerships Manager at Secret</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Card 4 — Dummy */}
+          <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-white shadow-sm hover:shadow-xl hover:border-purple-400 transition-all duration-300 p-8">
+            <div class="flex justify-between items-center mb-6">
+              <div>
+                <div class="text-3xl font-bold text-gray-900">+42%</div>
+                <div class="text-gray-500 text-lg font-medium">Lead Quality</div>
+              </div>
+              <img src="https://cdn-icons-png.flaticon.com/512/1048/1048953.png" class="w-14 h-14" />
+            </div>
+
+            <p class="text-lg text-gray-700 italic mb-6">
+              "Our team improved lead targeting massively, bringing in more qualified prospects and better conversion rates."
+            </p>
+
+            <div class="flex items-center gap-4">
+              <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="w-14 h-14 rounded-full" />
+              <div>
+                <div class="text-sm font-semibold text-gray-900">Alex Carter</div>
+                <div class="text-sm text-gray-500">Head of Sales at NovaTech</div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
     </section>

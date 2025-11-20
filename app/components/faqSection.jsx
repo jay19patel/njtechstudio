@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-
+import MovingTextBg from "./MovingTextBg";
 const FAQSection = () => {
     const [openItem, setOpenItem] = useState(null);
 
@@ -30,6 +30,7 @@ const FAQSection = () => {
     };
 
     return (
+        <MovingTextBg text="FAQs" textColor="text-gray-400">
         <section className="relative py-12 lg:py-20 overflow-hidden">
             {/* Decorative Elements */}
             <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
@@ -118,6 +119,7 @@ const FAQSection = () => {
                 </div>
             </div>
         </section>
+        </MovingTextBg>
     );
 };
 

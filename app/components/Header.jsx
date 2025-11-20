@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
 
 export default function Navbar() {
@@ -31,8 +31,8 @@ export default function Navbar() {
       image: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&w=900&q=60"
     },
     {
-      label: "FAQ",
-      href: "/faq",
+      label: "Contact",
+      href: "/contact",
       image: "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=900&q=60"
     },
   ];
@@ -78,45 +78,69 @@ export default function Navbar() {
             </motion.div>
 
             {/* Menu Button with Icon */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={toggleMenu}
-              className="relative w-8 h-8 text-white cursor-pointer group z-[110] flex items-center justify-center"
-              aria-label="Toggle menu"
+            <MotionConfig
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
             >
-              {/* Hamburger Icon */}
-              <motion.div
-                animate={isMenuOpen ? { opacity: 0, rotate: 90, scale: 0.75 } : { opacity: 1, rotate: 0, scale: 1 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="absolute"
+              <motion.button
+                initial={false}
+                animate={isMenuOpen ? "open" : "closed"}
+                onClick={toggleMenu}
+                whileTap={{ scale: 0.95 }}
+                className="relative h-10 w-10 rounded-full"
+                aria-label="Toggle menu"
               >
-                <div className="w-6 h-5 flex flex-col justify-between">
-                  <motion.span
-                    animate={isMenuOpen ? { width: "0%" } : { width: "100%" }}
-                    className="h-[2px] bg-white"
-                  />
-                  <motion.span
-                    animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-                    className="w-full h-[2px] bg-white"
-                  />
-                  <motion.span
-                    animate={isMenuOpen ? { width: "0%" } : { width: "100%" }}
-                    className="h-[2px] bg-white"
-                  />
-                </div>
-              </motion.div>
-
-              {/* Cross Icon */}
-              <motion.div
-                animate={isMenuOpen ? { opacity: 1, rotate: 0, scale: 1 } : { opacity: 0, rotate: 90, scale: 0.75 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="absolute w-6 h-6"
-              >
-                <span className="absolute top-1/2 left-0 w-full h-[2px] bg-white rotate-45 transform origin-center"></span>
-                <span className="absolute top-1/2 left-0 w-full h-[2px] bg-white -rotate-45 transform origin-center"></span>
-              </motion.div>
-            </motion.button>
+                <motion.span
+                  variants={{
+                    open: {
+                      rotate: ["0deg", "0deg", "45deg"],
+                      top: ["35%", "50%", "50%"],
+                    },
+                    closed: {
+                      rotate: ["45deg", "0deg", "0deg"],
+                      top: ["50%", "50%", "35%"],
+                    },
+                  }}
+                  className="absolute h-[2px] w-6 bg-white"
+                  style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
+                />
+                <motion.span
+                  variants={{
+                    open: {
+                      rotate: ["0deg", "0deg", "-45deg"],
+                    },
+                    closed: {
+                      rotate: ["-45deg", "0deg", "0deg"],
+                    },
+                  }}
+                  className="absolute h-[2px] w-6 bg-white"
+                  style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
+                />
+                <motion.span
+                  variants={{
+                    open: {
+                      rotate: ["0deg", "0deg", "45deg"],
+                      bottom: ["35%", "50%", "50%"],
+                      left: "50%",
+                    },
+                    closed: {
+                      rotate: ["45deg", "0deg", "0deg"],
+                      bottom: ["50%", "50%", "35%"],
+                      left: "calc(50% + 10px)",
+                    },
+                  }}
+                  className="absolute h-[2px] w-4 bg-white"
+                  style={{
+                    x: "-50%",
+                    y: "50%",
+                    bottom: "35%",
+                    left: "calc(50% + 10px)",
+                  }}
+                />
+              </motion.button>
+            </MotionConfig>
           </div>
         </motion.div>
       </motion.nav>

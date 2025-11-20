@@ -1,69 +1,130 @@
 "use client";
+import { motion } from "framer-motion";
 
 export default function AboutSection() {
   return (
-    <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            About <span className="text-blue-600">NJ Tech Studio</span>
-          </h2>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Transforming ideas into powerful digital solutions
-          </p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
-            <h3 className="text-3xl font-bold text-gray-900">
-              Building Tomorrow's Technology Today
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              At NJ Tech Studio, we are passionate about creating innovative software solutions
-              that drive business growth and digital transformation. With years of expertise in
-              web development, mobile apps, and custom software solutions, we help businesses
-              achieve their digital goals.
-            </p>
-            <p className="text-gray-600 leading-relaxed">
-              Our team of skilled developers, designers, and strategists work collaboratively
-              to deliver high-quality, scalable solutions tailored to your unique needs. We
-              combine cutting-edge technology with creative thinking to build products that
-              make a difference.
-            </p>
-            <div className="grid grid-cols-3 gap-6 pt-6">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">50+</div>
-                <div className="text-gray-600 text-sm">Projects Completed</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">30+</div>
-                <div className="text-gray-600 text-sm">Happy Clients</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-blue-600 mb-2">5+</div>
-                <div className="text-gray-600 text-sm">Years Experience</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative">
-            <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl p-8 text-white">
-              <h4 className="text-2xl font-bold mb-6">Our Mission</h4>
-              <p className="mb-6 leading-relaxed">
-                To empower businesses with innovative technology solutions that drive growth,
-                efficiency, and success in the digital age.
-              </p>
-              <h4 className="text-2xl font-bold mb-6">Our Vision</h4>
-              <p className="leading-relaxed">
-                To be a leading technology partner known for delivering exceptional digital
-                experiences and transformative solutions that shape the future.
-              </p>
-            </div>
-            <div className="absolute -bottom-6 -right-6 w-full h-full bg-blue-100 rounded-2xl -z-10"></div>
-          </div>
-        </div>
+    <section className="min-h-screen bg-gradient-to-b from-white to-gray-50 px-4 py-20">
+      <div className="max-w-6xl mx-auto">
+        <motion.div
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+          transition={{
+            staggerChildren: 0.05,
+          }}
+          className="grid grid-cols-12 gap-4"
+        >
+          <HeaderBlock />
+          <FounderBlock />
+          <AboutBlock />
+          <MissionBlock />
+          <VisionBlock />
+        </motion.div>
       </div>
     </section>
   );
 }
+
+const Block = ({ className, children, ...rest }) => {
+  return (
+    <motion.div
+      variants={{
+        initial: {
+          scale: 0.5,
+          y: 50,
+          opacity: 0,
+        },
+        animate: {
+          scale: 1,
+          y: 0,
+          opacity: 1,
+        },
+      }}
+      transition={{
+        type: "spring",
+        mass: 3,
+        stiffness: 400,
+        damping: 50,
+      }}
+      className={`rounded-2xl border border-gray-200 bg-white p-6 shadow-lg ${className}`}
+      {...rest}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+const HeaderBlock = () => (
+  <Block className="col-span-12 md:col-span-6 flex flex-col justify-between">
+    <div>
+      <h1 className="mb-4 text-6xl md:text-8xl font-bold leading-tight text-gray-900">
+        <span className="bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent" style={{ fontFamily: "'Jersey 10', 'Arial Black', sans-serif" }}>
+          NJ Tech Studio
+        </span>
+      </h1>
+      <p className="text-lg text-gray-600 leading-relaxed mb-8">
+        Transforming ideas into powerful digital solutions that drive business growth and innovation.
+      </p>
+    </div>
+    <div className="flex justify-center items-end mt-auto">
+      <img
+        src="/Logo.png"
+        alt="NJ Tech Studio Logo"
+        className="w-32 h-auto opacity-20"
+      />
+    </div>
+  </Block>
+);
+
+const FounderBlock = () => (
+  <Block className="col-span-12 md:col-span-6 flex items-center">
+    <p className="text-2xl md:text-3xl leading-snug text-gray-900">
+      Hi, I'm <span className="text-purple-700 font-bold">Jay Patel</span>.{" "}
+      <span className="text-gray-500">
+        A passionate software developer with 2 years of experience building innovative web applications,
+        mobile apps, and AI-powered solutions. I specialize in creating efficient, scalable products
+        that solve real-world problems.
+      </span>
+    </p>
+  </Block>
+);
+
+const AboutBlock = () => (
+  <Block className="col-span-12">
+    <p className="text-2xl md:text-3xl leading-snug text-gray-900">
+      We build innovative software solutions.{" "}
+      <span className="text-gray-500">
+        Specializing in web development, mobile apps, AI integrations, and custom automation.
+        Our passion is creating scalable, high-quality products that solve real business challenges
+        and drive digital transformation.
+      </span>
+    </p>
+  </Block>
+);
+
+const MissionBlock = () => (
+  <Block className="col-span-12 md:col-span-6">
+    <p className="text-2xl md:text-3xl leading-snug text-gray-900">
+      <span className="text-purple-700 font-bold">Our Mission</span>
+      <br />
+      <span className="text-gray-500">
+        To empower businesses with innovative technology solutions that drive growth,
+        efficiency, and success in the digital age.
+      </span>
+    </p>
+  </Block>
+);
+
+const VisionBlock = () => (
+  <Block className="col-span-12 md:col-span-6">
+    <p className="text-2xl md:text-3xl leading-snug text-gray-900">
+      <span className="text-purple-700 font-bold">Our Vision</span>
+      <br />
+      <span className="text-gray-500">
+        To be a leading technology partner known for delivering exceptional digital
+        experiences and transformative solutions that shape the future.
+      </span>
+    </p>
+  </Block>
+);
+
