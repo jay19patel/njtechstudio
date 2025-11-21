@@ -21,8 +21,8 @@ export default function Navbar() {
       image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=60"
     },
     {
-      label: "Solutions",
-      href: "/solutions",
+      label: "Projects",
+      href: "/projects",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=60"
     },
     {

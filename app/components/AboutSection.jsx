@@ -16,6 +16,7 @@ export default function AboutSection() {
         >
           <HeaderBlock />
           <FounderBlock />
+          <AboutNJTechStudioBlock/>
           <AboutBlock />
           <MissionBlock />
           <VisionBlock />
@@ -55,23 +56,16 @@ const Block = ({ className, children, ...rest }) => {
 };
 
 const HeaderBlock = () => (
-  <Block className="col-span-12 md:col-span-6 flex flex-col justify-between">
+  <Block className="col-span-12 md:col-span-6 flex flex-col justify-center items-center">
     <div>
-      <h1 className="mb-4 text-6xl md:text-8xl font-bold leading-tight text-gray-900">
+      <h1 className="text-6xl md:text-8xl font-bold leading-tight text-gray-900">
         <span className="bg-linear-to-r from-purple-600 to-indigo-600 bg-clip-text text-transparent" style={{ fontFamily: "'Jersey 10', 'Arial Black', sans-serif" }}>
           NJ Tech Studio
         </span>
       </h1>
-      <p className="text-lg text-gray-600 leading-relaxed mb-8">
+      <p className="text-lg text-gray-600 leading-relaxed">
         Transforming ideas into powerful digital solutions that drive business growth and innovation.
       </p>
-    </div>
-    <div className="flex justify-center items-end mt-auto">
-      <img
-        src="/Logo.png"
-        alt="NJ Tech Studio Logo"
-        className="w-32 h-auto opacity-20"
-      />
     </div>
   </Block>
 );
@@ -101,6 +95,44 @@ const AboutBlock = () => (
     </p>
   </Block>
 );
+
+
+const AboutNJTechStudioBlock = () => (
+  <Block className="col-span-12">
+      <div className="w-full max-w-6xl bg-[#1E1E22] text-white rounded-3xl 
+                      p-14 shadow-xl flex flex-col md:flex-row gap-12 items-center min-h-[320px]">
+        
+        {/* Avatar + Badge */}
+        <div className="relative">
+          <img
+            src="/photo.png" // Replace with your own avatar image
+            alt="User Avatar"
+            className="w-32 h-32 rounded-2xl object-cover border-2 border-gray-700 shadow-lg"
+          />
+
+          <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white 
+                           text-black px-4 py-1.5 text-xs font-semibold rounded-xl shadow-md">
+            videoly
+          </span>
+        </div>
+
+        {/* Text */}
+        <div className="flex-1 space-y-4">
+          <p className="text-gray-200 text-xl leading-relaxed">
+            “We went from using only email sequences and manual steps on other
+            channels to having all important tools integrated. Now we’re able to
+            run multichannel campaigns from just one workflow.”
+          </p>
+
+          <p className="text-sm font-semibold pt-2">
+            Patric Lindström{" "}
+            <span className="text-gray-400 font-normal">Chief Sales Officer</span>
+          </p>
+        </div>
+      </div>
+  </Block>
+);
+
 
 const MissionBlock = () => (
   <Block className="col-span-12 md:col-span-6">
