@@ -4,7 +4,8 @@ import TechSkillSection from "./components/TechSkillSection";
 import WhyChooseUs from "./components/WhyChooseUs";
 import SolutionsSection from "./components/SolutionsSection";
 import FAQSection from "./components/faqSection";
-import YoutubeSection from "./components/YoutubeSection"
+import YoutubeSection from "./components/YoutubeSection";
+import TestimonialSection from "./components/TestimonialSection";
 
 export default function Home() {
   return (
@@ -15,6 +16,7 @@ export default function Home() {
       <TechSkillSection />
       <WhyChooseUs />
       <YoutubeSection/>
+      <TestimonialSection />
       <FAQSection />
     </div>
   );

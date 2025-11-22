@@ -43,8 +43,8 @@ export default function TechSkillSection() {
   };
 
   return (
-    <MovingTextBg text="TECHSTACK">
-    <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20 overflow-hidden">
+    <MovingTextBg text="TECHSTACK" textColor="text-gray-400">
+    <section className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 overflow-hidden ">
       {/* Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
         {/* Dotted Pattern */}

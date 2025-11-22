@@ -2,34 +2,40 @@ import React from "react";
 import MovingTextBg from "../components/MovingTextBg";
 const projects = [
   {
-    name: "AI Sales Assistant",
-    techstack: ["Next.js", "React", "Tailwind", "Node.js", "PostgreSQL"],
-    description: "Automates outreach and improves lead conversions using AI.",
-    link: "https://example.com/ai-sales-assistant",
+    name: "AI-Powered Blogging Platform",
+    techstack: ["Next.js", "FastAPI", "MongoDB", "LangChain", "LangGraph", "Redis", "JWT"],
+    description: "Create AI-assisted blogs tailored to your style. Vector store powers semantic search, Redis caching = 35% faster loads. Login, write with AI, share, discover! 🚀",
+    link: "https://github.com/yourusername/ai-blog-platform",
   },
   {
-    name: "Portfolio Analyzer",
-    techstack: ["Python", "FastAPI", "React", "Pandas", "Docker"],
-    description: "Tool that analyzes investment portfolios with real‑time metrics.",
-    link: "https://example.com/portfolio-analyzer",
+    name: "Multi-Microservices Trading Automation",
+    techstack: ["Python", "Celery", "Redis Pub/Sub", "WebSocket", "Pandas", "NumPy"],
+    description: "Event-driven trading platform with <250ms signal-to-trade execution. Strategy service explores live data, order manager executes, risk manager protects. 90% automation! 📈",
+    link: "https://github.com/yourusername/trading-automation",
   },
   {
-    name: "SaaS Metrics Dashboard",
-    techstack: ["Vue", "Supabase", "Tailwind", "D3.js", "Vercel"],
-    description: "Beautiful dashboard showing growth metrics for SaaS companies.",
-    link: "https://example.com/saas-dashboard",
+    name: "AI Talent Acquisition System",
+    techstack: ["Python", "FastAPI", "OpenSearch", "Vector DB", "GenAI", "React", "GCP"],
+    description: "Automate candidate screening with GenAI + vector search. Reduced manual screening time by ~50%. Smart matching, faster hiring! 💼",
+    link: "#",
   },
   {
-    name: "Team Collaboration Hub",
-    techstack: ["React", "Firebase", "Zustand", "Node.js", "Express"],
-    description: "Centralized platform to enhance team collaboration and productivity.",
-    link: "https://example.com/collab-hub",
+    name: "Custom ERP Solutions (Frappe/ERPNext)",
+    techstack: ["Frappe", "ERPNext", "React", "Python", "PostgreSQL"],
+    description: "Built full-stack ERP systems for SMBs. Automated workflows, quotations, task tracking, real-time dashboards. 30% speed boost guaranteed! ⚡",
+    link: "#",
   },
   {
-    name: "Market Research Engine",
-    techstack: ["Next.js", "Redis", "OpenAI API", "Tailwind", "MySQL"],
-    description: "AI‑powered engine that summarizes market reports instantly.",
-    link: "https://example.com/market-research",
+    name: "Healthcare Manufacturing Automation",
+    techstack: ["C#", ".NET", "SQL Server", "Python", "FastAPI", "IoT"],
+    description: "IoT-integrated automation for healthcare manufacturing. Streamlined documentation, reduced manual processing by 50%+. Efficiency unlocked! 🏥",
+    link: "#",
+  },
+  {
+    name: "Car Rental Management System",
+    techstack: ["Frappe", "Python", "JavaScript", "Email Automation"],
+    description: "Automated HR approvals, employee bookings, car provider coordination. Email loops + status tracking = fully automated rental workflow! 🚗",
+    link: "#",
   },
 ];
 
@@ -40,10 +46,10 @@ export default function ProjectGrid() {
       {/* Heading Section */}
       <div className="mb-12 text-left">
         <h2 className="text-5xl font-extrabold text-gray-900 leading-tight">
-          Featured Projects
+          Stuff I've Built & Shipped
         </h2>
         <p className="text-lg text-gray-600 mt-2 max-w-xl">
-          A curated selection of powerful projects built using modern technologies.
+          Real projects from AI-powered platforms to trading bots to ERP systems. If it scales and solves problems, it's here! 💻
         </p>
       </div>
 

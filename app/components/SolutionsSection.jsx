@@ -3,29 +3,29 @@ import { motion, useTransform, useScroll, useSpring } from "framer-motion";
 import { useRef } from "react";
 import MovingTextBg from "./MovingTextBg";
 const sectionsData = [
-  { 
+  {
     id: 1,
-    label: "FOR ACCOUNTANTS",
-    title: "CLOSE THE BOOKS WITHOUT OVERTIME",
-    description: "Serve your clients with max efficiency. Review transactions, reconcile cashflows, record adjustments, and generate reports",
-    image: "https://images.unsplash.com/photo-1554224311-beee460c201f?w=800",
-    layout: "left" // text on left, image on right
+    label: "AI-POWERED AUTOMATION",
+    title: "GENAI SYSTEMS THAT ACTUALLY WORK",
+    description: "Build intelligent apps with LangChain, vector search (OpenSearch), and AI agents. From talent acquisition automation to personalized content generation — I make AI do the heavy lifting so you can focus on growth.",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800",
+    layout: "left"
   },
-  { 
+  {
     id: 2,
-    label: "FOR BUSINESSES",
-    title: "STREAMLINE YOUR FINANCIAL OPERATIONS",
-    description: "Manage your business finances with ease. Track expenses, monitor cash flow, and make data-driven decisions with real-time insights",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800",
-    layout: "right" // image on left, text on right
+    label: "FULL-STACK ERP SOLUTIONS",
+    title: "CUSTOM ERP BUILT YOUR WAY",
+    description: "Frappe/ERPNext + React magic! Automate workflows, track inventory, manage approvals, and get real-time dashboards. Clean UI, fast performance, 30% productivity boost guaranteed. Your business, fully automated.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
+    layout: "right"
   },
-  { 
+  {
     id: 3,
-    label: "FOR STARTUPS",
-    title: "GROW FASTER WITH SMART AUTOMATION",
-    description: "Focus on what matters most. Automate bookkeeping, payroll, and compliance so you can spend time building your business",
-    image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=800",
-    layout: "left" // text on left, image on right
+    label: "SCALABLE WEB APPS",
+    title: "SHIP FAST, SCALE HARD",
+    description: "Next.js, React, FastAPI, Django — if it needs to be fast, responsive, and cloud-ready (GCP), I got you! From MVPs to production-ready apps with CI/CD, Docker, and microservices architecture.",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
+    layout: "left"
   },
 ];
 
@@ -73,35 +73,35 @@ const SectionCard = ({ section }) => {
   const isLeftLayout = section.layout === "left";
 
   return (
-    
-    <div className="min-w-full h-full flex items-center justify-center px-8 md:px-16 lg:px-24">
+
+    <div className="min-w-full h-full flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24 py-8 sm:py-12 md:py-16">
       <div className="w-full max-w-7xl">
         <MovingTextBg text="WHAT I CAN DO" textColor="text-gray-100">
-          <div className={`flex flex-col ${isLeftLayout ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 lg:gap-16 items-center`}>
+          <div className={`flex flex-col ${isLeftLayout ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-6 sm:gap-8 md:gap-10 lg:gap-16 items-center`}>
             {/* Text Content */}
-            <div className="w-full lg:w-1/2 space-y-6">
-              <div className="inline-block px-4 py-2 border border-white/30 rounded-full">
-                <span className="text-white text-sm font-medium tracking-wider">
+            <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6 text-center lg:text-left">
+              <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 border border-white/30 rounded-full">
+                <span className="text-white text-xs sm:text-sm font-medium tracking-wider">
                   {section.label}
                 </span>
               </div>
-              
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight px-2 sm:px-0">
                 {section.title}
               </h2>
-              
-              <p className="text-lg md:text-xl text-gray-400 leading-relaxed">
+
+              <p className="text-base sm:text-lg md:text-xl text-gray-400 leading-relaxed px-2 sm:px-0">
                 {section.description}
               </p>
             </div>
 
             {/* Image Content */}
             <div className="w-full lg:w-1/2">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
                 <img
                   src={section.image}
                   alt={section.title}
-                  className="w-full h-[400px] md:h-[500px] lg:h-[600px] object-cover"
+                  className="w-full h-[280px] sm:h-[350px] md:h-[400px] lg:h-[500px] xl:h-[600px] object-cover"
                 />
                 <div className="absolute inset-0 bg-liner-to-t from-black/20 to-transparent"></div>
               </div>

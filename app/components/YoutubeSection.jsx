@@ -1,49 +1,51 @@
 "use client";
 import React from "react";
+import MovingTextBg from "./MovingTextBg";
 
 export default function YoutubeSection() {
   const cards = [
     {
-      videoId: "CZFlHnakLNQ",
-      title: "Top outreach triggers to qualify leads",
+      videoId: "dQw4w9WgXcQ",
+      title: "Building AI Apps with LangChain & FastAPI",
       description:
-        "Get real examples from 12,000+ outbound campaigns to speed up your sales cycle.",
-      badge: "300+ MEETINGS BOOKED",
+        "Learn how I built an AI-powered blogging platform with vector search and Redis caching. Full tutorial from zero to production!",
+      badge: "AI TUTORIAL",
     },
     {
-      videoId: "lLrHxOka8Ns",
-      title: "Step-by-step guide to avoiding spam",
+      videoId: "dQw4w9WgXcQ",
+      title: "Frappe/ERPNext: Custom ERP in 30 Minutes",
       description:
-        "The 11-step method to keep your deliverability high and emails out of the spam folder.",
-      badge: "DELIVERABILITY GUIDE",
+        "Speed-run building a custom ERP system with automated workflows and real-time dashboards. Perfect for SMBs!",
+      badge: "ERP MASTERY",
     },
     {
-      videoId: "Or2Vkcz14iI",
-      title: "The new way of sales calling in 2025",
+      videoId: "dQw4w9WgXcQ",
+      title: "My Startup Journey: From Code to Company",
       description:
-        "4-step cold calling playbook successful sales teams use for +270% conversion rate.",
-      badge: "3X MEETINGS",
+        "Behind the scenes of building NJTechStudio — the wins, fails, and everything in between. Real talk from a developer turned founder.",
+      badge: "STARTUP STORY",
     },
   ];
 
   return (
-    <section className="py-16 px-4">
+    <MovingTextBg text="CONTENT" textColor="text-gray-400">
+    <section className="pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-12 md:pb-16 px-4 bg-white">
       <div className="max-w-[1400px] mx-auto">
-        <div className="bg-black rounded-3xl p-8 md:p-12 lg:p-16 shadow-xl border border-gray-800">
-          <div className="text-center mb-12">
-            <h2 className="text-[34px] md:text-[42px] lg:text-[48px] leading-[1.2] font-bold text-white mb-2">
-              We did the learning.
+        <div className="bg-black rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 shadow-xl border border-gray-800">
+          <div className="text-center mb-8 sm:mb-10 md:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-[42px] lg:text-[48px] leading-[1.2] font-bold text-white mb-2">
+              Code. Create. Teach.
             </h2>
-            <h2 className="text-[34px] md:text-[42px] lg:text-[48px] leading-[1.2] font-bold text-white">
-              Here's everything you need to hit sales quotas.
+            <h2 className="text-2xl sm:text-3xl md:text-[42px] lg:text-[48px] leading-[1.2] font-bold text-white">
+              Everything you need to build & scale tech products. 🎬
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {cards.map((card, index) => (
               <div
                 key={index}
-                className="bg-gray-800 rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 hover:shadow-purple-500/40 hover:shadow-lg transition-all duration-300 group"
+                className="bg-gray-800 rounded-lg sm:rounded-xl overflow-hidden border border-gray-700 hover:border-purple-500 hover:shadow-purple-500/40 hover:shadow-lg transition-all duration-300 group"
               >
                 <div className="relative cursor-pointer">
                   <img
@@ -58,9 +60,9 @@ export default function YoutubeSection() {
 
                   {/* Hover Play Button */}
                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white bg-opacity-90 group-hover:bg-opacity-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-lg">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white bg-opacity-90 group-hover:bg-opacity-100 rounded-full flex items-center justify-center group-hover:scale-110 transition-all duration-300 shadow-lg">
                       <svg
-                        className="w-8 h-8 text-red-600 ml-1"
+                        className="w-6 h-6 sm:w-8 sm:h-8 text-red-600 ml-1"
                         viewBox="0 0 24 24"
                         fill="currentColor"
                       >
@@ -71,18 +73,18 @@ export default function YoutubeSection() {
 
                   {/* Badge */}
                   {card.badge && (
-                    <div className="absolute bottom-4 left-4 bg-purple-600 text-white px-3 py-1 rounded text-xs font-bold shadow-md">
+                    <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 bg-purple-600 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded text-[10px] sm:text-xs font-bold shadow-md">
                       {card.badge}
                     </div>
                   )}
                 </div>
 
                 {/* Card Content */}
-                <div className="p-6">
-                  <h3 className="text-[18px] font-semibold leading-[1.4] mb-3 text-white">
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-[18px] font-semibold leading-[1.4] mb-2 sm:mb-3 text-white">
                     {card.title}
                   </h3>
-                  <div className="text-gray-300 text-[14px] leading-[1.6]">
+                  <div className="text-gray-300 text-xs sm:text-[14px] leading-[1.6]">
                     {card.description}
                   </div>
                 </div>
@@ -92,5 +94,6 @@ export default function YoutubeSection() {
         </div>
       </div>
     </section>
+    </MovingTextBg>
   );
 }

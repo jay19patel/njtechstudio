@@ -142,24 +142,62 @@
   top: 50%;
   left: 0;
   width: 100%;
+  height: 100%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  justify-content: space-evenly;
+  gap: 0;
   pointer-events: none;
 }
 
 .moving-text-bg .moving-text-row {
   white-space: nowrap;
-  font-size: 14vw;
+  font-size: 180px;
   font-weight: 900;
   font-family: 'Jersey 10', 'Arial Black', sans-serif;
-  line-height: 0.85;
-  opacity: 0.12;
+  line-height: 0.9;
+  opacity: 0.08;
   display: flex;
   gap: 3rem;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+}
+
+/* Responsive font sizes for MovingTextBg */
+@media (max-width: 640px) {
+  .moving-text-bg .moving-text-row {
+    font-size: 200px;
+    gap: 2rem;
+    opacity: 0.1;
+  }
+  .moving-text-bg .moving-text-container {
+    gap: 0.5rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 768px) {
+  .moving-text-bg .moving-text-row {
+    font-size: 140px;
+    gap: 2.5rem;
+    opacity: 0.09;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .moving-text-bg .moving-text-row {
+    font-size: 160px;
+    gap: 2.5rem;
+    opacity: 0.08;
+  }
+}
+
+@media (min-width: 1025px) {
+  .moving-text-bg .moving-text-row {
+    font-size: 200px;
+    gap: 3rem;
+    opacity: 0.08;
+  }
 }
 
 .moving-text-bg .moving-text-row:nth-child(odd) {
