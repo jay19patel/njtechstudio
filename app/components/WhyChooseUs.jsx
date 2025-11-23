@@ -1,4 +1,3 @@
-// Updated WhyChooseUs Component (new layout: left-aligned title, subtitle, 4 cards in 2 rows)
 "use client";
 export default function WhyChooseUs() {
   return (
@@ -8,10 +7,10 @@ export default function WhyChooseUs() {
         {/* Heading Section */}
         <div className="mb-8 sm:mb-10 text-left">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">
-            Real Results, Real Impact
+            Why People Love Working With Us
           </h2>
           <p className="text-base sm:text-lg text-gray-600 mt-2 max-w-xl">
-            Here's what happens when you ship smart, scalable solutions that actually work.
+            Smart execution, reliable delivery, budget-friendly solutions, and the joy of working with a team that actually understands your goals.
           </p>
         </div>
 
@@ -22,21 +21,21 @@ export default function WhyChooseUs() {
           <div className="rounded-xl sm:rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-xl hover:border-purple-400 transition-all duration-300 p-5 sm:p-6 md:p-8">
             <div className="flex justify-between items-center mb-4 sm:mb-6">
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">~50%</div>
-                <div className="text-gray-500 text-base sm:text-lg font-medium">Faster Screening</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900">Budget-Friendly</div>
+                <div className="text-gray-500 text-base sm:text-lg font-medium">High Value, Fair Pricing</div>
               </div>
               <img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png" className="w-12 h-12 sm:w-14 sm:h-14" />
             </div>
 
             <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-4 sm:mb-6">
-              "Built AI-powered talent acquisition automation with GenAI and vector search (OpenSearch). Manual screening time reduced by ~50%, candidates matched smarter, HR team finally happy!"
+              "We keep quality high and costs practical. No over-engineering, no unnecessary complexity — just smart solutions that fit your budget and scale with your growth."
             </p>
 
             <div className="flex items-center gap-3 sm:gap-4">
               <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full" />
               <div>
-                <div className="text-xs sm:text-sm font-semibold text-gray-900">Sayaji Infotech Client</div>
-                <div className="text-xs sm:text-sm text-gray-500">HR Manager</div>
+                <div className="text-xs sm:text-sm font-semibold text-gray-900">Satisfied Client</div>
+                <div className="text-xs sm:text-sm text-gray-500">Startup Founder</div>
               </div>
             </div>
           </div>
@@ -45,21 +44,21 @@ export default function WhyChooseUs() {
           <div className="rounded-xl sm:rounded-2xl border border-purple-300 bg-linear-to-br from-purple-50 to-white shadow-sm hover:shadow-xl hover:border-purple-500 transition-all duration-300 p-5 sm:p-6 md:p-8">
             <div className="flex justify-between items-center mb-4 sm:mb-6">
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">~30%</div>
-                <div className="text-gray-500 text-base sm:text-lg font-medium">Speed Boost</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900">Optimized Solutions</div>
+                <div className="text-gray-500 text-base sm:text-lg font-medium">Designed to Perform</div>
               </div>
               <img src="https://cdn-icons-png.flaticon.com/512/3281/3281307.png" className="w-12 h-12 sm:w-14 sm:h-14" />
             </div>
 
             <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-4 sm:mb-6">
-              "Created full-stack ERP solutions with Frappe/ERPNext and React. One-click access to key data, automated quotations, task tracking — management and working speed increased by ~30%!"
+              "We don’t just build — we optimize. Faster systems, cleaner UX, automated workflows, and future-proof architecture that supports long-term business growth."
             </p>
 
             <div className="flex items-center gap-3 sm:gap-4">
               <img src="https://cdn-icons-png.flaticon.com/512/3135/3135789.png" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full" />
               <div>
-                <div className="text-xs sm:text-sm font-semibold text-gray-900">SMB Owner</div>
-                <div className="text-xs sm:text-sm text-gray-500">Operations Director</div>
+                <div className="text-xs sm:text-sm font-semibold text-gray-900">Business Owner</div>
+                <div className="text-xs sm:text-sm text-gray-500">Operations Head</div>
               </div>
             </div>
           </div>
@@ -68,21 +67,21 @@ export default function WhyChooseUs() {
           <div className="rounded-xl sm:rounded-2xl border border-purple-300 bg-linear-to-br from-purple-50 to-white shadow-sm hover:shadow-xl hover:border-purple-500 transition-all duration-300 p-5 sm:p-6 md:p-8">
             <div className="flex justify-between items-center mb-4 sm:mb-6">
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">&lt;250ms</div>
-                <div className="text-gray-500 text-base sm:text-lg font-medium">Execution Speed</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900">AI-Driven Approach</div>
+                <div className="text-gray-500 text-base sm:text-lg font-medium">Smarter, Faster, Scalable</div>
               </div>
               <img src="https://cdn-icons-png.flaticon.com/512/3468/3468377.png" className="w-12 h-12 sm:w-14 sm:h-14" />
             </div>
 
             <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-4 sm:mb-6">
-              "Engineered a multi-microservices trading platform with event-driven architecture. Sub-250ms signal-to-trade execution, automated strategies, real-time risk management — 90% less manual work!"
+              "From automations to custom LLM workflows, we integrate AI wherever it truly makes sense — improving speed, accuracy, and overall efficiency with measurable impact."
             </p>
 
             <div className="flex items-center gap-3 sm:gap-4">
               <img src="https://cdn-icons-png.flaticon.com/512/3135/3135823.png" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full" />
               <div>
-                <div className="text-xs sm:text-sm font-semibold text-gray-900">Personal Project</div>
-                <div className="text-xs sm:text-sm text-gray-500">Trading Automation Platform</div>
+                <div className="text-xs sm:text-sm font-semibold text-gray-900">Tech Client</div>
+                <div className="text-xs sm:text-sm text-gray-500">AI Automation Project</div>
               </div>
             </div>
           </div>
@@ -91,21 +90,21 @@ export default function WhyChooseUs() {
           <div className="rounded-xl sm:rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-xl hover:border-purple-400 transition-all duration-300 p-5 sm:p-6 md:p-8">
             <div className="flex justify-between items-center mb-4 sm:mb-6">
               <div>
-                <div className="text-2xl sm:text-3xl font-bold text-gray-900">~50%</div>
-                <div className="text-gray-500 text-base sm:text-lg font-medium">Time Saved</div>
+                <div className="text-2xl sm:text-3xl font-bold text-gray-900">Reliable Delivery</div>
+                <div className="text-gray-500 text-base sm:text-lg font-medium">On Time, Every Time</div>
               </div>
               <img src="https://cdn-icons-png.flaticon.com/512/2920/2920235.png" className="w-12 h-12 sm:w-14 sm:h-14" />
             </div>
 
             <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-4 sm:mb-6">
-              "Built healthcare manufacturing automation with C# + IoT integration. Streamlined documentation workflows, reduced manual processing by over 50%. Healthcare meets automation — game changer!"
+              "Clear communication, transparent progress, and predictable delivery. We make development stress-free so your team can focus on what truly matters."
             </p>
 
             <div className="flex items-center gap-3 sm:gap-4">
               <img src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full" />
               <div>
-                <div className="text-xs sm:text-sm font-semibold text-gray-900">Meril Life Client</div>
-                <div className="text-xs sm:text-sm text-gray-500">Manufacturing Lead</div>
+                <div className="text-xs sm:text-sm font-semibold text-gray-900">Enterprise Client</div>
+                <div className="text-xs sm:text-sm text-gray-500">Project Manager</div>
               </div>
             </div>
           </div>

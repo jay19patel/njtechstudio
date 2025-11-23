@@ -5,29 +5,51 @@ import MovingTextBg from "./MovingTextBg";
 const sectionsData = [
   {
     id: 1,
-    label: "AI-POWERED AUTOMATION",
-    title: "GENAI SYSTEMS THAT ACTUALLY WORK",
-    description: "Build intelligent apps with LangChain, vector search (OpenSearch), and AI agents. From talent acquisition automation to personalized content generation — I make AI do the heavy lifting so you can focus on growth.",
-    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800",
-    layout: "left"
+    label: "CONTENT & YOUTUBE CREATION",
+    title: "CREATIVE TECH CONTENT THAT TEACHES & ENTERTAINS",
+    description:
+      "I create fun, engaging and value-packed content around programming, startups, software development and real-world tech journeys. With a joyful delivery style, I turn complex tech topics into simple, enjoyable and relatable experiences through YouTube, reels and storytelling.",
+    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800",
+    layout: "left",
   },
   {
     id: 2,
-    label: "FULL-STACK ERP SOLUTIONS",
-    title: "CUSTOM ERP BUILT YOUR WAY",
-    description: "Frappe/ERPNext + React magic! Automate workflows, track inventory, manage approvals, and get real-time dashboards. Clean UI, fast performance, 30% productivity boost guaranteed. Your business, fully automated.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
-    layout: "right"
+    label: "WEB + AI DEVELOPMENT",
+    title: "MODERN WEB APPS SUPERCHARGED WITH AI",
+    description:
+      "I build fast, scalable and intelligent applications using Next.js, React, FastAPI, Django and GenAI tools. From backend APIs to smart automation, vector search, AI agents and real-time dashboards — your digital product becomes faster, smarter and future-ready.",
+    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
+    layout: "right",
   },
   {
     id: 3,
-    label: "SCALABLE WEB APPS",
-    title: "SHIP FAST, SCALE HARD",
-    description: "Next.js, React, FastAPI, Django — if it needs to be fast, responsive, and cloud-ready (GCP), I got you! From MVPs to production-ready apps with CI/CD, Docker, and microservices architecture.",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
-    layout: "left"
+    label: "ERP & BUSINESS AUTOMATION",
+    title: "CUSTOM ERP FOR SMALL & MEDIUM BUSINESSES",
+    description:
+      "Automate your business with tailored ERP systems built using Frappe/ERPNext + React. From inventory and HR to approvals and finance dashboards — I deliver fast, clean and efficient workflows that boost productivity and reduce manual work.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
+    layout: "left",
   },
+  {
+    id: 4,
+    label: "IOT & SMART AUTOMATION",
+    title: "CONNECT DEVICES WITH REAL-WORLD SOFTWARE",
+    description:
+      "I design IoT-enabled systems that combine sensors, cloud services and smart automation. From real-time monitoring to device dashboards and industry automation — I bridge hardware, software and AI to bring ideas to life.",
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800",
+    layout: "right",
+  },
+  {
+    id: 5,
+    label: "SCHOOL & COLLEGE PROJECTS",
+    title: "HIGH-SCORING MODERN STUDENT PROJECTS",
+    description:
+      "Helping students build impactful, presentation-ready academic projects using Web Development, Python, AI, ML, automation and IoT. Clean code, proper documentation and impressive UI — perfect for final-year submissions and demos.",
+    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800",
+    layout: "left",
+  }
 ];
+
 
 export default function HorizontalScrollSection() {
   const targetRef = useRef(null);

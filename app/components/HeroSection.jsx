@@ -19,17 +19,13 @@ const FlipLink = ({ children }) => {
         {children.split("").map((l, i) => (
           <motion.span
             variants={{
-              initial: {
-                y: 0,
-              },
-              hovered: {
-                y: "-100%",
-              },
+              initial: { y: 0 },
+              hovered: { y: "-100%" }
             }}
             transition={{
               duration: DURATION,
               ease: "easeInOut",
-              delay: STAGGER * i,
+              delay: STAGGER * i
             }}
             className="inline-block"
             key={i}
@@ -42,17 +38,13 @@ const FlipLink = ({ children }) => {
         {children.split("").map((l, i) => (
           <motion.span
             variants={{
-              initial: {
-                y: "100%",
-              },
-              hovered: {
-                y: 0,
-              },
+              initial: { y: "100%" },
+              hovered: { y: 0 }
             }}
             transition={{
               duration: DURATION,
               ease: "easeInOut",
-              delay: STAGGER * i,
+              delay: STAGGER * i
             }}
             className="inline-block"
             key={i}
@@ -71,79 +63,88 @@ export default function HeroSection() {
   const [typingProgress, setTypingProgress] = useState("");
   const messagesRef = useRef(null);
 
-  // Website development conversation flow
+  // Updated scripted conversation (text only)
   const scriptedConversation = useMemo(() => ([
-    { role: "user", content: "Hey Jay, heard you build AI-powered apps? Need help with an ERP system." },
-    { role: "assistant", content: "Absolutely! I specialize in full-stack ERP solutions with Frappe/ERPNext + React. What's your business looking to automate?" },
-    { role: "user", content: "We need inventory management, automated workflows, and real-time analytics." },
-    { role: "assistant", content: "Perfect fit! I'll build you a custom ERP with AI-powered automation, real-time dashboards, and seamless integrations. Clean UI, fast performance guaranteed!" },
-    { role: "assistant", content: "Building your solution...", pending: true },
-    { role: "assistant", content: "Done! Your ERP is live with automated workflows, one-click reports, and 30% faster operations. Let's scale your business! 🚀" },
-    { role: "user", content: "This is exactly what we needed! Quick delivery and the system works flawlessly. Highly recommend!" },
+    { role: "user", content: "Hey Jay, heard you build modern Python-based applications? Need help with a custom automation tool." },
+    { role: "assistant", content: "Absolutely! I specialize in Python + JavaScript development—FastAPI, Django, React, Next.js and automation systems. What would you like to automate?" },
+    { role: "user", content: "We need data scraping, processing, and a clean dashboard to visualize everything." },
+    { role: "assistant", content: "Perfect! I'll build you a fast, scalable solution with smart automation, clean APIs, and an interactive dashboard. Smooth performance guaranteed!" },
+    { role: "assistant", content: "Processing your tool...", pending: true },
+    { role: "assistant", content: "Done! Your automation system is live—faster workflows, centralized dashboards, and seamless integrations. Let’s take it even further! 🚀" },
+    { role: "user", content: "This is fantastic! Clean UI, quick delivery, and the automation works perfectly. Highly recommend!" }
   ]), []);
 
-  // Auto-scroll to latest message
+  // Auto-scroll
   useEffect(() => {
     const el = messagesRef.current;
-    if (el) {
-      el.scrollTop = el.scrollHeight;
-    }
+    if (el) el.scrollTop = el.scrollHeight;
   }, [displayedMessages, currentTypingIndex, typingProgress]);
 
-  // Auto-play the scripted conversation one-by-one (deterministic, no polling)
+  // Typing animation control
   useEffect(() => {
     let isCancelled = false;
 
-    const typeMessage = (fullText, role, pending = false) => new Promise((resolve) => {
-      const align = role === "user" ? "right" : "left";
+    const typeMessage = (fullText, role, pending = false) =>
+      new Promise((resolve) => {
+        const align = role === "user" ? "right" : "left";
 
-      // Add message in typing state at the end
-      setDisplayedMessages(prev => {
-        const next = [...prev, { role, align, content: fullText, displayedContent: "", isTyping: true, pending }];
-        setCurrentTypingIndex(next.length - 1);
-        setTypingProgress("");
-        return next;
+        setDisplayedMessages((prev) => {
+          const next = [
+            ...prev,
+            { role, align, content: fullText, displayedContent: "", isTyping: true, pending }
+          ];
+          setCurrentTypingIndex(next.length - 1);
+          setTypingProgress("");
+          return next;
+        });
+
+        if (pending) {
+          setTimeout(() => {
+            setDisplayedMessages((prev) => {
+              const lastIndex = prev.length - 1;
+              return prev.map((m, idx) =>
+                idx === lastIndex
+                  ? { ...m, isTyping: false, displayedContent: fullText, pending: false }
+                  : m
+              );
+            });
+            setCurrentTypingIndex(-1);
+            setTypingProgress("");
+            resolve();
+          }, 2000);
+          return;
+        }
+
+        let i = 0;
+        const speed = 20;
+
+        const tick = () => {
+          if (isCancelled) return resolve();
+          i += 1;
+          const slice = fullText.slice(0, i);
+          setTypingProgress(slice);
+
+          if (i >= fullText.length) {
+            setDisplayedMessages((prev) => {
+              const lastIndex = prev.length - 1;
+              return prev.map((m, idx) =>
+                idx === lastIndex
+                  ? { ...m, isTyping: false, displayedContent: fullText, pending: false }
+                  : m
+              );
+            });
+            setCurrentTypingIndex(-1);
+            setTypingProgress("");
+            return resolve();
+          }
+
+          setTimeout(tick, speed);
+        };
+
+        setTimeout(tick, speed);
       });
 
-      // If pending, show loading animation for 2 seconds
-      if (pending) {
-        setTimeout(() => {
-          setDisplayedMessages(prev => {
-            const lastIndex = prev.length - 1;
-            return prev.map((m, idx) => idx === lastIndex ? { ...m, isTyping: false, displayedContent: fullText, pending: false } : m)
-          });
-          setCurrentTypingIndex(-1);
-          setTypingProgress("");
-          resolve();
-        }, 2000);
-        return;
-      }
-
-      // Drive typing with a local interval independent of render cycles
-      let i = 0;
-      const speed = 20; // ms per char
-      const tick = () => {
-        if (isCancelled) return resolve();
-        i += 1;
-        const slice = fullText.slice(0, i);
-        setTypingProgress(slice);
-        if (i >= fullText.length) {
-          // Commit final state
-          setDisplayedMessages(prev => {
-            const lastIndex = prev.length - 1;
-            return prev.map((m, idx) => idx === lastIndex ? { ...m, isTyping: false, displayedContent: fullText, pending: false } : m)
-          });
-          setCurrentTypingIndex(-1);
-          setTypingProgress("");
-          return resolve();
-        }
-        setTimeout(tick, speed);
-      };
-      setTimeout(tick, speed);
-    });
-
     const play = async () => {
-      // Reset
       setDisplayedMessages([]);
       setCurrentTypingIndex(-1);
       setTypingProgress("");
@@ -152,12 +153,15 @@ export default function HeroSection() {
         if (isCancelled) break;
         const msg = scriptedConversation[i];
         await typeMessage(msg.content, msg.role, msg.pending);
-        await new Promise(r => setTimeout(r, 350));
+        await new Promise((r) => setTimeout(r, 350));
       }
     };
 
     const start = setTimeout(() => play(), 350);
-    return () => { isCancelled = true; clearTimeout(start); };
+    return () => {
+      isCancelled = true;
+      clearTimeout(start);
+    };
   }, [scriptedConversation]);
 
   return (
@@ -177,11 +181,11 @@ export default function HeroSection() {
                   href="#"
                   className="flex origin-top-left items-center justify-start rounded-full border border-zinc-900 bg-white p-0.5 text-xs sm:text-sm transition-transform hover:-rotate-2"
                 >
-                  <span className="rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 px-2 sm:px-3 py-0.5 font-medium text-white">
-                    YO!
+                  <span className="rounded-full bg-linear-to-r from-indigo-600 to-purple-600 px-2 sm:px-3 py-0.5 font-medium text-white">
+                    Hey I’m NJ!
                   </span>
                   <span className="ml-2 mr-1 inline-block font-medium text-gray-900">
-                    Full-Stack Dev | AI/ML | YouTuber 🎥
+                    Software Developer with Creativity at its Peak 🎥✨
                   </span>
                   <svg
                     stroke="currentColor"
@@ -208,28 +212,28 @@ export default function HeroSection() {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="text-gray-900 font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl leading-tight flex flex-col gap-1 sm:gap-2"
                 >
-                  <FlipLink>Building</FlipLink>
-                  <FlipLink>solutionsThat</FlipLink>
-                  <FlipLink>actuallyShip</FlipLink>
-                  <FlipLink>& scale</FlipLink>
+                 <FlipLink>CodeThat</FlipLink>
+                <FlipLink>CreatesMagic</FlipLink>
+                <FlipLink>AndTurnsIdeas</FlipLink>
+                <FlipLink>IntoReality</FlipLink>
+
                 </motion.div>
               </div>
             </div>
 
+            {/* RIGHT SIDE CHAT UI (unchanged except text) */}
             <div className="w-full lg:col-span-6 flex justify-center lg:justify-end mt-8 lg:mt-0">
               <div className="relative w-full max-w-2xl px-4 sm:px-0">
-                {/* Animated floating orbs */}
+                {/* (No text changes here) */}
+                
                 <div className="absolute -top-10 -left-10 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-br from-indigo-400 to-purple-500 opacity-20 rounded-full blur-3xl animate-pulse"></div>
                 <div className="absolute -bottom-10 -right-10 w-32 h-32 sm:w-40 sm:h-40 bg-linear-to-br from-purple-400 to-pink-500 opacity-20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
                 <div className="absolute top-1/2 left-0 w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-pink-400 to-indigo-500 opacity-15 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}}></div>
 
-                {/* Main Card with enhanced design */}
                 <div className="relative rounded-2xl sm:rounded-3xl bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500 p-[2px] shadow-2xl overflow-hidden">
-                  {/* Animated gradient border */}
                   <div className="absolute inset-0 bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-75 animate-pulse"></div>
 
                   <div className="relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-inner">
-                    {/* Enhanced Browser Header */}
                     <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500 shadow-sm hover:scale-110 transition-transform cursor-pointer"></div>
@@ -241,9 +245,8 @@ export default function HeroSection() {
                       </div>
                     </div>
 
-                    {/* Enhanced Chat Interface */}
+                    {/* Chat Messages (already updated above) */}
                     <div className="flex flex-col gap-3 sm:gap-4">
-                      {/* Messages Container */}
                       <div ref={messagesRef} className="bg-linear-to-br from-gray-50 to-indigo-50/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-indigo-100/50 h-[240px] sm:h-[280px] overflow-y-auto flex flex-col gap-2 sm:gap-3 custom-scrollbar">
                         {displayedMessages.map((m, idx) => {
                           let displayText = m.displayedContent;
@@ -261,7 +264,7 @@ export default function HeroSection() {
                               }>
                                 {m.pending ? (
                                   <span className="inline-flex items-center gap-2">
-                                    <span className="text-xs sm:text-sm font-medium">Designing your website</span>
+                                    <span className="text-xs sm:text-sm font-medium">Processing your request</span>
                                     <span className="inline-flex gap-1">
                                       <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce" style={{animationDelay: '-0.3s'}}></span>
                                       <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce" style={{animationDelay: '-0.15s'}}></span>

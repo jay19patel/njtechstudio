@@ -7,37 +7,37 @@ export default function TestimonialSection() {
       id: 1,
       name: "Videoly Client",
       role: "Operations Manager",
-      text: "Jay transformed our entire workflow! He built us a custom ERP system with Frappe that automated approvals, bookings, and coordination across teams. Our management speed increased by 30%!",
+      text: "Jay transformed our workflow! Custom ERP with Frappe automated approvals, bookings, and coordination. Management speed increased by 30%! 🎉",
     },
     {
       id: 2,
       name: "Sayaji Infotech",
       role: "HR Manager",
-      text: "Built AI-powered talent acquisition automation with GenAI and vector search. Manual screening time reduced by ~50%, candidates matched smarter!",
+      text: "Built AI-powered talent acquisition automation with GenAI and vector search. Manual screening reduced by ~50%, candidates matched smarter! 🚀",
     },
     {
       id: 3,
       name: "Startup Founder",
       role: "CEO",
-      text: "Shipped our MVP in just 3 weeks with Next.js and FastAPI. Clean code, fast performance, and excellent communication throughout. Highly recommend!",
+      text: "Shipped MVP in 3 weeks with Next.js & FastAPI. Clean code, fast performance, excellent communication. Highly recommend! 💡",
     },
     {
       id: 4,
       name: "Meril Life Client",
       role: "Manufacturing Lead",
-      text: "Built healthcare manufacturing automation with C# + IoT integration. Streamlined documentation workflows, reduced manual processing by over 50%!",
+      text: "Healthcare manufacturing automation with C# + IoT integration. Reduced manual processing by over 50%! ⭐",
     },
     {
       id: 5,
       name: "Tech Company",
       role: "CTO",
-      text: "Engineered a multi-microservices trading platform with event-driven architecture. Sub-250ms execution, automated strategies, real-time risk management!",
+      text: "Multi-microservices trading platform with event-driven architecture. Sub-250ms execution, automated strategies, real-time risk management! ⚡",
     },
     {
       id: 6,
       name: "E-commerce Business",
       role: "Product Manager",
-      text: "Built our entire e-commerce platform with React and Django. Scalable, fast, and handles thousands of orders daily. Game changer for our business!",
+      text: "Built entire e-commerce platform with React & Django. Scalable, fast, handles thousands of orders daily. Game changer! 🎯",
     },
   ];
 
