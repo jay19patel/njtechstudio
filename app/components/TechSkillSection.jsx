@@ -69,12 +69,15 @@ export default function TechSkillSection() {
         <div className="absolute bottom-10 right-1/4 w-8 h-8 border-2 border-purple-200 opacity-20 rotate-12"></div>
       </div>
 
-      {/* Centered Heading */}
-      <div className="relative text-center mb-12">
-        <div className="space-y-2">
+      {/* Right Aligned Heading */}
+      <div className="relative mb-12 flex justify-end">
+        <div className="space-y-2 text-right">
           <h2 className="text-4xl lg:text-5xl font-extrabold text-gray-900">
             Our Skills & <span className="text-indigo-600">Expertise</span>
           </h2>
+          <p className="text-base text-gray-600 max-w-2xl ml-auto">
+            Powered by expertise, driven by innovation. We master the tools that turn ambitious ideas into real-world solutions, delivering speed, scalability, and success.
+          </p>
         </div>
       </div>
 

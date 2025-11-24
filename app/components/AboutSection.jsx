@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function AboutSection() {
   return (
@@ -89,10 +90,13 @@ const FounderCard = () => (
 
       {/* Avatar */}
       <div className="relative flex-shrink-0">
-        <img
+        <Image
           src="/photo.png"
           alt="Jay Patel"
-          className="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-2xl object-cover border-2 border-gray-700 shadow-lg"
+          width={192}
+          height={192}
+          className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-2xl object-cover border-2 border-gray-700 shadow-lg"
+          priority
         />
 
         {/* Name Tag (Better fit + centered + single line) */}
