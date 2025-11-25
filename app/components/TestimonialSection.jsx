@@ -47,10 +47,10 @@ export default function TestimonialSection() {
 
   return (
     <MovingTextBg text="TESTIMONIALS" textColor="text-gray-400">
-      <section className="bg-white pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 relative">
+      <section className="bg-transparent pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 relative">
         <div className="mb-8 sm:mb-12 px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl mx-auto">
           <h3 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-semibold text-left">
-            What Clients Say
+            What Clients <span className="text-indigo-600">Say</span>
           </h3>
           <p className="text-left text-gray-600 text-sm sm:text-base mt-2 sm:mt-3 max-w-2xl">
             Real feedback from real clients who trusted me to build their tech solutions.
@@ -59,7 +59,7 @@ export default function TestimonialSection() {
 
         <div className="p-4 overflow-x-hidden relative">
           {/* Left Gradient */}
-          <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-24 z-10 bg-linear-to-r from-white to-transparent"></div>
+          <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-24 z-10 bg-gradient-to-r from-white to-transparent"></div>
 
           {/* Row 1 - Left to Right */}
           <div className="flex items-center mb-6">
@@ -80,7 +80,7 @@ export default function TestimonialSection() {
           </div>
 
           {/* Right Gradient */}
-          <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-24 z-10 bg-linear-to-l from-white to-transparent"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-24 z-10 bg-gradient-to-l from-white to-transparent"></div>
         </div>
 
         <style jsx>{`

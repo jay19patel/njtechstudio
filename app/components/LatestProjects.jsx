@@ -29,7 +29,7 @@ export default function LatestProjects() {
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % projects.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 8000); // Change slide every 8 seconds
 
     return () => clearInterval(interval);
   }, [projects.length]);
@@ -52,18 +52,18 @@ export default function LatestProjects() {
 
   return (
     <MovingTextBg text='PROJECTS' textColor='text-gray-400'>
-      <section className="py-20 bg-transparent">
+      <section className="pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-10 md:pb-12 bg-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="mb-16 flex justify-end">
+          <div className="mb-8 flex justify-end">
             <div className="text-right">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3">
                 Crafted With Passion, <span className="text-indigo-600">Built to Impress</span>
               </h2>
-              <p className="text-base sm:text-lg text-gray-600 dark:text-gray-400 max-w-2xl ml-auto">
+              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl ml-auto">
                 Turning bold ideas into reality with precision and creativity. Every project tells a story of innovation and excellence.
               </p>
-              <div className="mt-6 flex justify-end">
+              <div className="mt-4 flex justify-end">
                 <Link
                   href="/projects"
                   className="inline-flex items-center px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 font-medium hover:bg-indigo-200 transition-colors text-sm"
@@ -76,7 +76,7 @@ export default function LatestProjects() {
           </div>
 
           {/* Carousel Container */}
-          <div className="relative mb-12">
+          <div className="relative mb-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentIndex}
@@ -85,13 +85,13 @@ export default function LatestProjects() {
                 animate="center"
                 exit="exit"
                 transition={{
-                  duration: 0.4,
+                  duration: 0.8,
                   ease: 'easeInOut'
                 }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center border border-indigo-600 rounded-2xl p-6 bg-white"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center border border-indigo-600 rounded-2xl p-4 sm:p-5 bg-white"
               >
                 {/* Left Side - Image */}
-                <div className="relative h-[400px] lg:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                <div className="relative h-[280px] sm:h-[320px] lg:h-[360px] rounded-2xl overflow-hidden shadow-2xl">
                   {project.image ? (
                     <Image
                       src={project.image}
@@ -115,13 +115,13 @@ export default function LatestProjects() {
                 </div>
 
                 {/* Right Side - Details */}
-                <div className="space-y-6">
+                <div className="space-y-3 sm:space-y-4">
                   {/* Title */}
                   <motion.h3
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.5 }}
-                    className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white"
+                    className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white"
                   >
                     {project.title}
                   </motion.h3>
@@ -131,7 +131,7 @@ export default function LatestProjects() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
-                    className="text-xl text-gray-600 dark:text-gray-400"
+                    className="text-base sm:text-lg text-gray-600 dark:text-gray-400"
                   >
                     {project.subtitle}
                   </motion.p>
@@ -141,7 +141,7 @@ export default function LatestProjects() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
+                    className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed"
                   >
                     {project.description}
                   </motion.p>
@@ -152,13 +152,13 @@ export default function LatestProjects() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.5, duration: 0.5 }}
-                      className="pt-2"
+                      className="pt-1"
                     >
                       <a
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-lg font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
+                        className="text-sm sm:text-base font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
                       >
                         {project.liveUrl}
                       </a>
@@ -170,7 +170,7 @@ export default function LatestProjects() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6, duration: 0.5 }}
-                    className="flex flex-wrap gap-2"
+                    className="flex flex-wrap gap-1.5 sm:gap-2"
                   >
                     {project.technologies.slice(0, 6).map((tech, index) => (
                       <motion.span
@@ -178,7 +178,7 @@ export default function LatestProjects() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.7 + index * 0.05, duration: 0.3 }}
-                        className="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm font-medium"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-blue-50 dark:bg-blue-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs sm:text-sm font-medium"
                       >
                         {tech}
                       </motion.span>
@@ -188,7 +188,7 @@ export default function LatestProjects() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.7 + 6 * 0.05, duration: 0.3 }}
-                        className="px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-lg text-sm font-medium"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-lg text-xs sm:text-sm font-medium"
                       >
                         +{project.technologies.length - 6} more
                       </motion.span>
@@ -196,11 +196,11 @@ export default function LatestProjects() {
                   </motion.div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex items-center justify-between pt-3 sm:pt-4 border-t border-gray-200 dark:border-gray-700">
                     {/* Date */}
-                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                      <Calendar className="w-5 h-5" />
-                      <span className="text-base">
+                    <div className="flex items-center gap-1.5 sm:gap-2 text-gray-500 dark:text-gray-400">
+                      <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <span className="text-xs sm:text-sm">
                         {new Date(project.endDate || project.startDate).toLocaleDateString('en-US', {
                           month: 'short',
                           year: 'numeric'
@@ -211,10 +211,10 @@ export default function LatestProjects() {
                     {/* View Details Link */}
                     <Link
                       href={`/projects/${project.slug}`}
-                      className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-semibold hover:gap-3 transition-all duration-300 text-lg"
+                      className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-semibold hover:gap-2 transition-all duration-300 text-sm sm:text-base"
                     >
                       View Details
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </Link>
                   </div>
                 </div>
@@ -222,7 +222,7 @@ export default function LatestProjects() {
             </AnimatePresence>
 
             {/* Carousel Indicators */}
-            <div className="flex justify-center gap-2 mt-8">
+            <div className="flex justify-center gap-2 mt-6">
               {projects.map((_, index) => (
                 <motion.button
                   key={index}

@@ -32,7 +32,7 @@ export default function YoutubeSection() {
 
   return (
     <MovingTextBg text="CONTENT" textColor="text-gray-400">
-      <section className="pt-24 sm:pt-28 md:pt-32 pb-8 sm:pb-12 md:pb-16 px-4 bg-white">
+      <section className="pt-6 sm:pt-7 md:pt-8 pb-4 sm:pb-5 md:pb-6 px-4 bg-white">
         <div className="max-w-[1400px] mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}

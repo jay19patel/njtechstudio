@@ -7,14 +7,14 @@ export default function AboutSection() {
   return (
     <div className="min-h-screen bg-linear-to-b from-white to-gray-50">
       <MovingTextBg text="ABOUT" textColor="text-gray-400">
-        <section className="px-4 pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 bg-transparent relative z-10">
+        <section className="px-4 pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-10 md:pb-12 bg-transparent relative z-10">
           <div className="max-w-6xl mx-auto">
             <motion.div
               initial="initial"
               whileInView="animate"
               viewport={{ once: true }}
               transition={{ staggerChildren: 0.05 }}
-              className="grid grid-cols-12 gap-4"
+              className="grid grid-cols-12 gap-3"
             >
               <StudioHeader />
               <StudioIntro />
@@ -43,7 +43,7 @@ const Block = ({ className, children, ...rest }) => (
       stiffness: 400,
       damping: 50,
     }}
-    className={`rounded-2xl border border-gray-200 bg-white p-6 shadow-lg ${className}`}
+    className={`rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 shadow-lg ${className}`}
     {...rest}
   >
     {children}
@@ -55,7 +55,7 @@ const Block = ({ className, children, ...rest }) => (
 const StudioHeader = () => (
   <Block className="col-span-12 md:col-span-6 flex flex-col justify-center items-center">
     <div className="text-center md:text-left">
-      <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
         <span
           className="bg-linear-to-r from-indigo-600 to-indigo-600 bg-clip-text text-transparent"
           style={{ fontFamily: "'Jersey 10', 'Arial Black', sans-serif" }}
@@ -64,7 +64,7 @@ const StudioHeader = () => (
         </span>
       </h1>
 
-      <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed mt-2">
+      <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed mt-2">
         Building smart digital solutions with clean code, creativity, and a joyful spirit.
       </p>
     </div>
@@ -75,12 +75,12 @@ const StudioHeader = () => (
 
 const StudioIntro = () => (
   <Block className="col-span-12 md:col-span-6 flex items-center">
-    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
+    <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-900">
       <span className="text-gray-500">
         We design and develop smart, scalable digital solutions for individuals, startups and growing businesses.
         From modern web platforms to automation systems and AI-enhanced tools —
         our work focuses on clarity, performance and smooth user experience.
-        Our motto: <span className="text-indigo-700 font-bold">“Code with clarity, build with purpose, deliver with joy.”</span>
+        Our motto: <span className="text-indigo-700 font-bold">"Code with clarity, build with purpose, deliver with joy."</span>
       </span>
     </p>
   </Block>
@@ -91,7 +91,7 @@ const StudioIntro = () => (
 
 const FounderCard = () => (
   <Block className="col-span-12">
-    <div className="w-full max-w-6xl bg-[#1E1E22] text-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 lg:p-14 shadow-xl flex flex-col md:flex-row gap-6 sm:gap-8 md:gap-12 items-center min-h-[280px] sm:min-h-[320px]">
+    <div className="w-full max-w-6xl bg-[#1E1E22] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8 items-center min-h-[200px] sm:min-h-[220px]">
 
       {/* Avatar */}
       <div className="relative flex-shrink-0">
@@ -100,7 +100,7 @@ const FounderCard = () => (
           alt="Jay Patel"
           width={192}
           height={192}
-          className="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-2xl object-cover border-2 border-gray-700 shadow-lg"
+          className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-2xl object-cover border-2 border-gray-700 shadow-lg"
           priority
         />
 
@@ -111,8 +111,8 @@ const FounderCard = () => (
       </div>
 
       {/* Text */}
-      <div className="flex-1 space-y-3 sm:space-y-4 text-center md:text-left">
-        <p className="text-gray-200 text-base sm:text-lg md:text-xl leading-relaxed">
+      <div className="flex-1 space-y-2 sm:space-y-3 text-center md:text-left">
+        <p className="text-gray-200 text-sm sm:text-base md:text-lg leading-relaxed">
           Hi, I'm Jay Patel — a Python-first Software Developer with 2 years of experience building fast, secure and scalable systems.
           I love combining technology and creativity to craft solutions that feel modern, smooth and impactful. Whether it's backend APIs,
           full-stack apps, automation or AI/ML — I build with clarity, quality and purpose.
@@ -131,7 +131,7 @@ const FounderCard = () => (
 
 const MissionBlock = () => (
   <Block className="col-span-12 md:col-span-6">
-    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
+    <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-900">
       <span className="text-indigo-700 font-bold">The Mission</span>
       <br />
       <span className="text-gray-500">
@@ -147,7 +147,7 @@ const MissionBlock = () => (
 
 const VisionBlock = () => (
   <Block className="col-span-12 md:col-span-6">
-    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
+    <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-900">
       <span className="text-indigo-700 font-bold">The Vision</span>
       <br />
       <span className="text-gray-500">
