@@ -2,7 +2,7 @@
 const nextConfig = {
   /* config options here */
   images: {
-    domains: ["via.placeholder.com", "images.unsplash.com", "randomuser.me"],
+    domains: ["via.placeholder.com", "images.unsplash.com", "randomuser.me", "img.youtube.com"],
   },
 };
 

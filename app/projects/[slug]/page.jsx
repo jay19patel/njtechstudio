@@ -237,13 +237,65 @@ export default function ProjectDetailPage() {
     );
   }
 
+  // Helper function to extract video ID from YouTube URL
+  const getYoutubeVideoId = (url) => {
+    if (!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  const VideoPlayer = ({ url }) => {
+    const [isPlaying, setIsPlaying] = useState(false);
+    const videoId = getYoutubeVideoId(url);
+
+    if (!videoId) return null;
+
+    return (
+      <div className="mb-12">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+          Project Demo
+        </h2>
+        <div className="relative aspect-video rounded-xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700 bg-gray-900">
+          {!isPlaying ? (
+            <button
+              onClick={() => setIsPlaying(true)}
+              className="absolute inset-0 w-full h-full group cursor-pointer"
+              aria-label="Play video"
+            >
+              <Image
+                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                alt="Video thumbnail"
+                fill
+                className="object-cover transition-opacity group-hover:opacity-90"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-red-600 rounded-full flex items-center justify-center shadow-lg transform transition-transform group-hover:scale-110">
+                  <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"></div>
+                </div>
+              </div>
+            </button>
+          ) : (
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}?autoplay=1`}
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              className="absolute inset-0 w-full h-full"
+            ></iframe>
+          )}
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen py-8 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-6xl mx-auto px-4">
         {/* Back Button */}
         <Link
           href="/projects"
-          className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 mb-6 transition-colors"
+          className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 mb-6 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Projects
@@ -251,7 +303,7 @@ export default function ProjectDetailPage() {
 
         <article className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl overflow-hidden">
           {/* Hero Image */}
-          <div className="relative h-[500px] w-full bg-gradient-to-br from-blue-500 to-purple-600">
+          <div className="relative h-[500px] w-full bg-gradient-to-br from-indigo-500 to-indigo-600">
             {project.image ? (
               <Image
                 src={project.image}
@@ -270,18 +322,9 @@ export default function ProjectDetailPage() {
             {/* Hero Content */}
             <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
               <div className="flex flex-wrap gap-3 mb-4">
-                <span className="px-4 py-1.5 bg-blue-600/80 backdrop-blur-sm rounded-full text-sm font-medium">
+                <span className="px-4 py-1.5 bg-indigo-600/80 backdrop-blur-sm rounded-full text-sm font-medium">
                   {project.category}
                 </span>
-                {project.status && (
-                  <span className={`px-4 py-1.5 backdrop-blur-sm rounded-full text-sm font-medium ${
-                    project.status === 'Completed'
-                      ? 'bg-green-600/80'
-                      : 'bg-yellow-600/80'
-                  }`}>
-                    {project.status}
-                  </span>
-                )}
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-3">
                 {project.title}
@@ -297,7 +340,7 @@ export default function ProjectDetailPage() {
             <div className="flex flex-wrap gap-6">
               {project.client && (
                 <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                  <User className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                   <div>
                     <p className="text-xs text-gray-500 dark:text-gray-400">Client</p>
                     <p className="font-medium">{project.client}</p>
@@ -305,7 +348,7 @@ export default function ProjectDetailPage() {
                 </div>
               )}
               <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
                 <div>
                   <p className="text-xs text-gray-500 dark:text-gray-400">Duration</p>
                   <p className="font-medium">
@@ -321,10 +364,10 @@ export default function ProjectDetailPage() {
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
                   >
                     <ExternalLink className="w-5 h-5" />
-                    Live Site
+                    {project.liveUrl.replace(/^https?:\/\//, '')}
                   </a>
                 )}
                 {project.githubUrl && (
@@ -353,13 +396,16 @@ export default function ProjectDetailPage() {
                 {project.technologies.map((tech, index) => (
                   <span
                     key={index}
-                    className="px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg text-sm font-medium border border-blue-200 dark:border-blue-800"
+                    className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm font-medium border border-indigo-200 dark:border-indigo-800"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
             </div>
+
+            {/* YouTube Video Section */}
+            {project.youtubeUrl && <VideoPlayer url={project.youtubeUrl} />}
 
             {/* Overview */}
             {project.content?.overview && (
@@ -437,11 +483,10 @@ export default function ProjectDetailPage() {
                       <button
                         key={index}
                         onClick={() => setActiveGalleryImage(index)}
-                        className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${
-                          activeGalleryImage === index
-                            ? 'border-blue-600 dark:border-blue-400'
-                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-400'
-                        }`}
+                        className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${activeGalleryImage === index
+                          ? 'border-indigo-600 dark:border-indigo-400'
+                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-400'
+                          }`}
                       >
                         <Image
                           src={image}
@@ -458,7 +503,7 @@ export default function ProjectDetailPage() {
 
             {/* Testimonial */}
             {project.testimonial && (
-              <div className="mt-12 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-2xl p-8 border border-blue-200 dark:border-blue-800">
+              <div className="mt-12 bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 rounded-2xl p-8 border border-indigo-200 dark:border-indigo-800">
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Client Testimonial
                 </h2>
@@ -466,7 +511,7 @@ export default function ProjectDetailPage() {
                   "{project.testimonial.text}"
                 </blockquote>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                  <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
                     {project.testimonial.author.charAt(0)}
                   </div>
                   <div>

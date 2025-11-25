@@ -5,11 +5,19 @@
     "title": "Propelry - Real Estate Platform",
     "subtitle": "Modern real estate platform for property listings and management",
     "description": "A comprehensive real estate platform that connects property buyers, sellers, and agents. Built with modern web technologies for seamless user experience.",
-    "image": "/images/projects/propelry-main.jpg",
+    "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000&auto=format&fit=crop",
     "featured": true,
     "category": "Web Application",
-    "technologies": ["Next.js", "React", "Node.js", "MongoDB", "Tailwind CSS", "Express"],
+    "technologies": [
+      "Next.js",
+      "React",
+      "Node.js",
+      "MongoDB",
+      "Tailwind CSS",
+      "Express"
+    ],
     "liveUrl": "https://propelry.com",
+    "youtubeUrl": "https://www.youtube.com/watch?v=yNUXc9sTcvg",
     "githubUrl": "",
     "startDate": "2024-01-15",
     "endDate": "2024-06-30",
@@ -28,20 +36,48 @@
         {
           "type": "table",
           "title": "Technical Stack",
-          "headers": ["Technology", "Purpose", "Version"],
+          "headers": [
+            "Technology",
+            "Purpose",
+            "Version"
+          ],
           "rows": [
-            ["Next.js", "Frontend Framework", "14.0"],
-            ["React", "UI Library", "18.2"],
-            ["Node.js", "Backend Runtime", "20.x"],
-            ["MongoDB", "Database", "7.0"],
-            ["Tailwind CSS", "Styling", "3.4"],
-            ["Express", "API Server", "4.18"]
+            [
+              "Next.js",
+              "Frontend Framework",
+              "14.0"
+            ],
+            [
+              "React",
+              "UI Library",
+              "18.2"
+            ],
+            [
+              "Node.js",
+              "Backend Runtime",
+              "20.x"
+            ],
+            [
+              "MongoDB",
+              "Database",
+              "7.0"
+            ],
+            [
+              "Tailwind CSS",
+              "Styling",
+              "3.4"
+            ],
+            [
+              "Express",
+              "API Server",
+              "4.18"
+            ]
           ]
         },
         {
           "type": "image",
           "title": "Platform Dashboard",
-          "url": "/images/projects/propelry-dashboard.jpg",
+          "url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop",
           "alt": "Propelry Dashboard",
           "caption": "The comprehensive admin dashboard for managing properties"
         },
@@ -66,10 +102,10 @@
       "results": "The platform successfully launched and gained significant traction with over 500 active listings in the first month. User engagement increased by 150% compared to traditional real estate platforms, and the average time to close a deal decreased by 40%."
     },
     "gallery": [
-      "/images/projects/propelry-main.jpg",
-      "/images/projects/propelry-dashboard.jpg",
-      "/images/projects/propelry-search.jpg",
-      "/images/projects/propelry-details.jpg"
+      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop"
     ],
     "testimonial": {
       "text": "NJ Tech Studio delivered an exceptional platform that transformed our real estate business. The attention to detail and technical expertise was outstanding.",
@@ -83,10 +119,17 @@
     "title": "E-Commerce Analytics Dashboard",
     "subtitle": "Real-time analytics and insights for online stores",
     "description": "A powerful analytics dashboard that provides real-time insights into e-commerce performance, customer behavior, and sales trends.",
-    "image": "/images/projects/ecommerce-main.jpg",
+    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
     "featured": true,
     "category": "Dashboard",
-    "technologies": ["React", "TypeScript", "Firebase", "Chart.js", "Material-UI", "Redux"],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Firebase",
+      "Chart.js",
+      "Material-UI",
+      "Redux"
+    ],
     "liveUrl": "https://demo-ecommerce-analytics.com",
     "githubUrl": "https://github.com/njtechstudio/ecommerce-dashboard",
     "startDate": "2023-09-01",
@@ -106,20 +149,48 @@
         {
           "type": "table",
           "title": "Key Metrics Tracked",
-          "headers": ["Metric", "Description", "Update Frequency"],
+          "headers": [
+            "Metric",
+            "Description",
+            "Update Frequency"
+          ],
           "rows": [
-            ["Revenue", "Total sales and revenue trends", "Real-time"],
-            ["Conversion Rate", "Visitor to customer conversion", "Hourly"],
-            ["Customer LTV", "Lifetime value analysis", "Daily"],
-            ["Inventory Levels", "Stock tracking and alerts", "Real-time"],
-            ["Traffic Sources", "Marketing channel performance", "Hourly"],
-            ["Cart Abandonment", "Abandoned cart tracking", "Real-time"]
+            [
+              "Revenue",
+              "Total sales and revenue trends",
+              "Real-time"
+            ],
+            [
+              "Conversion Rate",
+              "Visitor to customer conversion",
+              "Hourly"
+            ],
+            [
+              "Customer LTV",
+              "Lifetime value analysis",
+              "Daily"
+            ],
+            [
+              "Inventory Levels",
+              "Stock tracking and alerts",
+              "Real-time"
+            ],
+            [
+              "Traffic Sources",
+              "Marketing channel performance",
+              "Hourly"
+            ],
+            [
+              "Cart Abandonment",
+              "Abandoned cart tracking",
+              "Real-time"
+            ]
           ]
         },
         {
           "type": "image",
           "title": "Analytics Overview",
-          "url": "/images/projects/ecommerce-analytics.jpg",
+          "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
           "alt": "Analytics Dashboard",
           "caption": "Real-time analytics with interactive charts and visualizations"
         },
@@ -150,10 +221,10 @@
       "results": "The dashboard helped clients increase their revenue by 35% through better insights and data-driven decisions. Customer satisfaction scores improved by 45%, and the average time spent on data analysis decreased from 4 hours to 30 minutes per day."
     },
     "gallery": [
-      "/images/projects/ecommerce-main.jpg",
-      "/images/projects/ecommerce-analytics.jpg",
-      "/images/projects/ecommerce-reports.jpg",
-      "/images/projects/ecommerce-mobile.jpg"
+      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1543286386-713df548e9cc?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1000&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?q=80&w=1000&auto=format&fit=crop"
     ],
     "testimonial": {
       "text": "This dashboard completely transformed how we understand our business. The insights we gained led to a 35% increase in revenue within the first quarter.",

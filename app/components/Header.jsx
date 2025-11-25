@@ -159,114 +159,111 @@ export default function Navbar() {
             <MovingTextBg text="MENU ">
               <div className="relative w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-0">
 
-              {/* Left Side - Preview Image */}
-              <div className="hidden lg:flex items-center justify-center p-12 xl:p-16 border-r border-white/10">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
-                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, rotateY: 15 }}
-                  transition={{ duration: 1, delay: 0.3, ease: [0.76, 0, 0.24, 1] }}
-                  className="relative w-full max-w-sm aspect-[3/4] rounded-xl overflow-hidden shadow-2xl"
-                  style={{ perspective: "1000px" }}
-                >
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={hoveredImage || menuLinks[0].image}
-                      initial={{ opacity: 0, scale: 1.1, rotateY: 10 }}
-                      animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                      exit={{ opacity: 0, scale: 0.9, rotateY: -10 }}
-                      transition={{ duration: 0.5, ease: "easeInOut" }}
-                      className="relative w-full h-full"
-                    >
-                      <Image
-                        src={hoveredImage || menuLinks[0].image}
-                        alt="Preview"
-                        fill
-                        className="object-cover"
-                      />
-                    </motion.div>
-                  </AnimatePresence>
-                </motion.div>
-              </div>
-
-              {/* Right Side - Menu Content */}
-              <div className="flex flex-col h-full">
-                {/* Main Navigation Links */}
-                <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 gap-2 lg:gap-3">
-                  {menuLinks.map((link, index) => (
-                    <motion.div
-                      key={link.label}
-                      initial={{ opacity: 0, y: 100, rotateX: -90 }}
-                      animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                      exit={{ opacity: 0, y: -80, rotateX: 90 }}
-                      transition={{
-                        duration: 0.8,
-                        delay: 0.4 + index * 0.1,
-                        ease: [0.76, 0, 0.24, 1]
-                      }}
-                      className="overflow-hidden"
-                      style={{ perspective: "1000px" }}
-                    >
-                      <Link
-                        href={link.href}
-                        onClick={toggleMenu}
-                        onMouseEnter={() => setHoveredImage(link.image)}
-                        onMouseLeave={() => setHoveredImage(null)}
-                        className={`block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold transition-colors duration-500 tracking-tighter leading-[1.1] group relative ${
-                          pathname === link.href ? 'text-white' : 'text-purple-400/60 hover:text-white'
-                        }`}
+                {/* Left Side - Preview Image */}
+                <div className="hidden lg:flex items-center justify-center p-12 xl:p-16 border-r border-white/10">
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
+                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, rotateY: 15 }}
+                    transition={{ duration: 1, delay: 0.3, ease: [0.76, 0, 0.24, 1] }}
+                    className="relative w-full max-w-sm aspect-[3/4] rounded-xl overflow-hidden shadow-2xl"
+                    style={{ perspective: "1000px" }}
+                  >
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={hoveredImage || menuLinks[0].image}
+                        initial={{ opacity: 0, scale: 1.1, rotateY: 10 }}
+                        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                        exit={{ opacity: 0, scale: 0.9, rotateY: -10 }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        className="relative w-full h-full"
                       >
-                        <span className={`inline-block group-hover:translate-x-3 transition-transform duration-500 ${
-                          pathname === link.href ? 'translate-x-3' : ''
-                        }`}>
-                          {link.label}
-                        </span>
-                        <span className={`absolute bottom-2 left-0 h-[3px] bg-white transition-all duration-700 ease-out ${
-                          pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
-                        }`}></span>
-                      </Link>
-                    </motion.div>
-                  ))}
+                        <Image
+                          src={hoveredImage || menuLinks[0].image}
+                          alt="Preview"
+                          fill
+                          className="object-cover"
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+                  </motion.div>
                 </div>
 
-                {/* Social Links - Bottom of right side */}
-                <div className="px-8 sm:px-12 lg:px-16 pb-24 lg:pb-32">
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.5, delay: 0.8 }}
-                    className="text-white/40 text-xs uppercase tracking-widest mb-4"
-                  >
-                    Follow Us
-                  </motion.p>
-                  <div className="flex flex-wrap gap-x-6 gap-y-2">
-                    {socialLinks.map((social, index) => (
+                {/* Right Side - Menu Content */}
+                <div className="flex flex-col h-full">
+                  {/* Main Navigation Links */}
+                  <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 gap-2 lg:gap-3">
+                    {menuLinks.map((link, index) => (
                       <motion.div
-                        key={social.name}
-                        initial={{ opacity: 0, x: -40 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -40 }}
+                        key={link.label}
+                        initial={{ opacity: 0, y: 100, rotateX: -90 }}
+                        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                        exit={{ opacity: 0, y: -80, rotateX: 90 }}
                         transition={{
-                          duration: 0.6,
-                          delay: 0.9 + index * 0.08,
+                          duration: 0.8,
+                          delay: 0.4 + index * 0.1,
                           ease: [0.76, 0, 0.24, 1]
                         }}
+                        className="overflow-hidden"
+                        style={{ perspective: "1000px" }}
                       >
-                        <a
-                          href={social.href}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-block text-purple-200/50 hover:text-white text-sm transition-colors duration-300 relative group"
+                        <Link
+                          href={link.href}
+                          onClick={toggleMenu}
+                          onMouseEnter={() => setHoveredImage(link.image)}
+                          onMouseLeave={() => setHoveredImage(null)}
+                          className={`block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold transition-colors duration-500 tracking-tighter leading-[1.1] group relative ${pathname === link.href ? 'text-white' : 'text-indigo-400/60 hover:text-white'
+                            }`}
                         >
-                          {social.name}
-                          <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-300"></span>
-                        </a>
+                          <span className={`inline-block group-hover:translate-x-3 transition-transform duration-500 ${pathname === link.href ? 'translate-x-3' : ''
+                            }`}>
+                            {link.label}
+                          </span>
+                          <span className={`absolute bottom-2 left-0 h-[3px] bg-white transition-all duration-700 ease-out ${pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
+                            }`}></span>
+                        </Link>
                       </motion.div>
                     ))}
                   </div>
+
+                  {/* Social Links - Bottom of right side */}
+                  <div className="px-8 sm:px-12 lg:px-16 pb-24 lg:pb-32">
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 20 }}
+                      transition={{ duration: 0.5, delay: 0.8 }}
+                      className="text-white/40 text-xs uppercase tracking-widest mb-4"
+                    >
+                      Follow Us
+                    </motion.p>
+                    <div className="flex flex-wrap gap-x-6 gap-y-2">
+                      {socialLinks.map((social, index) => (
+                        <motion.div
+                          key={social.name}
+                          initial={{ opacity: 0, x: -40 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -40 }}
+                          transition={{
+                            duration: 0.6,
+                            delay: 0.9 + index * 0.08,
+                            ease: [0.76, 0, 0.24, 1]
+                          }}
+                        >
+                          <a
+                            href={social.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-block text-indigo-200/50 hover:text-white text-sm transition-colors duration-300 relative group"
+                          >
+                            {social.name}
+                            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-300"></span>
+                          </a>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
               </div>
             </MovingTextBg>
           </motion.div>

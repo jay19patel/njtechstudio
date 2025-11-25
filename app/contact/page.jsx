@@ -18,8 +18,8 @@ export default function ContactPage() {
                   className="w-full h-auto rounded-2xl shadow-2xl object-cover"
                 />
                 {/* Floating decoration */}
-                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-linear-to-br from-purple-400 to-indigo-500 opacity-20 rounded-full blur-3xl"></div>
-                <div className="absolute -top-6 -left-6 w-24 h-24 bg-linear-to-br from-indigo-400 to-purple-500 opacity-20 rounded-full blur-2xl"></div>
+                <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-linear-to-br from-indigo-400 to-indigo-500 opacity-20 rounded-full blur-3xl"></div>
+                <div className="absolute -top-6 -left-6 w-24 h-24 bg-linear-to-br from-indigo-400 to-indigo-500 opacity-20 rounded-full blur-2xl"></div>
               </div>
             </div>
 
@@ -28,7 +28,7 @@ export default function ContactPage() {
               {/* Heading */}
               <div className="text-center lg:text-left mb-8 sm:mb-10">
                 <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-gray-900">Contact Us</h1>
-                <p className="text-purple-600 text-base sm:text-lg">
+                <p className="text-indigo-600 text-base sm:text-lg">
                   We'll get back to you as soon as possible!
                 </p>
               </div>
