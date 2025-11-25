@@ -50,8 +50,8 @@ export default function ProjectsPage() {
   }, [selectedCategory, searchQuery, projects]);
 
   return (
-    <MovingTextBg text="PROJECTS" textColor="text-gray-200 dark:text-gray-800">
-      <div className="min-h-screen py-20 bg-transparent">
+    <MovingTextBg text="PROJECTS" textColor="text-gray-400">
+      <div className="min-h-screen py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Page Header */}
           <div className="text-center mb-12">

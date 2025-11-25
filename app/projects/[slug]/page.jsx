@@ -290,16 +290,9 @@ export default function ProjectDetailPage() {
   };
 
   return (
-    <div className="min-h-screen py-8 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Back Button */}
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 mb-6 transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Projects
-        </Link>
+        {/* Back Button - Top */}
 
         <article className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl overflow-hidden">
           {/* Hero Image */}
@@ -527,6 +520,15 @@ export default function ProjectDetailPage() {
             )}
           </div>
         </article>
+
+        {/* Back Button - Bottom */}
+        <Link
+          href="/projects"
+          className="inline-flex items-center gap-2 px-4 py-2 text-indigo-600 dark:text-indigo-400 hover:text-white hover:bg-indigo-600 dark:hover:bg-indigo-500 border-2 border-indigo-600 dark:border-indigo-400 rounded-lg mt-6 transition-all font-medium"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Back to Projects
+        </Link>
       </div>
     </div>
   );
