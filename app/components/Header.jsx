@@ -3,8 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
+import { useRouter, usePathname } from "next/navigation";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent, MotionConfig } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
 import AudioPlayer from "./AudioPlayer";
 import { Menu, X } from "lucide-react";
@@ -12,9 +12,30 @@ import { Menu, X } from "lucide-react";
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredImage, setHoveredImage] = useState(null);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogoClick = async (e) => {
+    e.preventDefault();
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
+    setIsNavigating(true);
+
+    // Wait for enter animation
+    await new Promise(resolve => setTimeout(resolve, 800)); // Match transition duration
+
+    router.push("/");
+
+    // Wait for page load/route change then exit
+    await new Promise(resolve => setTimeout(resolve, 500));
+    setIsNavigating(false);
+  };
 
   const { scrollY } = useScroll();
 
@@ -80,7 +101,7 @@ export default function Navbar() {
           transition={{ duration: 0.5, ease: "easeInOut" }}
           className={`pointer-events-auto bg-black border border-indigo-500/50 rounded-md px-2 py-0 shadow-lg flex items-center justify-center ${isMenuOpen ? 'pointer-events-none' : ''}`}
         >
-          <Link href="/" className="flex items-center justify-center">
+          <Link href="/" onClick={handleLogoClick} className="flex items-center justify-center">
             <span className="font-normal tracking-wide text-5xl leading-[0.85] pt-1 pb-1" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
               <span className="text-indigo-500">NJ</span><span className="text-white">TechStudio</span>
             </span>
@@ -118,22 +139,69 @@ export default function Navbar() {
 
 
           {/* Unified Menu/Close Button */}
-          <motion.button
-            onClick={toggleMenu}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className={`w-10 h-10 flex items-center justify-center transition-all duration-300 rounded-md z-[110] relative ${isMenuOpen ? 'bg-white text-indigo-600 hover:bg-gray-100' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}
+          <MotionConfig
+            transition={{
+              duration: 0.5,
+              ease: "easeInOut",
+            }}
           >
-            <motion.div
-              key={isMenuOpen ? "close" : "menu"}
-              initial={{ rotate: -90, opacity: 0 }}
-              animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 90, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+            <motion.button
+              initial={false}
+              animate={isMenuOpen ? "open" : "closed"}
+              onClick={toggleMenu}
+              whileTap={{ scale: 0.95 }}
+              className="relative h-10 w-10 rounded-full z-[110]"
+              aria-label="Toggle menu"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </motion.div>
-          </motion.button>
+              <motion.span
+                variants={{
+                  open: {
+                    rotate: ["0deg", "0deg", "45deg"],
+                    top: ["35%", "50%", "50%"],
+                  },
+                  closed: {
+                    rotate: ["45deg", "0deg", "0deg"],
+                    top: ["50%", "50%", "35%"],
+                  },
+                }}
+                className="absolute h-[2px] w-6 bg-white"
+                style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
+              />
+              <motion.span
+                variants={{
+                  open: {
+                    rotate: ["0deg", "0deg", "-45deg"],
+                  },
+                  closed: {
+                    rotate: ["-45deg", "0deg", "0deg"],
+                  },
+                }}
+                className="absolute h-[2px] w-6 bg-white"
+                style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
+              />
+              <motion.span
+                variants={{
+                  open: {
+                    rotate: ["0deg", "0deg", "45deg"],
+                    bottom: ["35%", "50%", "50%"],
+                    left: "50%",
+                  },
+                  closed: {
+                    rotate: ["45deg", "0deg", "0deg"],
+                    bottom: ["50%", "50%", "35%"],
+                    left: "calc(50% + 10px)",
+                  },
+                }}
+                className="absolute h-[2px] w-4 bg-white"
+                style={{
+                  x: "-50%",
+                  y: "50%",
+                  bottom: "35%",
+                  left: "calc(50% + 10px)",
+                }}
+              />
+            </motion.button>
+          </MotionConfig>
         </motion.div>
       </motion.nav>
 
@@ -255,7 +323,31 @@ export default function Navbar() {
           </motion.div>
         )
         }
-      </AnimatePresence >
+      </AnimatePresence>
+
+      {/* Page Transition Overlay */}
+      <AnimatePresence>
+        {isNavigating && (
+          <motion.div
+            initial={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)" }}
+            animate={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
+            exit={{ clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" }}
+            transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
+            className="fixed inset-0 bg-black z-[200] flex items-center justify-center"
+          >
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="text-white text-4xl md:text-6xl font-normal tracking-wider"
+              style={{ fontFamily: "'Jersey 10', sans-serif" }}
+            >
+              NJTechStudio
+            </motion.span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
