@@ -27,7 +27,7 @@ const FlipLink = ({ children }) => {
               ease: "easeInOut",
               delay: STAGGER * i
             }}
-            className="inline-block"
+            className="inline-block whitespace-pre"
             key={i}
           >
             {l}
@@ -210,12 +210,12 @@ export default function HeroSection() {
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.4 }}
-                    className="text-gray-900 font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl leading-tight flex flex-col gap-1 sm:gap-2"
+                    className="text-gray-900 font-extrabold text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] leading-tight tracking-tighter flex flex-col gap-0 sm:gap-1"
                   >
-                    <FlipLink>CodeThat</FlipLink>
-                    <FlipLink>CreatesMagic</FlipLink>
-                    <FlipLink>AndTurnsIdeas</FlipLink>
-                    <FlipLink>IntoReality</FlipLink>
+                    <FlipLink>Code That</FlipLink>
+                    <FlipLink>Creates Magic</FlipLink>
+                    <FlipLink>And Turns Ideas</FlipLink>
+                    <FlipLink>Into Reality</FlipLink>
 
                   </motion.div>
                 </div>

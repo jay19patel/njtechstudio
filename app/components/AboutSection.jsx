@@ -64,7 +64,7 @@ const StudioHeader = () => (
         </span>
       </h1>
 
-      <p className="text-sm sm:text-base md:text-lg text-gray-600 leading-relaxed mt-2">
+      <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed mt-2">
         Building smart digital solutions with clean code, creativity, and a joyful spirit.
       </p>
     </div>
@@ -75,7 +75,7 @@ const StudioHeader = () => (
 
 const StudioIntro = () => (
   <Block className="col-span-12 md:col-span-6 flex items-center">
-    <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-900">
+    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
       <span className="text-gray-500">
         We design and develop smart, scalable digital solutions for individuals, startups and growing businesses.
         From modern web platforms to automation systems and AI-enhanced tools —
@@ -112,7 +112,7 @@ const FounderCard = () => (
 
       {/* Text */}
       <div className="flex-1 space-y-2 sm:space-y-3 text-center md:text-left">
-        <p className="text-gray-200 text-sm sm:text-base md:text-lg leading-relaxed">
+        <p className="text-gray-200 text-base sm:text-lg md:text-xl leading-relaxed">
           Hi, I'm Jay Patel — a Python-first Software Developer with 2 years of experience building fast, secure and scalable systems.
           I love combining technology and creativity to craft solutions that feel modern, smooth and impactful. Whether it's backend APIs,
           full-stack apps, automation or AI/ML — I build with clarity, quality and purpose.
@@ -131,7 +131,7 @@ const FounderCard = () => (
 
 const MissionBlock = () => (
   <Block className="col-span-12 md:col-span-6">
-    <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-900">
+    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
       <span className="text-indigo-700 font-bold">The Mission</span>
       <br />
       <span className="text-gray-500">
@@ -147,7 +147,7 @@ const MissionBlock = () => (
 
 const VisionBlock = () => (
   <Block className="col-span-12 md:col-span-6">
-    <p className="text-sm sm:text-base md:text-lg leading-relaxed text-gray-900">
+    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
       <span className="text-indigo-700 font-bold">The Vision</span>
       <br />
       <span className="text-gray-500">

@@ -39,10 +39,10 @@ export default function WhyChooseUs() {
               transition={{ duration: 0.6 }}
               className="mb-6 sm:mb-8 text-left"
             >
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
                 Why <span className="text-indigo-600">People Love Working With Us</span>
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 mt-3 max-w-xl">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 mt-3 max-w-xl">
                 Smart execution, reliable delivery, budget-friendly solutions, and the joy of working with a team that actually understands your goals.
               </p>
             </motion.div>
@@ -66,7 +66,7 @@ export default function WhyChooseUs() {
                   <img src="https://cdn-icons-png.flaticon.com/512/3135/3135682.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Budget-Friendly" />
                 </div>
 
-                <p className="text-xs sm:text-sm md:text-base text-gray-700 italic mb-3 sm:mb-4">
+                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   "We keep quality high and costs practical. No over-engineering, no unnecessary complexity — just smart solutions that fit your budget and scale with your growth."
                 </p>
 
@@ -91,7 +91,7 @@ export default function WhyChooseUs() {
                   <img src="https://cdn-icons-png.flaticon.com/512/2920/2920349.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Optimized Solutions" />
                 </div>
 
-                <p className="text-xs sm:text-sm md:text-base text-gray-700 italic mb-3 sm:mb-4">
+                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   "We don't just build — we optimize. Faster systems, cleaner UX, automated workflows, and future-proof architecture that supports long-term business growth."
                 </p>
 
@@ -116,7 +116,7 @@ export default function WhyChooseUs() {
                   <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="AI-Driven" />
                 </div>
 
-                <p className="text-xs sm:text-sm md:text-base text-gray-700 italic mb-3 sm:mb-4">
+                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   "From automations to custom LLM workflows, we integrate AI wherever it truly makes sense — improving speed, accuracy, and overall efficiency with measurable impact."
                 </p>
 
@@ -141,7 +141,7 @@ export default function WhyChooseUs() {
                   <img src="https://cdn-icons-png.flaticon.com/512/3281/3281289.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Reliable Delivery" />
                 </div>
 
-                <p className="text-xs sm:text-sm md:text-base text-gray-700 italic mb-3 sm:mb-4">
+                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   "Clear communication, transparent progress, and predictable delivery. We make development stress-free so your team can focus on what truly matters."
                 </p>
 

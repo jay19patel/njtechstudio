@@ -108,7 +108,7 @@ const SectionCard = ({ section }) => {
                 </span>
               </div>
 
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white leading-tight px-2 sm:px-0">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight px-2 sm:px-0">
                 {section.title}
               </h2>
 

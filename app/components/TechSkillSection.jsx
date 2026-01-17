@@ -82,7 +82,7 @@ export default function TechSkillSection() {
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900">
                 Our Skills & <span className="text-indigo-600">Expertise</span>
               </h2>
-              <p className="text-base sm:text-lg text-gray-600 max-w-2xl ml-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl ml-auto">
                 Powered by expertise, driven by innovation. We master the tools that turn ambitious ideas into real-world solutions, delivering speed, scalability, and success.
               </p>
             </div>

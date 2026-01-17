@@ -63,10 +63,10 @@ export default function LatestProjects() {
           {/* Section Header */}
           <div className="mb-8 flex justify-end">
             <div className="text-right">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-3">
                 Crafted With Passion, <span className="text-indigo-600">Built to Impress</span>
               </h2>
-              <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 max-w-2xl ml-auto">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl ml-auto">
                 Turning bold ideas into reality with precision and creativity. Every project tells a story of innovation and excellence.
               </p>
               <div className="mt-4 flex justify-end">
@@ -148,7 +148,7 @@ export default function LatestProjects() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.5 }}
-                    className="text-sm sm:text-base text-gray-700 dark:text-gray-300 leading-relaxed"
+                    className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
                   >
                     {project.description}
                   </motion.p>
