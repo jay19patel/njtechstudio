@@ -7,7 +7,6 @@ import SolutionsSection from "./components/SolutionsSection";
 import FAQSection from "./components/faqSection";
 import YoutubeSection from "./components/YoutubeSection";
 import TestimonialSection from "./components/TestimonialSection";
-import JoinTeamSection from "./components/JoinTeamSection";
 
 export default function Home() {
   return (
@@ -20,7 +19,6 @@ export default function Home() {
       <LatestProjects />
       <YoutubeSection />
       <TestimonialSection />
-      <JoinTeamSection />
       <FAQSection />
     </div>
   );

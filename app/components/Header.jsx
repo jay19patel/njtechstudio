@@ -70,31 +70,26 @@ export default function Navbar() {
         }}
         animate={hidden ? "hidden" : "visible"}
         transition={{ duration: 0.35, ease: "easeInOut" }}
-        className={`fixed top-0 left-0 w-full z-[100] px-6 py-6 flex justify-between items-center text-white mix-blend-difference pointer-events-none`}
+        className={`fixed top-0 left-0 w-full z-[100] px-6 py-6 flex justify-between items-center pointer-events-none`}
       >
 
         {/* Left: Logo (Pointer Events Auto to catch clicks) */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="pointer-events-auto"
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: isMenuOpen ? 0 : 1, x: isMenuOpen ? -100 : 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className={`pointer-events-auto bg-black border border-indigo-500/50 rounded-md px-2 py-0 shadow-lg flex items-center justify-center ${isMenuOpen ? 'pointer-events-none' : ''}`}
         >
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/Logo.png"
-              alt="NJ Tech Studio"
-              width={120}
-              height={32}
-              className="h-8 w-auto object-contain invert"
-              priority
-            />
+          <Link href="/" className="flex items-center justify-center">
+            <span className="font-normal tracking-wide text-5xl leading-[0.85] pt-1 pb-1" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
+              <span className="text-indigo-500">NJ</span><span className="text-white">TechStudio</span>
+            </span>
           </Link>
         </motion.div>
 
         {/* Right: Actions Group */}
         <motion.div
-          className="flex items-center gap-4 pointer-events-auto"
+          className="flex items-center gap-4 pointer-events-auto bg-black border border-indigo-500/50 rounded-md px-4 py-2 shadow-lg"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
@@ -102,25 +97,21 @@ export default function Navbar() {
           {/* Info Text & Audio - Hidden when Menu is Open to avoid clutter/overlap */}
           <div className="flex items-center gap-4">
             {/* Info Text - Hidden when Menu is Open */}
-            <AnimatePresence>
-              {!isMenuOpen && (
-                <motion.div
-                  initial={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className="hidden lg:flex flex-col items-end text-xs font-medium opacity-80 mr-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
-                    <span>Available 9 AM - 6 PM</span>
-                  </div>
-                  <div>Valsad, Gujarat, India</div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Info Text - Always Visible */}
+            <motion.div
+              initial={{ opacity: 1, x: 0 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="hidden lg:flex flex-col items-end text-xs font-medium text-white mr-4"
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                <span>Available 9 AM - 6 PM</span>
+              </div>
+              <div>Valsad, Gujarat, India</div>
+            </motion.div>
 
             {/* Audio Player - Persisted in DOM but hidden when menu is open */}
-            <div className={`mr-2 transition-all duration-300 ${isMenuOpen ? 'opacity-0 pointer-events-none translate-x-10' : 'opacity-100 translate-x-0'}`}>
+            <div className={`mr-2 transition-all duration-300 opacity-100 translate-x-0`}>
               <AudioPlayer />
             </div>
           </div>
@@ -131,7 +122,7 @@ export default function Navbar() {
             onClick={toggleMenu}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`w-12 h-12 flex items-center justify-center transition-all duration-300 rounded-sm z-[110] relative ${isMenuOpen ? 'bg-white text-purple-600 hover:bg-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}
+            className={`w-10 h-10 flex items-center justify-center transition-all duration-300 rounded-md z-[110] relative ${isMenuOpen ? 'bg-white text-indigo-600 hover:bg-gray-100' : 'bg-indigo-600 hover:bg-indigo-700 text-white'}`}
           >
             <motion.div
               key={isMenuOpen ? "close" : "menu"}
@@ -147,7 +138,7 @@ export default function Navbar() {
       </motion.nav>
 
       {/* Fullscreen Menu Overlay */}
-      <AnimatePresence>
+      < AnimatePresence >
         {isMenuOpen && (
           <motion.div
             initial={{ clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" }}
@@ -262,8 +253,9 @@ export default function Navbar() {
               </div>
             </MovingTextBg>
           </motion.div>
-        )}
-      </AnimatePresence>
+        )
+        }
+      </AnimatePresence >
     </>
   );
 }

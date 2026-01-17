@@ -28,6 +28,7 @@ export default function LatestProjects() {
     if (projects.length === 0) return;
 
     const interval = setInterval(() => {
+      setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % projects.length);
     }, 8000); // Change slide every 8 seconds
 
@@ -39,15 +40,20 @@ export default function LatestProjects() {
   const project = projects[currentIndex];
 
   const variants = {
-    enter: {
+    enter: (direction) => ({
+      x: direction > 0 ? 50 : -50,
       opacity: 0,
-    },
+    }),
     center: {
+      zIndex: 1,
+      x: 0,
       opacity: 1,
     },
-    exit: {
+    exit: (direction) => ({
+      zIndex: 0,
+      x: direction < 0 ? 50 : -50,
       opacity: 0,
-    },
+    }),
   };
 
   return (
@@ -77,16 +83,17 @@ export default function LatestProjects() {
 
           {/* Carousel Container */}
           <div className="relative mb-8">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="wait" custom={direction}>
               <motion.div
                 key={currentIndex}
+                custom={direction}
                 variants={variants}
                 initial="enter"
                 animate="center"
                 exit="exit"
                 transition={{
-                  duration: 0.8,
-                  ease: 'easeInOut'
+                  x: { type: "spring", stiffness: 300, damping: 30 },
+                  opacity: { duration: 0.2 }
                 }}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center border border-indigo-600 rounded-2xl p-4 sm:p-5 bg-white"
               >

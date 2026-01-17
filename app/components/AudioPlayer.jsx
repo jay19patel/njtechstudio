@@ -46,7 +46,7 @@ const AudioPlayer = () => {
                 {bars.map((bar) => (
                     <motion.div
                         key={bar}
-                        className={`w-[2px] rounded-full ${isPlaying ? "bg-purple-500" : "bg-white/50"}`}
+                        className={`w-[2px] rounded-full ${isPlaying ? "bg-indigo-500" : "bg-white/50"}`}
                         animate={{
                             height: isPlaying ? [4, 12, 6, 16, 4] : 4,
                         }}
@@ -62,7 +62,7 @@ const AudioPlayer = () => {
             </div>
 
             {/* Status Text */}
-            <span className={`text-[10px] font-bold uppercase tracking-widest ${isPlaying ? "text-purple-400" : "text-white/50"}`}>
+            <span className={`text-[10px] font-bold uppercase tracking-widest text-indigo-400`}>
                 Audio {isPlaying ? "ON" : "OFF"}
             </span>
         </motion.div>

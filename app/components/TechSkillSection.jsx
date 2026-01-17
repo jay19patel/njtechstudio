@@ -190,7 +190,7 @@ export default function TechSkillSection() {
             <div className="w-full lg:sticky lg:top-8">
               <div className="max-w-md mx-auto">
                 <div className="relative overflow-hidden bg-linear-to-b from-black via-gray-900 to-gray-800 rounded-xl shadow-2xl p-8 text-white">
-                  {/* Subtle Purple Glow Layer */}
+                  {/* Subtle indigo Glow Layer */}
 
 
                   {/* Soft Skew Highlight */}

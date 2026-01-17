@@ -225,3 +225,8 @@
     transform: translateX(0%);
   }
 }
+
+::selection {
+    background-color: #9333ea;
+    color: white;
+}
