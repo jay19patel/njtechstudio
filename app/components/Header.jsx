@@ -4,13 +4,30 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence, MotionConfig } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
+import AudioPlayer from "./AudioPlayer";
+import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredImage, setHoveredImage] = useState(null);
+
+  const [hidden, setHidden] = useState(false);
   const pathname = usePathname();
+
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    if (latest > previous && latest > 150 && !isMenuOpen) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
+
+
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -26,9 +43,9 @@ export default function Navbar() {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=60"
     },
     {
-      label: "Tech Skills",
-      href: "/tech-skills",
-      image: "https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&w=900&q=60"
+      label: "Join Us",
+      href: "/join-us",
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=60"
     },
     {
       label: "Contact",
@@ -46,102 +63,86 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Navbar */}
       <motion.nav
-        initial={{ y: -100, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
-        className="fixed top-4 left-0 right-0 z-[100] px-4"
+        variants={{
+          visible: { y: 0 },
+          hidden: { y: "-100%" },
+        }}
+        animate={hidden ? "hidden" : "visible"}
+        transition={{ duration: 0.35, ease: "easeInOut" }}
+        className={`fixed top-0 left-0 w-full z-[100] px-6 py-6 flex justify-between items-center text-white mix-blend-difference pointer-events-none`}
       >
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.2 }}
-          className="bg-black text-white max-w-80 mx-auto rounded-lg px-4 sm:px-6 lg:px-8 shadow-lg backdrop-blur-sm"
-        >
-          <div className="flex items-center justify-between h-12">
-            {/* Logo */}
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.2 }}
-              className="shrink-0"
-            >
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/Logo.png"
-                  alt="NJ Tech Studio"
-                  width={100}
-                  height={28}
-                  className="h-6 w-auto object-contain"
-                  priority
-                />
-              </Link>
-            </motion.div>
 
-            {/* Menu Button with Icon */}
-            <MotionConfig
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
-            >
-              <motion.button
-                initial={false}
-                animate={isMenuOpen ? "open" : "closed"}
-                onClick={toggleMenu}
-                whileTap={{ scale: 0.95 }}
-                className="relative h-10 w-10 rounded-full"
-                aria-label="Toggle menu"
-              >
-                <motion.span
-                  variants={{
-                    open: {
-                      rotate: ["0deg", "0deg", "45deg"],
-                      top: ["35%", "50%", "50%"],
-                    },
-                    closed: {
-                      rotate: ["45deg", "0deg", "0deg"],
-                      top: ["50%", "50%", "35%"],
-                    },
-                  }}
-                  className="absolute h-[2px] w-6 bg-white"
-                  style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
-                />
-                <motion.span
-                  variants={{
-                    open: {
-                      rotate: ["0deg", "0deg", "-45deg"],
-                    },
-                    closed: {
-                      rotate: ["-45deg", "0deg", "0deg"],
-                    },
-                  }}
-                  className="absolute h-[2px] w-6 bg-white"
-                  style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
-                />
-                <motion.span
-                  variants={{
-                    open: {
-                      rotate: ["0deg", "0deg", "45deg"],
-                      bottom: ["35%", "50%", "50%"],
-                      left: "50%",
-                    },
-                    closed: {
-                      rotate: ["45deg", "0deg", "0deg"],
-                      bottom: ["50%", "50%", "35%"],
-                      left: "calc(50% + 10px)",
-                    },
-                  }}
-                  className="absolute h-[2px] w-4 bg-white"
-                  style={{
-                    x: "-50%",
-                    y: "50%",
-                    bottom: "35%",
-                    left: "calc(50% + 10px)",
-                  }}
-                />
-              </motion.button>
-            </MotionConfig>
+        {/* Left: Logo (Pointer Events Auto to catch clicks) */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="pointer-events-auto"
+        >
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/Logo.png"
+              alt="NJ Tech Studio"
+              width={120}
+              height={32}
+              className="h-8 w-auto object-contain invert"
+              priority
+            />
+          </Link>
+        </motion.div>
+
+        {/* Right: Actions Group */}
+        <motion.div
+          className="flex items-center gap-4 pointer-events-auto"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+        >
+          {/* Info Text & Audio - Hidden when Menu is Open to avoid clutter/overlap */}
+          <div className="flex items-center gap-4">
+            {/* Info Text - Hidden when Menu is Open */}
+            <AnimatePresence>
+              {!isMenuOpen && (
+                <motion.div
+                  initial={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="hidden lg:flex flex-col items-end text-xs font-medium opacity-80 mr-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+                    <span>Available 9 AM - 6 PM</span>
+                  </div>
+                  <div>Valsad, Gujarat, India</div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Audio Player - Persisted in DOM but hidden when menu is open */}
+            <div className={`mr-2 transition-all duration-300 ${isMenuOpen ? 'opacity-0 pointer-events-none translate-x-10' : 'opacity-100 translate-x-0'}`}>
+              <AudioPlayer />
+            </div>
           </div>
+
+
+          {/* Unified Menu/Close Button */}
+          <motion.button
+            onClick={toggleMenu}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className={`w-12 h-12 flex items-center justify-center transition-all duration-300 rounded-sm z-[110] relative ${isMenuOpen ? 'bg-white text-purple-600 hover:bg-gray-100' : 'bg-purple-600 hover:bg-purple-700 text-white'}`}
+          >
+            <motion.div
+              key={isMenuOpen ? "close" : "menu"}
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </motion.div>
+          </motion.button>
         </motion.div>
       </motion.nav>
 
@@ -153,12 +154,12 @@ export default function Navbar() {
             animate={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
             exit={{ clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-black z-[90]"
-            style={{ transformStyle: "preserve-3d" }}
+            className="fixed inset-0 bg-black z-[90] text-white"
           >
+            {/* No separate close button here - the header button handles it */}
+
             <MovingTextBg text="MENU ">
               <div className="relative w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-0">
-
                 {/* Left Side - Preview Image */}
                 <div className="hidden lg:flex items-center justify-center p-12 xl:p-16 border-r border-white/10">
                   <motion.div
@@ -191,7 +192,6 @@ export default function Navbar() {
 
                 {/* Right Side - Menu Content */}
                 <div className="flex flex-col h-full">
-                  {/* Main Navigation Links */}
                   <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 gap-2 lg:gap-3">
                     {menuLinks.map((link, index) => (
                       <motion.div
@@ -212,21 +212,17 @@ export default function Navbar() {
                           onClick={toggleMenu}
                           onMouseEnter={() => setHoveredImage(link.image)}
                           onMouseLeave={() => setHoveredImage(null)}
-                          className={`block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold transition-colors duration-500 tracking-tighter leading-[1.1] group relative ${pathname === link.href ? 'text-white' : 'text-indigo-400/60 hover:text-white'
-                            }`}
+                          className={`block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold transition-colors duration-500 tracking-tighter leading-[1.1] group relative ${pathname === link.href ? 'text-white' : 'text-zinc-600 hover:text-white'}`}
                         >
-                          <span className={`inline-block group-hover:translate-x-3 transition-transform duration-500 ${pathname === link.href ? 'translate-x-3' : ''
-                            }`}>
+                          <span className="inline-block group-hover:translate-x-3 transition-transform duration-500">
                             {link.label}
                           </span>
-                          <span className={`absolute bottom-2 left-0 h-[3px] bg-white transition-all duration-700 ease-out ${pathname === link.href ? 'w-full' : 'w-0 group-hover:w-full'
-                            }`}></span>
                         </Link>
                       </motion.div>
                     ))}
                   </div>
 
-                  {/* Social Links - Bottom of right side */}
+                  {/* Social Links */}
                   <div className="px-8 sm:px-12 lg:px-16 pb-24 lg:pb-32">
                     <motion.p
                       initial={{ opacity: 0, y: 20 }}
@@ -254,10 +250,9 @@ export default function Navbar() {
                             href={social.href}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-block text-indigo-200/50 hover:text-white text-sm transition-colors duration-300 relative group"
+                            className="inline-block text-zinc-400 hover:text-white text-sm transition-colors duration-300 relative group"
                           >
                             {social.name}
-                            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-white group-hover:w-full transition-all duration-300"></span>
                           </a>
                         </motion.div>
                       ))}

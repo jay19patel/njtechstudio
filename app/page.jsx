@@ -7,18 +7,20 @@ import SolutionsSection from "./components/SolutionsSection";
 import FAQSection from "./components/faqSection";
 import YoutubeSection from "./components/YoutubeSection";
 import TestimonialSection from "./components/TestimonialSection";
+import JoinTeamSection from "./components/JoinTeamSection";
 
 export default function Home() {
   return (
     <div>
       <HeroSection />
       <AboutSection />
-      <SolutionsSection/>
+      <SolutionsSection />
       <TechSkillSection />
       <WhyChooseUs />
       <LatestProjects />
-      <YoutubeSection/>
+      <YoutubeSection />
       <TestimonialSection />
+      <JoinTeamSection />
       <FAQSection />
     </div>
   );
