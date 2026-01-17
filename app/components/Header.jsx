@@ -94,115 +94,118 @@ export default function Navbar() {
         className={`fixed top-0 left-0 w-full z-[100] px-6 py-6 flex justify-between items-center pointer-events-none`}
       >
 
-        {/* Left: Logo (Pointer Events Auto to catch clicks) */}
-        <motion.div
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: isMenuOpen ? 0 : 1, x: isMenuOpen ? -100 : 0 }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          className={`pointer-events-auto bg-black border border-indigo-500/50 rounded-md px-2 py-0 shadow-lg flex items-center justify-center ${isMenuOpen ? 'pointer-events-none' : ''}`}
-        >
-          <Link href="/" onClick={handleLogoClick} className="flex items-center justify-center">
-            <span className="font-normal tracking-wide text-5xl leading-[0.85] pt-1 pb-1" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
-              <span className="text-indigo-500">NJ</span><span className="text-white">TechStudio</span>
-            </span>
-          </Link>
-        </motion.div>
+        {/* Unified Container for Mobile / Transparent Wrapper for Desktop */}
+        <div className="w-full max-w-7xl mx-auto bg-black sm:bg-transparent border border-indigo-500/50 sm:border-none rounded-md px-3 py-2 sm:px-0 sm:py-0 shadow-lg sm:shadow-none flex items-center justify-between pointer-events-auto sm:pointer-events-none">
 
-        {/* Right: Actions Group */}
-        <motion.div
-          className="flex items-center gap-4 pointer-events-auto bg-black border border-indigo-500/50 rounded-md px-4 py-2 shadow-lg"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-        >
-          {/* Info Text & Audio - Hidden when Menu is Open to avoid clutter/overlap */}
-          <div className="flex items-center gap-4">
-            {/* Info Text - Hidden when Menu is Open */}
-            {/* Info Text - Always Visible */}
-            <motion.div
-              initial={{ opacity: 1, x: 0 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="hidden lg:flex flex-col items-end text-xs font-medium text-white mr-4"
-            >
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
-                <span>Available 9 AM - 6 PM</span>
-              </div>
-              <div>Valsad, Gujarat, India</div>
-            </motion.div>
-
-            {/* Audio Player - Persisted in DOM but hidden when menu is open */}
-            <div className={`mr-2 transition-all duration-300 opacity-100 translate-x-0`}>
-              <AudioPlayer />
-            </div>
-          </div>
-
-
-          {/* Unified Menu/Close Button */}
-          <MotionConfig
-            transition={{
-              duration: 0.5,
-              ease: "easeInOut",
-            }}
+          {/* Left: Logo */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className={`flex items-center justify-center pointer-events-auto sm:bg-black sm:border sm:border-indigo-500/50 sm:rounded-md sm:px-4 sm:py-0 sm:shadow-lg`}
           >
-            <motion.button
-              initial={false}
-              animate={isMenuOpen ? "open" : "closed"}
-              onClick={toggleMenu}
-              whileTap={{ scale: 0.95 }}
-              className="relative h-10 w-10 rounded-full z-[110]"
-              aria-label="Toggle menu"
+            <Link href="/" onClick={handleLogoClick} className="flex items-center justify-center">
+              <span className="font-normal tracking-tight sm:tracking-wide text-2xl sm:text-4xl md:text-5xl leading-[0.85] pt-1 pb-1" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
+                <span className="text-indigo-500">NJ</span><span className="text-white">TechStudio</span>
+              </span>
+            </Link>
+          </motion.div>
+
+          {/* Right: Actions Group */}
+          <motion.div
+            className="flex items-center gap-2 sm:gap-4 pointer-events-auto sm:bg-black sm:border sm:border-indigo-500/50 sm:rounded-md sm:px-4 sm:py-2 sm:shadow-lg"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+          >
+            {/* Info Text & Audio */}
+            <div className="flex items-center gap-4">
+              {/* Info Text - Hidden on small screens */}
+              <motion.div
+                initial={{ opacity: 1, x: 0 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="hidden lg:flex flex-col items-end text-xs font-medium text-white mr-4"
+              >
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                  <span>Available 9 AM - 6 PM</span>
+                </div>
+                <div>Valsad, Gujarat, India</div>
+              </motion.div>
+
+              {/* Audio Player */}
+              <div className={`mr-2 transition-all duration-300 opacity-100 translate-x-0`}>
+                <AudioPlayer />
+              </div>
+            </div>
+
+
+            {/* Unified Menu/Close Button */}
+            <MotionConfig
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
             >
-              <motion.span
-                variants={{
-                  open: {
-                    rotate: ["0deg", "0deg", "45deg"],
-                    top: ["35%", "50%", "50%"],
-                  },
-                  closed: {
-                    rotate: ["45deg", "0deg", "0deg"],
-                    top: ["50%", "50%", "35%"],
-                  },
-                }}
-                className="absolute h-[2px] w-6 bg-white"
-                style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
-              />
-              <motion.span
-                variants={{
-                  open: {
-                    rotate: ["0deg", "0deg", "-45deg"],
-                  },
-                  closed: {
-                    rotate: ["-45deg", "0deg", "0deg"],
-                  },
-                }}
-                className="absolute h-[2px] w-6 bg-white"
-                style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
-              />
-              <motion.span
-                variants={{
-                  open: {
-                    rotate: ["0deg", "0deg", "45deg"],
-                    bottom: ["35%", "50%", "50%"],
-                    left: "50%",
-                  },
-                  closed: {
-                    rotate: ["45deg", "0deg", "0deg"],
-                    bottom: ["50%", "50%", "35%"],
+              <motion.button
+                initial={false}
+                animate={isMenuOpen ? "open" : "closed"}
+                onClick={toggleMenu}
+                whileTap={{ scale: 0.95 }}
+                className="relative h-10 w-10 rounded-full z-[110]"
+                aria-label="Toggle menu"
+              >
+                <motion.span
+                  variants={{
+                    open: {
+                      rotate: ["0deg", "0deg", "45deg"],
+                      top: ["35%", "50%", "50%"],
+                    },
+                    closed: {
+                      rotate: ["45deg", "0deg", "0deg"],
+                      top: ["50%", "50%", "35%"],
+                    },
+                  }}
+                  className="absolute h-[2px] w-6 bg-white"
+                  style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
+                />
+                <motion.span
+                  variants={{
+                    open: {
+                      rotate: ["0deg", "0deg", "-45deg"],
+                    },
+                    closed: {
+                      rotate: ["-45deg", "0deg", "0deg"],
+                    },
+                  }}
+                  className="absolute h-[2px] w-6 bg-white"
+                  style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
+                />
+                <motion.span
+                  variants={{
+                    open: {
+                      rotate: ["0deg", "0deg", "45deg"],
+                      bottom: ["35%", "50%", "50%"],
+                      left: "50%",
+                    },
+                    closed: {
+                      rotate: ["45deg", "0deg", "0deg"],
+                      bottom: ["50%", "50%", "35%"],
+                      left: "calc(50% + 10px)",
+                    },
+                  }}
+                  className="absolute h-[2px] w-4 bg-white"
+                  style={{
+                    x: "-50%",
+                    y: "50%",
+                    bottom: "35%",
                     left: "calc(50% + 10px)",
-                  },
-                }}
-                className="absolute h-[2px] w-4 bg-white"
-                style={{
-                  x: "-50%",
-                  y: "50%",
-                  bottom: "35%",
-                  left: "calc(50% + 10px)",
-                }}
-              />
-            </motion.button>
-          </MotionConfig>
-        </motion.div>
+                  }}
+                />
+              </motion.button>
+            </MotionConfig>
+          </motion.div>
+        </div>
       </motion.nav>
 
       {/* Fullscreen Menu Overlay */}
@@ -251,7 +254,7 @@ export default function Navbar() {
 
                 {/* Right Side - Menu Content */}
                 <div className="flex flex-col h-full">
-                  <div className="flex-1 flex flex-col justify-center px-8 sm:px-12 lg:px-16 py-16 gap-2 lg:gap-3">
+                  <div className="flex-1 flex flex-col justify-start px-8 sm:px-12 lg:px-16 pt-32 sm:pt-40 pb-16 gap-2 lg:gap-3">
                     {menuLinks.map((link, index) => (
                       <motion.div
                         key={link.label}
