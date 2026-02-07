@@ -1,4 +1,4 @@
-import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
+import { Instagram, Linkedin, Youtube } from "lucide-react";
 
 export default function Footer() {
   return (
@@ -8,7 +8,7 @@ export default function Footer() {
           {/* Copyright */}
           <div className="text-center md:text-left">
             <p className="text-gray-600 text-xs">
-              © {new Date().getFullYear()} <span className="font-bold ml-2"><a href="#" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">NJTechStudio</a></span>. All rights reserved. | 
+              © {new Date().getFullYear()} <span className="font-bold ml-2"><a href="#" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">NJTechStudio</a></span>. All rights reserved. |
               <span className="font-bold ml-2">Developed by <a href="#" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">Jay Patel</a></span>
             </p>
           </div>
@@ -16,32 +16,31 @@ export default function Footer() {
           {/* Social Media Icons */}
           <div className="flex items-center space-x-4">
             <a
-              href="#"
-              className="text-gray-400 hover:text-indigo-600 transition-colors"
-              aria-label="Facebook"
-            >
-              <Facebook size={20} />
-            </a>
-            <a
-              href="#"
-              className="text-gray-400 hover:text-indigo-600 transition-colors"
-              aria-label="Twitter"
-            >
-              <Twitter size={20} />
-            </a>
-            <a
-              href="#"
+              href="https://www.instagram.com/njtechstudio.in/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-indigo-600 transition-colors"
               aria-label="Instagram"
             >
               <Instagram size={20} />
             </a>
             <a
-              href="#"
+              href="https://www.linkedin.com/in/jayy19patel/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-400 hover:text-indigo-600 transition-colors"
               aria-label="LinkedIn"
             >
               <Linkedin size={20} />
+            </a>
+            <a
+              href="https://www.youtube.com/@njtechstudio"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-indigo-600 transition-colors"
+              aria-label="YouTube"
+            >
+              <Youtube size={20} />
             </a>
           </div>
         </div>

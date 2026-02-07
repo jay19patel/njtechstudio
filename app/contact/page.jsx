@@ -84,8 +84,8 @@ export default function ContactPage() {
                 <div>
                   <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black uppercase tracking-tight mb-6 lg:mb-8">Contact Details</h3>
                   <div className="space-y-6 lg:space-y-8">
-                    <ContactItem icon={Mail} label="Email Us" value="hello@njtechstudio.com" />
-                    <ContactItem icon={Phone} label="Call Us" value="+91 98765 43210" />
+                    <ContactItem icon={Mail} label="Email Us" value="developer.jay19@gmail.com" />
+                    <ContactItem icon={Phone} label="Call Us" value="+91 73599 74806" />
                     <ContactItem icon={MapPin} label="Visit Us" value="Valsad, Gujarat, India" />
                   </div>
                 </div>
