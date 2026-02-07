@@ -9,7 +9,7 @@ const sectionsData = [
     title: "CREATIVE TECH CONTENT THAT TEACHES & ENTERTAINS",
     description:
       "I create fun, engaging and value-packed content around programming, startups, software development and real-world tech journeys. With a joyful delivery style, I turn complex tech topics into simple, enjoyable and relatable experiences through YouTube, reels and storytelling.",
-    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800",
+    image: "/content-creation.png",
     layout: "left",
   },
   {
@@ -18,7 +18,7 @@ const sectionsData = [
     title: "MODERN WEB APPS SUPERCHARGED WITH AI",
     description:
       "I build fast, scalable and intelligent applications using Next.js, React, FastAPI, Django and GenAI tools. From backend APIs to smart automation, vector search, AI agents and real-time dashboards — your digital product becomes faster, smarter and future-ready.",
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=800",
+    image: "/web-development.jpg",
     layout: "right",
   },
   {
@@ -27,7 +27,7 @@ const sectionsData = [
     title: "CUSTOM ERP FOR SMALL & MEDIUM BUSINESSES",
     description:
       "Automate your business with tailored ERP systems built using Frappe/ERPNext + React. From inventory and HR to approvals and finance dashboards — I deliver fast, clean and efficient workflows that boost productivity and reduce manual work.",
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800",
+    image: "/erp-system.jpg",
     layout: "left",
   },
   {
@@ -36,7 +36,7 @@ const sectionsData = [
     title: "CONNECT DEVICES WITH REAL-WORLD SOFTWARE",
     description:
       "I design IoT-enabled systems that combine sensors, cloud services and smart automation. From real-time monitoring to device dashboards and industry automation — I bridge hardware, software and AI to bring ideas to life.",
-    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800",
+    image: "/iot-automation.jpg",
     layout: "right",
   },
   {
@@ -45,7 +45,7 @@ const sectionsData = [
     title: "HIGH-SCORING MODERN STUDENT PROJECTS",
     description:
       "Helping students build impactful, presentation-ready academic projects using Web Development, Python, AI, ML, automation and IoT. Clean code, proper documentation and impressive UI — perfect for final-year submissions and demos.",
-    image: "https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800",
+    image: "/student-projects.jpg",
     layout: "left",
   }
 ];

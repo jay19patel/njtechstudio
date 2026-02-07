@@ -2,6 +2,7 @@ import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer.jsx";
 import Preloader from "./components/Preloader";
+import { TransitionProvider } from "./context/TransitionContext";
 
 export const metadata = {
   title: "NJ Tech Studio",
@@ -18,13 +19,15 @@ export default function RootLayout({ children }) {
       </head>
       <body className="antialiased">
         <Preloader />
-        <div className="min-h-screen w-full flex flex-col">
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <TransitionProvider>
+          <div className="min-h-screen w-full flex flex-col">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </TransitionProvider>
       </body>
     </html>
   );

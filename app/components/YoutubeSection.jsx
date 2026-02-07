@@ -8,25 +8,25 @@ export default function YoutubeSection() {
 
   const cards = [
     {
-      videoId: "yNUXc9sTcvg",
-      title: "Building AI Apps with LangChain & FastAPI",
+      videoId: "VWPyx_L3zzY",
+      title: "Latest Tech Insights & Tutorials",
       description:
-        "Learn how I built an AI-powered blogging platform with vector search and Redis caching. Full tutorial from zero to production!",
-      badge: "AI TUTORIAL",
+        "Deep dive into modern web development, AI tools, and software engineering practices. Join me as we explore the latest tech trends.",
+      badge: "NEW UPLOAD",
     },
     {
-      videoId: "SqcY0GlETPk",
-      title: "Frappe/ERPNext: Custom ERP in 30 Minutes",
+      videoId: "9_ILhEnsG4k",
+      title: "Building Scalable Systems",
       description:
-        "Speed-run building a custom ERP system with automated workflows and real-time dashboards. Perfect for SMBs!",
-      badge: "ERP MASTERY",
+        "Learn how to design and build scalable applications that can handle real-world traffic and data loads efficiently.",
+      badge: "SYSTEM DESIGN",
     },
     {
-      videoId: "bMknfKXIFA8",
-      title: "My Startup Journey: From Code to Company",
+      videoId: "Q1EkS5tFQK4",
+      title: "Developer Roadmap & Tips",
       description:
-        "Behind the scenes of building NJTechStudio — the wins, fails, and everything in between. Real talk from a developer turned founder.",
-      badge: "STARTUP STORY",
+        "Essential tips for developers, roadmap guides, and career advice to help you navigate your journey in the tech industry.",
+      badge: "CAREER GROWTH",
     },
   ];
 

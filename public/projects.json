@@ -1,235 +1,208 @@
 [
   {
     "id": 1,
-    "slug": "propelry",
-    "title": "Propelry - Real Estate Platform",
-    "subtitle": "Modern real estate platform for property listings and management",
-    "description": "A comprehensive real estate platform that connects property buyers, sellers, and agents. Built with modern web technologies for seamless user experience.",
-    "image": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000&auto=format&fit=crop",
+    "slug": "bloger-menia",
+    "title": "Bloger Menia",
+    "subtitle": "Modern Content Publishing Platform",
+    "description": "A feature-rich blogging platform built with Next.js and Django, offering a seamless writing and reading experience for content creators.",
+    "image": "/content-creation.png",
     "featured": true,
     "category": "Web Application",
     "technologies": [
       "Next.js",
-      "React",
-      "Node.js",
-      "MongoDB",
+      "Django",
+      "PostgreSQL",
       "Tailwind CSS",
-      "Express"
+      "Redis"
     ],
-    "liveUrl": "https://propelry.com",
-    "youtubeUrl": "https://www.youtube.com/watch?v=yNUXc9sTcvg",
-    "githubUrl": "",
-    "startDate": "2024-01-15",
-    "endDate": "2024-06-30",
-    "status": "Completed",
-    "client": "Propelry Inc.",
+    "liveUrl": "https://blogermenia.com",
+    "githubUrl": "https://github.com/jay19patel/BlogerMenia",
+    "startDate": "2024-01-01",
+    "endDate": "2024-03-15",
+    "status": "Live",
+    "client": "NJ Tech Studio",
     "content": {
-      "overview": "Propelry is a cutting-edge real estate platform designed to revolutionize how people buy, sell, and manage properties. The platform offers advanced search capabilities, virtual tours, and seamless communication between buyers and sellers.",
-      "challenge": "The real estate market needed a modern, user-friendly platform that could handle large volumes of property listings while providing an intuitive experience for both buyers and sellers. The challenge was to create a scalable solution that could integrate with multiple data sources and provide real-time updates.",
-      "solution": "We built a full-stack application using Next.js for optimal performance and SEO. The platform features advanced filtering, interactive maps, virtual property tours, and a robust admin dashboard for property management.",
+      "overview": "Bloger Menia is a next-generation blogging platform designed for performance and SEO. It allows users to create, publish, and manage their blogs with an intuitive rich-text editor and real-time preview.",
+      "challenge": "Existing platforms were either too complex or lacked customization. We needed a solution that offered the speed of a static site with the dynamic capabilities of a CMS, handling rich media and high traffic loads efficiently.",
+      "solution": "We architected a solution using Next.js for a blazing fast frontend and Django for a robust backend. The platform supports markdown, image optimization, and features an advanced comment system and user profiles.",
       "sections": [
         {
           "type": "text",
           "title": "Key Features",
-          "content": "• Advanced Property Search with AI-powered recommendations\n• Interactive Map Integration with Google Maps\n• Virtual 3D Property Tours\n• Real-time Messaging between Buyers and Sellers\n• Comprehensive Admin Dashboard\n• Mobile-responsive Design\n• Secure Payment Gateway Integration"
+          "content": "• SEO Optimized Rendering (SSR/ISR)\n• Rich Text Editor with Markdown Support\n• User Authentication & Profiles\n• Categories & Tagging System\n• Newsletter Integration"
         },
         {
           "type": "table",
-          "title": "Technical Stack",
+          "title": "Tech Stack",
           "headers": [
-            "Technology",
-            "Purpose",
-            "Version"
+            "Component",
+            "Technology"
           ],
           "rows": [
             [
-              "Next.js",
-              "Frontend Framework",
-              "14.0"
+              "Frontend",
+              "Next.js 14, Tailwind CSS"
             ],
             [
-              "React",
-              "UI Library",
-              "18.2"
+              "Backend",
+              "Django Rest Framework"
             ],
             [
-              "Node.js",
-              "Backend Runtime",
-              "20.x"
-            ],
-            [
-              "MongoDB",
               "Database",
-              "7.0"
+              "PostgreSQL"
             ],
             [
-              "Tailwind CSS",
-              "Styling",
-              "3.4"
+              "Cache",
+              "Redis"
             ],
             [
-              "Express",
-              "API Server",
-              "4.18"
+              "Deployment",
+              "Vercel & AWS"
             ]
-          ]
-        },
-        {
-          "type": "image",
-          "title": "Platform Dashboard",
-          "url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop",
-          "alt": "Propelry Dashboard",
-          "caption": "The comprehensive admin dashboard for managing properties"
-        },
-        {
-          "type": "code",
-          "title": "Sample API Endpoint",
-          "language": "javascript",
-          "content": "// Property Search API Endpoint\napp.get('/api/properties/search', async (req, res) => {\n  try {\n    const { location, minPrice, maxPrice, type } = req.query;\n    \n    const filters = {};\n    if (location) filters.location = { $regex: location, $options: 'i' };\n    if (minPrice) filters.price = { $gte: parseInt(minPrice) };\n    if (maxPrice) filters.price = { ...filters.price, $lte: parseInt(maxPrice) };\n    if (type) filters.propertyType = type;\n    \n    const properties = await Property.find(filters)\n      .sort({ createdAt: -1 })\n      .limit(20);\n    \n    res.json({ success: true, data: properties });\n  } catch (error) {\n    res.status(500).json({ success: false, error: error.message });\n  }\n});"
-        },
-        {
-          "type": "bullets",
-          "title": "Project Highlights",
-          "items": [
-            "Successfully launched with 500+ property listings in the first month",
-            "Achieved 99.9% uptime with robust infrastructure",
-            "Reduced property search time by 70% with AI-powered recommendations",
-            "Integrated with multiple MLS (Multiple Listing Services) data sources",
-            "Implemented advanced security features including 2FA and encryption"
           ]
         }
       ],
-      "results": "The platform successfully launched and gained significant traction with over 500 active listings in the first month. User engagement increased by 150% compared to traditional real estate platforms, and the average time to close a deal decreased by 40%."
+      "results": "The platform achieved a Lighthouse score of 95+ in all categories. Engagement time increased by 40% due to the fast load times and clean UI."
     },
     "gallery": [
-      "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop"
+      "/content-creation.png",
+      "/web-development.jpg"
     ],
     "testimonial": {
-      "text": "NJ Tech Studio delivered an exceptional platform that transformed our real estate business. The attention to detail and technical expertise was outstanding.",
-      "author": "John Smith",
-      "position": "CEO, Propelry Inc."
+      "text": "Bloger Menia offers the perfect balance between simplicity and power. It's my go-to platform for technical writing.",
+      "author": "Jay Patel",
+      "position": "Creator"
     }
   },
   {
     "id": 2,
-    "slug": "ecommerce-dashboard",
-    "title": "E-Commerce Analytics Dashboard",
-    "subtitle": "Real-time analytics and insights for online stores",
-    "description": "A powerful analytics dashboard that provides real-time insights into e-commerce performance, customer behavior, and sales trends.",
-    "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
+    "slug": "trade-buddy-broker",
+    "title": "Trade Buddy Broker",
+    "subtitle": "Algorithmic Trading & Automation System",
+    "description": "An intelligent trading bot and brokerage interface that executes trades based on technical indicators and sentiment analysis.",
+    "image": "/iot-automation.jpg",
     "featured": true,
-    "category": "Dashboard",
+    "category": "Fintech & Automation",
     "technologies": [
-      "React",
-      "TypeScript",
-      "Firebase",
-      "Chart.js",
-      "Material-UI",
-      "Redux"
+      "Python",
+      "Flask",
+      "Pandas",
+      "NumPy",
+      "Docker",
+      "Celery"
     ],
-    "liveUrl": "https://demo-ecommerce-analytics.com",
-    "githubUrl": "https://github.com/njtechstudio/ecommerce-dashboard",
-    "startDate": "2023-09-01",
-    "endDate": "2024-02-28",
+    "liveUrl": "",
+    "githubUrl": "https://github.com/jay19patel/Trade-Buddy-Broker",
+    "startDate": "2023-11-01",
+    "endDate": "2024-01-20",
     "status": "Completed",
-    "client": "ShopFast",
+    "client": "Private Client",
     "content": {
-      "overview": "An advanced analytics dashboard built for e-commerce businesses to track sales, monitor customer behavior, and gain actionable insights. The platform processes millions of data points to provide real-time visualizations and predictive analytics.",
-      "challenge": "E-commerce businesses struggled with fragmented data across multiple platforms. They needed a unified dashboard that could aggregate data from various sources and present it in an easily digestible format while handling large volumes of real-time data.",
-      "solution": "We developed a highly responsive dashboard using React and TypeScript with Firebase for real-time data synchronization. The solution includes custom-built charts, predictive analytics using machine learning, and automated reporting features.",
+      "overview": "Trade Buddy Broker is an automated trading system connecting researchers and traders with stock brokers via APIs, specifically tailored for algorithmic trading strategies.",
+      "challenge": "The main challenge was low latency execution and handling concurrent data streams from multiple exchanges without data loss. Ensuring thread safety and reliable error handling was critical for financial transactions.",
+      "solution": "We utilized Flask for the API layer and Python's efficient data libraries (Pandas/NumPy) for strategy calculation. Celery was used for asynchronous task management to ensure non-blocking trade execution.",
       "sections": [
         {
           "type": "text",
-          "title": "Platform Capabilities",
-          "content": "The dashboard provides comprehensive analytics including sales trends, customer segmentation, inventory management, and revenue forecasting. It integrates seamlessly with major e-commerce platforms like Shopify, WooCommerce, and Magento."
-        },
-        {
-          "type": "table",
-          "title": "Key Metrics Tracked",
-          "headers": [
-            "Metric",
-            "Description",
-            "Update Frequency"
-          ],
-          "rows": [
-            [
-              "Revenue",
-              "Total sales and revenue trends",
-              "Real-time"
-            ],
-            [
-              "Conversion Rate",
-              "Visitor to customer conversion",
-              "Hourly"
-            ],
-            [
-              "Customer LTV",
-              "Lifetime value analysis",
-              "Daily"
-            ],
-            [
-              "Inventory Levels",
-              "Stock tracking and alerts",
-              "Real-time"
-            ],
-            [
-              "Traffic Sources",
-              "Marketing channel performance",
-              "Hourly"
-            ],
-            [
-              "Cart Abandonment",
-              "Abandoned cart tracking",
-              "Real-time"
-            ]
-          ]
-        },
-        {
-          "type": "image",
-          "title": "Analytics Overview",
-          "url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
-          "alt": "Analytics Dashboard",
-          "caption": "Real-time analytics with interactive charts and visualizations"
-        },
-        {
-          "type": "code",
-          "title": "Real-time Data Hook",
-          "language": "typescript",
-          "content": "// Custom hook for real-time analytics data\nimport { useEffect, useState } from 'react';\nimport { ref, onValue } from 'firebase/database';\nimport { database } from '@/lib/firebase';\n\ninterface AnalyticsData {\n  revenue: number;\n  orders: number;\n  visitors: number;\n  conversionRate: number;\n}\n\nexport const useRealtimeAnalytics = (storeId: string) => {\n  const [data, setData] = useState<AnalyticsData | null>(null);\n  const [loading, setLoading] = useState(true);\n\n  useEffect(() => {\n    const analyticsRef = ref(database, `analytics/${storeId}`);\n    \n    const unsubscribe = onValue(analyticsRef, (snapshot) => {\n      const analyticsData = snapshot.val();\n      setData(analyticsData);\n      setLoading(false);\n    });\n\n    return () => unsubscribe();\n  }, [storeId]);\n\n  return { data, loading };\n};"
+          "title": "Capabilities",
+          "content": "• Real-time Market Data Streaming (WebSockets)\n• Multi-Strategy Backtesting Engine\n• Risk Management & Stop-Loss Automation\n• Telegram/Email Alert Integration\n• Portfolio Performance Tracking"
         },
         {
           "type": "bullets",
-          "title": "Technical Achievements",
+          "title": "Core Components",
           "items": [
-            "Processed over 10 million data points daily with sub-second latency",
-            "Implemented WebSocket connections for real-time updates",
-            "Built custom chart components for better performance",
-            "Integrated machine learning models for sales forecasting",
-            "Achieved 95% accuracy in predictive analytics",
-            "Reduced page load time to under 2 seconds"
+            "Strategy Engine (Python)",
+            "Order Management System (OMS)",
+            "Risk Controller",
+            "Notification Service"
           ]
-        },
-        {
-          "type": "note",
-          "title": "Performance Optimization",
-          "content": "We implemented advanced caching strategies and data aggregation techniques to ensure the dashboard remains responsive even with millions of data points. The use of Redis for caching and WebSockets for real-time updates significantly improved performance."
         }
       ],
-      "results": "The dashboard helped clients increase their revenue by 35% through better insights and data-driven decisions. Customer satisfaction scores improved by 45%, and the average time spent on data analysis decreased from 4 hours to 30 minutes per day."
+      "results": "The bot successfully automated high-frequency trades with a 99.9% execution success rate, significantly reducing manual intervention."
     },
     "gallery": [
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1543286386-713df548e9cc?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1526628953301-3e589a6a8b74?q=80&w=1000&auto=format&fit=crop"
+      "/iot-automation.jpg",
+      "/erp-system.jpg"
     ],
     "testimonial": {
-      "text": "This dashboard completely transformed how we understand our business. The insights we gained led to a 35% increase in revenue within the first quarter.",
-      "author": "Sarah Johnson",
-      "position": "Marketing Director, ShopFast"
+      "text": "The precision and speed of Trade Buddy are unmatched. It handles complex strategies effortlessly.",
+      "author": "Client",
+      "position": "Trader"
+    }
+  },
+  {
+    "id": 3,
+    "slug": "office-njtechstudio",
+    "title": "Office NJTechStudio",
+    "subtitle": "Enterprise Project & Task Management",
+    "description": "A comprehensive internal tool for managing office projects, assigning tasks, and tracking employee productivity.",
+    "image": "/erp-system.jpg",
+    "featured": true,
+    "category": "SaaS / Productivity",
+    "technologies": [
+      "Next.js",
+      "Redux",
+      "MongoDB",
+      "Material UI",
+      "Shadcn UI"
+    ],
+    "liveUrl": "https://office.njtechstudio.com",
+    "githubUrl": "https://github.com/jay19patel/office.njtechstudio",
+    "startDate": "2024-02-01",
+    "endDate": "Present",
+    "status": "In Development",
+    "client": "NJ Tech Studio",
+    "content": {
+      "overview": "A dedicated portal for office environments to manage sprints, track bugs, and assign daily tasks to employees. It features a Kanban board, time tracking, and performance reporting modules.",
+      "challenge": "Large teams often face communication gaps and unclear task priorities. The goal was to build a system that provides transparency and accountability without micromanagement.",
+      "solution": "We built a scalable SaaS application with Next.js and Django. The system uses a role-based access control (RBAC) model to ensure data security and proper hierarchy management inside the organization.",
+      "sections": [
+        {
+          "type": "text",
+          "title": "Core Modules",
+          "content": "• Kanban Board for Task Management\n• Sprint Planning & Backlogs\n• Employee Time Tracking & Timesheets\n• Automated Daily Standup Reports\n• File Sharing & Document Management"
+        },
+        {
+          "type": "table",
+          "title": "Architecture",
+          "headers": [
+            "Layer",
+            "Tech"
+          ],
+          "rows": [
+            [
+              "UI/UX",
+              "Material UI + Framer Motion"
+            ],
+            [
+              "State",
+              "Redux Toolkit"
+            ],
+            [
+              "API",
+              "Django REST Framework"
+            ],
+            [
+              "Auth",
+              "JWT + Google OAuth"
+            ],
+            [
+              "Realtime",
+              "Django Channels (WebSockets)"
+            ]
+          ]
+        }
+      ],
+      "results": "Improved team velocity by 25% and reduced meeting times by leveraging the automated reporting features."
+    },
+    "gallery": [
+      "/erp-system.jpg",
+      "/web-development.jpg"
+    ],
+    "testimonial": {
+      "text": "This tool streamlined our entire workflow. It's clean, fast, and effective.",
+      "author": "HR Manager",
+      "position": "Internal"
     }
   }
 ]

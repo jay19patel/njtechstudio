@@ -1,10 +1,62 @@
 "use client";
 import MovingTextBg from "../components/MovingTextBg";
-import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, MapPin, Phone, Loader2 } from "lucide-react";
+import { useState } from "react";
+import SuccessModal from "../components/SuccessModal";
 
 export default function ContactPage() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: ""
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const data = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        data.append(key, value);
+      });
+      data.append("type", "Contact");
+
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        body: data,
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+      } else {
+        alert("Failed to send message. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("An error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="bg-background text-foreground min-h-screen">
+      <SuccessModal
+        isOpen={isSuccess}
+        onClose={() => setIsSuccess(false)}
+        redirectUrl="/"
+      />
+
       <MovingTextBg text="LET'S TALK " textColor="text-gray-400">
         {/* Hero Section */}
         <section className="relative w-full pt-32 lg:pt-40 pb-12 lg:pb-20 px-4 md:px-8 lg:px-16">
@@ -52,27 +104,63 @@ export default function ContactPage() {
                   <p className="text-zinc-500 text-base lg:text-lg">Fill out the form below and we'll get back to you shortly.</p>
                 </div>
 
-                <form className="space-y-8 lg:space-y-10">
+                <form onSubmit={handleSubmit} className="space-y-8 lg:space-y-10">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                    <InputGroup label="Your Name" placeholder="John Doe" type="text" />
-                    <InputGroup label="Your Email" placeholder="john@example.com" type="email" />
+                    <InputGroup
+                      label="Your Name"
+                      placeholder="John Doe"
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                    <InputGroup
+                      label="Your Email"
+                      placeholder="john@example.com"
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
                   </div>
 
-                  <InputGroup label="Subject" placeholder="Project Inquiry" type="text" />
+                  <InputGroup
+                    label="Subject"
+                    placeholder="Project Inquiry"
+                    type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
+                  />
 
                   <div className="space-y-4">
                     <label className="text-xs lg:text-sm font-bold uppercase tracking-widest text-zinc-400">Message</label>
                     <textarea
                       rows={4}
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
                       className="w-full bg-transparent border-b-2 border-zinc-200 text-lg sm:text-xl md:text-xl lg:text-2xl font-medium placeholder:text-zinc-200 focus:outline-none focus:border-indigo-600 transition-colors py-3 lg:py-4 resize-none text-zinc-900"
                       placeholder="Tell us about your project..."
                     />
                   </div>
 
                   <div className="pt-4">
-                    <button className="group relative inline-flex items-center justify-center px-8 py-4 lg:px-10 lg:py-4 bg-black text-white rounded-full overflow-hidden transition-all hover:bg-indigo-600 hover:scale-105 active:scale-95 w-full md:w-auto">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="group relative inline-flex items-center justify-center px-8 py-4 lg:px-10 lg:py-4 bg-black text-white rounded-full overflow-hidden transition-all hover:bg-indigo-600 hover:scale-105 active:scale-95 w-full md:w-auto disabled:opacity-70 disabled:pointer-events-none"
+                    >
                       <span className="relative z-10 flex items-center gap-3 font-bold uppercase tracking-wider text-sm lg:text-base">
-                        Send Message <ArrowUpRight className="w-4 h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                        {isSubmitting ? (
+                          <>Sending... <Loader2 className="w-4 h-4 animate-spin" /></>
+                        ) : (
+                          <>Send Message <ArrowUpRight className="w-4 h-4 lg:w-5 lg:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" /></>
+                        )}
                       </span>
                     </button>
                   </div>
@@ -87,12 +175,16 @@ export default function ContactPage() {
   );
 }
 
-function InputGroup({ label, placeholder, type }) {
+function InputGroup({ label, placeholder, type, name, value, onChange, required }) {
   return (
     <div className="space-y-4">
       <label className="text-xs lg:text-sm font-bold uppercase tracking-widest text-zinc-400">{label}</label>
       <input
         type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        required={required}
         className="w-full bg-transparent border-b-2 border-zinc-200 text-lg sm:text-xl md:text-2xl lg:text-3xl font-medium placeholder:text-zinc-200 focus:outline-none focus:border-indigo-600 transition-colors py-3 lg:py-4 text-zinc-900"
         placeholder={placeholder}
       />
