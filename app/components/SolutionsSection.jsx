@@ -1,57 +1,68 @@
 "use client";
 import { motion, useTransform, useScroll, useSpring } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import MovingTextBg from "./MovingTextBg";
-const sectionsData = [
-  {
-    id: 1,
-    label: "CONTENT & YOUTUBE CREATION",
-    title: "CREATIVE TECH CONTENT THAT TEACHES & ENTERTAINS",
-    description:
-      "I create fun, engaging and value-packed content around programming, startups, software development and real-world tech journeys. With a joyful delivery style, I turn complex tech topics into simple, enjoyable and relatable experiences through YouTube, reels and storytelling.",
-    image: "/content-creation.png",
-    layout: "left",
-  },
-  {
-    id: 2,
-    label: "WEB + AI DEVELOPMENT",
-    title: "MODERN WEB APPS SUPERCHARGED WITH AI",
-    description:
-      "I build fast, scalable and intelligent applications using Next.js, React, FastAPI, Django and GenAI tools. From backend APIs to smart automation, vector search, AI agents and real-time dashboards — your digital product becomes faster, smarter and future-ready.",
-    image: "/web-development.jpg",
-    layout: "right",
-  },
-  {
-    id: 3,
-    label: "ERP & BUSINESS AUTOMATION",
-    title: "CUSTOM ERP FOR SMALL & MEDIUM BUSINESSES",
-    description:
-      "Automate your business with tailored ERP systems built using Frappe/ERPNext + React. From inventory and HR to approvals and finance dashboards — I deliver fast, clean and efficient workflows that boost productivity and reduce manual work.",
-    image: "/erp-system.jpg",
-    layout: "left",
-  },
-  {
-    id: 4,
-    label: "IOT & SMART AUTOMATION",
-    title: "CONNECT DEVICES WITH REAL-WORLD SOFTWARE",
-    description:
-      "I design IoT-enabled systems that combine sensors, cloud services and smart automation. From real-time monitoring to device dashboards and industry automation — I bridge hardware, software and AI to bring ideas to life.",
-    image: "/iot-automation.jpg",
-    layout: "right",
-  },
-  {
-    id: 5,
-    label: "SCHOOL & COLLEGE PROJECTS",
-    title: "HIGH-SCORING MODERN STUDENT PROJECTS",
-    description:
-      "Helping students build impactful, presentation-ready academic projects using Web Development, Python, AI, ML, automation and IoT. Clean code, proper documentation and impressive UI — perfect for final-year submissions and demos.",
-    image: "/student-projects.jpg",
-    layout: "left",
-  }
-];
-
 
 export default function HorizontalScrollSection() {
+  const [sections, setSections] = useState([
+    {
+      id: 1,
+      label: "CONTENT & YOUTUBE CREATION",
+      title: "CREATIVE TECH CONTENT THAT TEACHES & ENTERTAINS",
+      description:
+        "I create fun, engaging and value-packed content around programming, startups, software development and real-world tech journeys. With a joyful delivery style, I turn complex tech topics into simple, enjoyable and relatable experiences through YouTube, reels and storytelling.",
+      image: "/content-creation.png",
+      layout: "left",
+    },
+    {
+      id: 2,
+      label: "WEB + AI DEVELOPMENT",
+      title: "MODERN WEB APPS SUPERCHARGED WITH AI",
+      description:
+        "I build fast, scalable and intelligent applications using Next.js, React, FastAPI, Django and GenAI tools. From backend APIs to smart automation, vector search, AI agents and real-time dashboards — your digital product becomes faster, smarter and future-ready.",
+      image: "/web-development.jpg",
+      layout: "right",
+    },
+    {
+      id: 3,
+      label: "ERP & BUSINESS AUTOMATION",
+      title: "CUSTOM ERP FOR SMALL & MEDIUM BUSINESSES",
+      description:
+        "Automate your business with tailored ERP systems built using Frappe/ERPNext + React. From inventory and HR to approvals and finance dashboards — I deliver fast, clean and efficient workflows that boost productivity and reduce manual work.",
+      image: "/erp-system.jpg",
+      layout: "left",
+    },
+    {
+      id: 4,
+      label: "IOT & SMART AUTOMATION",
+      title: "CONNECT DEVICES WITH REAL-WORLD SOFTWARE",
+      description:
+        "I design IoT-enabled systems that combine sensors, cloud services and smart automation. From real-time monitoring to device dashboards and industry automation — I bridge hardware, software and AI to bring ideas to life.",
+      image: "/iot-automation.jpg",
+      layout: "right",
+    },
+    {
+      id: 5,
+      label: "SCHOOL & COLLEGE PROJECTS",
+      title: "HIGH-SCORING MODERN STUDENT PROJECTS",
+      description:
+        "Helping students build impactful, presentation-ready academic projects using Web Development, Python, AI, ML, automation and IoT. Clean code, proper documentation and impressive UI — perfect for final-year submissions and demos.",
+      image: "/student-projects.jpg",
+      layout: "left",
+    }
+  ]);
+
+  useEffect(() => {
+    fetch('/api/admin/data?type=solutions')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setSections(data);
+        }
+      })
+      .catch(err => console.error('Error fetching solutions:', err));
+  }, []);
+
   const targetRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -62,7 +73,7 @@ export default function HorizontalScrollSection() {
   const xRaw = useTransform(
     scrollYProgress,
     [0, 1],
-    ["0%", `-${(sectionsData.length - 1) * 100}%`]
+    ["0%", `-${(sections.length - 1) * 100}%`]
   );
 
   const x = useSpring(xRaw, {
@@ -75,14 +86,14 @@ export default function HorizontalScrollSection() {
     <section
       ref={targetRef}
       className="relative bg-black"
-      style={{ height: `${100 + (sectionsData.length - 1) * 100}vh` }}
+      style={{ height: `${100 + (sections.length - 1) * 100}vh` }}
     >
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
         <motion.div
           style={{ x }}
           className="flex w-full h-full"
         >
-          {sectionsData.map((section) => (
+          {sections.map((section) => (
             <SectionCard key={section.id} section={section} />
           ))}
         </motion.div>
@@ -90,6 +101,7 @@ export default function HorizontalScrollSection() {
     </section>
   );
 }
+
 
 const SectionCard = ({ section }) => {
   const isLeftLayout = section.layout === "left";

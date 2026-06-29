@@ -1,8 +1,9 @@
 "use client";
+import { useState, useEffect } from "react";
 import MovingTextBg from "./MovingTextBg";
 
 export default function TestimonialSection() {
-  const testimonials = [
+  const [testimonials, setTestimonials] = useState([
     {
       id: 1,
       name: "Videoly Client",
@@ -39,11 +40,23 @@ export default function TestimonialSection() {
       role: "Product Manager",
       text: "Built entire e-commerce platform with React & Django. Scalable, fast, handles thousands of orders daily. Game changer! 🎯",
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    fetch('/api/admin/data?type=testimonials')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setTestimonials(data);
+        }
+      })
+      .catch(err => console.error('Error fetching testimonials:', err));
+  }, []);
 
   // Duplicate for seamless infinite scroll - only 2 rows
   const row1 = [...testimonials, ...testimonials];
   const row2 = [...testimonials, ...testimonials];
+
 
   return (
     <MovingTextBg text="TESTIMONIALS" textColor="text-gray-400">

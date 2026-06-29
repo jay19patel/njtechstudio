@@ -1,0 +1,20 @@
+[
+  {
+    "videoId": "VWPyx_L3zzY",
+    "title": "Latest Tech Insights & Tutorials",
+    "description": "Deep dive into modern web development, AI tools, and software engineering practices. Join me as we explore the latest tech trends.",
+    "badge": "NEW UPLOAD"
+  },
+  {
+    "videoId": "9_ILhEnsG4k",
+    "title": "Building Scalable Systems",
+    "description": "Learn how to design and build scalable applications that can handle real-world traffic and data loads efficiently.",
+    "badge": "SYSTEM DESIGN"
+  },
+  {
+    "videoId": "Q1EkS5tFQK4",
+    "title": "Developer Roadmap & Tips",
+    "description": "Essential tips for developers, roadmap guides, and career advice to help you navigate your journey in the tech industry.",
+    "badge": "CAREER GROWTH"
+  }
+]

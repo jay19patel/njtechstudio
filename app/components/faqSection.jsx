@@ -1,15 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import MovingTextBg from "./MovingTextBg";
 import { motion } from "framer-motion";
 
 const FAQSection = () => {
     const [openItem, setOpenItem] = useState(null);
-
-    // Manual FAQ data with 3 questions
-    const faqItems = [
+    const [faqItems, setFaqItems] = useState([
         {
             id: 1,
             question: "What kind of projects do you take on?",
@@ -35,11 +33,23 @@ const FAQSection = () => {
             question: "What's your tech stack?",
             answer: "Backend: Python (Django, Flask, FastAPI, Frappe), Node.js. Frontend: React, Next.js, JavaScript. Databases: PostgreSQL, MongoDB, Redis, SQLite. AI/ML: LangChain, LangGraph, OpenSearch, Vector DBs. Cloud: GCP, Docker, CI/CD. Architecture: Microservices, Event-Driven (RabbitMQ, Celery, Redis Pub/Sub). If it's modern and scalable, I use it!",
         },
-    ];
+    ]);
+
+    useEffect(() => {
+        fetch('/api/admin/data?type=faqs')
+            .then(res => res.json())
+            .then(data => {
+                if (Array.isArray(data) && data.length > 0) {
+                    setFaqItems(data);
+                }
+            })
+            .catch(err => console.error('Error fetching FAQs:', err));
+    }, []);
 
     const toggleItem = (id) => {
         setOpenItem(openItem === id ? null : id);
     };
+
 
     return (
         <MovingTextBg text="FAQs" textColor="text-gray-400">

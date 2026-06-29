@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { promises as fs } from 'fs';
+import path from 'path';
 
 export async function POST(request) {
     try {
@@ -96,7 +98,40 @@ export async function POST(request) {
         await transporter.sendMail(adminMailOptions);
         await transporter.sendMail(userMailOptions);
 
-        return NextResponse.json({ success: true, message: 'Emails sent successfully' });
+        // Save submission to JSON database
+        try {
+            const SUBMISSIONS_PATH = path.join(process.cwd(), 'app', 'data', 'submissions.json');
+            let submissions = [];
+            try {
+                const dataStr = await fs.readFile(SUBMISSIONS_PATH, 'utf-8');
+                submissions = JSON.parse(dataStr);
+            } catch (err) {
+                if (err.code !== 'ENOENT') throw err;
+            }
+
+            const newSubmission = {
+                id: `sub_${Date.now()}`,
+                name,
+                email,
+                phone,
+                subject,
+                message,
+                type,
+                createdAt: new Date().toISOString(),
+                replied: false,
+                replies: []
+            };
+
+            submissions.push(newSubmission);
+            
+            // Ensure directory exists
+            await fs.mkdir(path.dirname(SUBMISSIONS_PATH), { recursive: true });
+            await fs.writeFile(SUBMISSIONS_PATH, JSON.stringify(submissions, null, 2), 'utf-8');
+        } catch (dbError) {
+            console.error('Failed to save submission to JSON DB:', dbError);
+        }
+
+        return NextResponse.json({ success: true, message: 'Emails sent successfully and submission saved' });
 
     } catch (error) {
         console.error('Error sending email:', error);

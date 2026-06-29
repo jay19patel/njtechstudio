@@ -10,12 +10,18 @@ import AudioPlayer from "./AudioPlayer";
 import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  
+  // Hide Navbar completely on the admin panel
+  if (pathname && pathname.startsWith("/admin")) {
+    return null;
+  }
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredImage, setHoveredImage] = useState(null);
   const [isNavigating, setIsNavigating] = useState(false);
 
   const [hidden, setHidden] = useState(false);
-  const pathname = usePathname();
   const router = useRouter();
 
   const handleLogoClick = async (e) => {
@@ -76,10 +82,9 @@ export default function Navbar() {
   ];
 
   const socialLinks = [
-    { name: "Behance", href: "https://behance.net" },
-    { name: "Instagram", href: "https://instagram.com" },
-    { name: "LinkedIn", href: "https://linkedin.com" },
-    { name: "Twitter", href: "https://twitter.com" }
+    { name: "Instagram", href: "https://www.instagram.com/njtechstudio.in/" },
+    { name: "YouTube", href: "https://www.youtube.com/@njtechstudio" },
+    { name: "LinkedIn", href: "https://www.linkedin.com/in/jayy19patel/" }
   ];
 
   return (
@@ -318,6 +323,26 @@ export default function Navbar() {
                           </a>
                         </motion.div>
                       ))}
+                      
+                      {/* Admin Redirect Link */}
+                      <motion.div
+                        initial={{ opacity: 0, x: -40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -40 }}
+                        transition={{
+                          duration: 0.6,
+                          delay: 0.9 + socialLinks.length * 0.08,
+                          ease: [0.76, 0, 0.24, 1]
+                        }}
+                      >
+                        <Link
+                          href="/admin"
+                          onClick={toggleMenu}
+                          className="inline-block text-zinc-400 hover:text-white text-sm transition-colors duration-300"
+                        >
+                          Admin
+                        </Link>
+                      </motion.div>
                     </div>
                   </div>
                 </div>

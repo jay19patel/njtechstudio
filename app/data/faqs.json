@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "question": "What kind of projects do you take on?",
+    "answer": "I specialize in AI-powered apps (GenAI, LangChain, vector search), full-stack ERP systems (Frappe/ERPNext + React), scalable web apps (Next.js, FastAPI, Django), and custom automation solutions. If it involves Python, JavaScript, AI/ML, or cloud deployment (GCP), I'm your guy! From MVPs to production-ready systems — I ship fast and scale hard. 🚀"
+  },
+  {
+    "id": 2,
+    "question": "How fast can you deliver?",
+    "answer": "Speed depends on scope! Simple automation or MVP? 1-2 weeks. Full ERP system or AI platform? 4-8 weeks. Trading bot or microservices architecture? 6-12 weeks. I work in sprints, keep you updated daily, and prioritize shipping working code over endless planning. Let's talk specifics and I'll give you a real timeline!"
+  },
+  {
+    "id": 3,
+    "question": "Do you offer support after the project is done?",
+    "answer": "Absolutely! I provide post-launch support including bug fixes, performance optimization, feature additions, and system maintenance. Whether it's fixing issues, scaling infrastructure, or adding new functionality — I'm here for the long haul. Flexible support packages available based on your needs!"
+  },
+  {
+    "id": 4,
+    "question": "Can you help with AI/ML integration?",
+    "answer": "100%! I've built AI-powered talent acquisition systems, blogging platforms with LangChain/LangGraph, vector search with OpenSearch, and semantic discovery engines. From prompt engineering to model fine-tuning to production deployment — I handle the entire AI pipeline. Let's make your app smarter! 🤖"
+  },
+  {
+    "id": 5,
+    "question": "What's your tech stack?",
+    "answer": "Backend: Python (Django, Flask, FastAPI, Frappe), Node.js. Frontend: React, Next.js, JavaScript. Databases: PostgreSQL, MongoDB, Redis, SQLite. AI/ML: LangChain, LangGraph, OpenSearch, Vector DBs. Cloud: GCP, Docker, CI/CD. Architecture: Microservices, Event-Driven (RabbitMQ, Celery, Redis Pub/Sub). If it's modern and scalable, I use it!"
+  }
+]

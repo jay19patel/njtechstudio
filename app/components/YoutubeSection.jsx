@@ -1,12 +1,11 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import MovingTextBg from "./MovingTextBg";
 import { motion } from "framer-motion";
 
 export default function YoutubeSection() {
-  const [playingVideo, setPlayingVideo] = React.useState(null);
-
-  const cards = [
+  const [playingVideo, setPlayingVideo] = useState(null);
+  const [cards, setCards] = useState([
     {
       videoId: "VWPyx_L3zzY",
       title: "Latest Tech Insights & Tutorials",
@@ -28,7 +27,19 @@ export default function YoutubeSection() {
         "Essential tips for developers, roadmap guides, and career advice to help you navigate your journey in the tech industry.",
       badge: "CAREER GROWTH",
     },
-  ];
+  ]);
+
+  useEffect(() => {
+    fetch('/api/admin/data?type=youtube')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data) && data.length > 0) {
+          setCards(data);
+        }
+      })
+      .catch(err => console.error('Error fetching youtube videos:', err));
+  }, []);
+
 
   return (
     <MovingTextBg text="CONTENT" textColor="text-gray-400">

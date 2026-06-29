@@ -1,6 +1,16 @@
+"use client";
+
 import { Instagram, Linkedin, Youtube } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Hide Footer completely on the admin panel
+  if (pathname && pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
