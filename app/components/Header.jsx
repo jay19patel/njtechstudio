@@ -70,9 +70,9 @@ export default function Navbar() {
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=60"
     },
     {
-      label: "Join Us",
-      href: "/join-us",
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=900&q=60"
+      label: "Channel",
+      href: "/channel",
+      image: "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?auto=format&fit=crop&w=900&q=60"
     },
     {
       label: "Contact",

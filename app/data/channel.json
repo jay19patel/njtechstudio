@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1719680000000",
+    "title": "Introducing Our New Channel Feed",
+    "category": "Announcement",
+    "date": "2026-06-29T10:00:00.000Z",
+    "image": "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?auto=format&fit=crop&w=1200&q=80",
+    "link": "https://njtechstudio.in",
+    "linkText": "Explore Features",
+    "content": "Welcome to our live channel feed! We designed this space to bring you real-time announcements, event details, tech tutorials, and insights from the team. Now you can check out what we are currently building, our event participations, and more."
+  },
+  {
+    "id": "1719685000000",
+    "title": "Next.js 16 Custom Boilerplate Released",
+    "category": "Tech Update",
+    "date": "2026-06-29T14:30:00.000Z",
+    "image": "https://images.unsplash.com/photo-1618477388954-7852f32655ec?auto=format&fit=crop&w=1200&q=80",
+    "link": "https://github.com/jay19patel",
+    "linkText": "View Repository",
+    "content": "We have open-sourced our highly optimized Next.js 16 + Tailwind CSS boilerplate. It is fully pre-configured with SEO best practices, structured layouts, and smooth animations using Framer Motion. Check it out and start building your premium websites instantly!"
+  }
+]

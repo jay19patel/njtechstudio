@@ -27,6 +27,7 @@ export default function AdminDashboard() {
   const [skills, setSkills] = useState({ backend: [], frontend: [], database: [], 'other-tools': [] });
   const [faqs, setFaqs] = useState([]);
   const [leads, setLeads] = useState([]);
+  const [channelPosts, setChannelPosts] = useState([]);
   
   // Loading & refresh states
   const [loadingData, setLoadingData] = useState(false);
@@ -42,13 +43,15 @@ export default function AdminDashboard() {
   const [testimonialsPage, setTestimonialsPage] = useState(1);
   const [youtubePage, setYoutubePage] = useState(1);
   const [faqsPage, setFaqsPage] = useState(1);
+  const [channelPage, setChannelPage] = useState(1);
 
   const itemsPerPage = {
     leads: 5,
     projects: 6,
     testimonials: 6,
     youtube: 6,
-    faqs: 5
+    faqs: 5,
+    channel: 6
   };
 
   // Reset pagination on filter change
@@ -63,11 +66,12 @@ export default function AdminDashboard() {
     setTestimonialsPage(1);
     setYoutubePage(1);
     setFaqsPage(1);
+    setChannelPage(1);
   }, [activeTab]);
 
   // Modal / Form Editor states
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [editorType, setEditorType] = useState(''); // projects, testimonials, youtube, solutions, faqs
+  const [editorType, setEditorType] = useState(''); // projects, testimonials, youtube, solutions, faqs, channel
   const [editItem, setEditItem] = useState(null); // null means "new"
 
   // Lead reply dialog state
@@ -106,7 +110,8 @@ export default function AdminDashboard() {
         { key: 'solutions', url: '/api/admin/data?type=solutions' },
         { key: 'skills', url: '/api/admin/data?type=skills' },
         { key: 'faqs', url: '/api/admin/data?type=faqs' },
-        { key: 'leads', url: '/api/admin/submissions' }
+        { key: 'leads', url: '/api/admin/submissions' },
+        { key: 'channel', url: '/api/admin/data?type=channel' }
       ];
 
       const results = await Promise.all(
@@ -130,6 +135,7 @@ export default function AdminDashboard() {
         else if (key === 'skills') setSkills(data);
         else if (key === 'faqs') setFaqs(data);
         else if (key === 'leads') setLeads(data);
+        else if (key === 'channel') setChannelPosts(data);
       });
     } catch (err) {
       if (err.message === 'Unauthorized') {
@@ -232,6 +238,10 @@ export default function AdminDashboard() {
       const updated = faqs.filter(f => f.id !== id);
       setFaqs(updated);
       saveJsonData('faqs', updated);
+    } else if (type === 'channel') {
+      const updated = channelPosts.filter(c => c.id !== id);
+      setChannelPosts(updated);
+      saveJsonData('channel', updated);
     }
   };
 
@@ -352,6 +362,27 @@ export default function AdminDashboard() {
       }
       setFaqs(updated);
       saveJsonData('faqs', updated);
+
+    } else if (editorType === 'channel') {
+      const itemData = {
+        id: editItem ? editItem.id : Date.now().toString(),
+        title: formData.get('title'),
+        category: formData.get('category'),
+        date: new Date(formData.get('date')).toISOString(),
+        image: formData.get('image') || '',
+        link: formData.get('link') || '',
+        linkText: formData.get('linkText') || 'Read More',
+        content: formData.get('content')
+      };
+
+      let updated;
+      if (editItem) {
+        updated = channelPosts.map(c => c.id === editItem.id ? itemData : c);
+      } else {
+        updated = [...channelPosts, itemData];
+      }
+      setChannelPosts(updated);
+      saveJsonData('channel', updated);
     }
 
     setIsEditorOpen(false);
@@ -441,6 +472,7 @@ export default function AdminDashboard() {
     { id: 'solutions', label: 'Home Sections', icon: Sparkles },
     { id: 'skills', label: 'Tech Stack', icon: Cpu },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
+    { id: 'channel', label: 'Channel Posts', icon: Send },
   ];
 
   if (checkingSession) {
@@ -571,6 +603,14 @@ export default function AdminDashboard() {
   const paginatedFaqs = faqs.slice(
     (faqsPage - 1) * itemsPerPage.faqs,
     faqsPage * itemsPerPage.faqs
+  );
+
+  // Pagination calculation for Channel Posts (Newest first)
+  const sortedChannelPosts = [...channelPosts].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const totalChannelPages = Math.ceil(sortedChannelPosts.length / itemsPerPage.channel);
+  const paginatedChannel = sortedChannelPosts.slice(
+    (channelPage - 1) * itemsPerPage.channel,
+    channelPage * itemsPerPage.channel
   );
 
   return (
@@ -1385,6 +1425,117 @@ export default function AdminDashboard() {
                     )}
                   </div>
                 )}
+
+                {/* --- 9. CHANNEL POSTS TAB --- */}
+                {activeTab === 'channel' && (
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-bold text-slate-800">Channel Updates & Posts</h3>
+                      <button
+                        onClick={() => {
+                          setEditorType('channel');
+                          setEditItem(null);
+                          setIsEditorOpen(true);
+                        }}
+                        className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm"
+                      >
+                        <Plus className="w-4 h-4" /> Add Post
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {paginatedChannel.length === 0 ? (
+                        <div className="col-span-full py-12 text-center bg-white border border-slate-200 border-dashed rounded-2xl">
+                          <Send className="w-8 h-8 text-slate-400 mx-auto mb-2" />
+                          <p className="text-slate-500 text-sm font-medium">No channel posts found. Create one now!</p>
+                        </div>
+                      ) : (
+                        paginatedChannel.map((post) => (
+                          <div key={post.id} className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between shadow-sm hover:border-slate-350 transition-colors">
+                            <div>
+                              {post.image && (
+                                <div className="relative h-40 w-full bg-slate-100 border-b border-slate-200">
+                                  <img
+                                    src={post.image}
+                                    alt={post.title}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                              )}
+                              <div className="p-5 space-y-3">
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-[10px] font-bold rounded">
+                                    {post.category}
+                                  </span>
+                                  <span className="text-[10px] text-slate-400 font-semibold">
+                                    {new Date(post.date).toLocaleDateString(undefined, {
+                                      dateStyle: 'medium',
+                                    })}
+                                  </span>
+                                </div>
+                                <h4 className="font-bold text-base text-slate-800 leading-tight">
+                                  {post.title}
+                                </h4>
+                                <p className="text-xs text-slate-505 leading-relaxed line-clamp-3 whitespace-pre-line">
+                                  {post.content}
+                                </p>
+                                {post.link && (
+                                  <div className="text-[11px] font-bold text-indigo-650 flex items-center gap-1">
+                                    <ExternalLink className="w-3 h-3" />
+                                    <span>{post.linkText || 'Link'}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                            <div className="px-5 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-1.5 shrink-0">
+                              <button
+                                onClick={() => {
+                                  setEditorType('channel');
+                                  setEditItem(post);
+                                  setIsEditorOpen(true);
+                                }}
+                                className="p-2 bg-white hover:bg-slate-100 text-slate-655 rounded-lg transition-colors border border-slate-200"
+                              >
+                                <Edit className="w-3.5 h-3.5" />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteItem('channel', post.id)}
+                                className="p-2 bg-red-50 hover:bg-red-100 text-red-655 rounded-lg transition-colors border border-red-200"
+                              >
+                                <Trash2 className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </div>
+                        ))
+                      )}
+                    </div>
+
+                    {/* Channel Posts Pagination */}
+                    {totalChannelPages > 1 && (
+                      <div className="flex items-center justify-between border-t border-slate-200 pt-4 mt-6">
+                        <span className="text-xs text-slate-500 font-semibold">
+                          Page {channelPage} of {totalChannelPages} (Showing {paginatedChannel.length} of {channelPosts.length} posts)
+                        </span>
+                        <div className="flex gap-2">
+                          <button
+                            disabled={channelPage === 1}
+                            onClick={() => setChannelPage(p => Math.max(1, p - 1))}
+                            className="px-3.5 py-1.5 bg-white border border-slate-200 text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-xs font-bold hover:bg-slate-55 transition-colors shadow-xxs"
+                          >
+                            Previous
+                          </button>
+                          <button
+                            disabled={channelPage === totalChannelPages}
+                            onClick={() => setChannelPage(p => Math.min(totalChannelPages, p + 1))}
+                            className="px-3.5 py-1.5 bg-white border border-slate-200 text-slate-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-lg text-xs font-bold hover:bg-slate-55 transition-colors shadow-xxs"
+                          >
+                            Next
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </motion.div>
             </AnimatePresence>
           )}
@@ -1704,6 +1855,52 @@ export default function AdminDashboard() {
                     <div className="space-y-1">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">FAQ Answer</label>
                       <textarea name="answer" rows={5} defaultValue={editItem?.answer || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
+                    </div>
+                  </div>
+                )}
+
+                {/* --- F. CHANNEL POSTS FORM FIELDS --- */}
+                {editorType === 'channel' && (
+                  <div className="space-y-4 text-sm">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Title</label>
+                      <input name="title" type="text" defaultValue={editItem?.title || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Category</label>
+                      <input name="category" type="text" defaultValue={editItem?.category || 'Announcement'} placeholder="e.g. Announcement, Event, Tech Update, Insight" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Date</label>
+                      <input 
+                        name="date" 
+                        type="datetime-local" 
+                        defaultValue={
+                          editItem?.date 
+                            ? new Date(new Date(editItem.date).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) 
+                            : new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)
+                        } 
+                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" 
+                        required 
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Image URL (Optional)</label>
+                      <input name="image" type="text" defaultValue={editItem?.image || ''} placeholder="e.g. /content-creation.png or Unsplash URL" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Button Link (Optional)</label>
+                        <input name="link" type="text" defaultValue={editItem?.link || ''} placeholder="e.g. https://github.com/..." className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Button Text (Optional)</label>
+                        <input name="linkText" type="text" defaultValue={editItem?.linkText || 'Read More'} placeholder="e.g. Read More" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" />
+                      </div>
+                    </div>
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Content / Post Text</label>
+                      <textarea name="content" rows={5} defaultValue={editItem?.content || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
                     </div>
                   </div>
                 )}

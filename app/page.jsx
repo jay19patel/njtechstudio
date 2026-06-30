@@ -7,6 +7,7 @@ import SolutionsSection from "./components/SolutionsSection";
 import FAQSection from "./components/faqSection";
 import YoutubeSection from "./components/YoutubeSection";
 import TestimonialSection from "./components/TestimonialSection";
+import ChannelRecentSection from "./components/ChannelRecentSection";
 
 export default function Home() {
   return (
@@ -17,6 +18,7 @@ export default function Home() {
       <TechSkillSection />
       <WhyChooseUs />
       <LatestProjects />
+      <ChannelRecentSection />
       <YoutubeSection />
       <TestimonialSection />
       <FAQSection />

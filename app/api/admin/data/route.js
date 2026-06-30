@@ -10,6 +10,7 @@ const FILES_MAP = {
   solutions: path.join(process.cwd(), 'app', 'data', 'solutions.json'),
   skills: path.join(process.cwd(), 'app', 'data', 'tools.json'),
   faqs: path.join(process.cwd(), 'app', 'data', 'faqs.json'),
+  channel: path.join(process.cwd(), 'app', 'data', 'channel.json'),
 };
 
 export async function GET(request) {
