@@ -11,11 +11,6 @@ import { Menu, X } from "lucide-react";
 
 export default function Navbar() {
   const pathname = usePathname();
-  
-  // Hide Navbar completely on the admin panel
-  if (pathname && pathname.startsWith("/admin")) {
-    return null;
-  }
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredImage, setHoveredImage] = useState(null);
@@ -55,6 +50,12 @@ export default function Navbar() {
   });
 
 
+
+  // Hide Navbar completely on the admin panel. This must come after every
+  // hook above so hook call order stays identical across renders.
+  if (pathname && pathname.startsWith("/admin")) {
+    return null;
+  }
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 

@@ -80,7 +80,7 @@ const StudioIntro = () => (
         We design and develop smart, scalable digital solutions for individuals, startups and growing businesses.
         From modern web platforms to automation systems and AI-enhanced tools —
         our work focuses on clarity, performance and smooth user experience.
-        Our motto: <span className="text-indigo-700 font-bold">"Code with clarity, build with purpose, deliver with joy."</span>
+        Our motto: <span className="text-indigo-700 font-bold">&quot;Code with clarity, build with purpose, deliver with joy.&quot;</span>
       </span>
     </p>
   </Block>
@@ -113,8 +113,8 @@ const FounderCard = () => (
       {/* Text */}
       <div className="flex-1 space-y-2 sm:space-y-3 text-center md:text-left">
         <p className="text-gray-200 text-base sm:text-lg md:text-xl leading-relaxed">
-          Hi, I'm Jay Patel — a Python-first Software Developer with 2 years of experience building fast, secure and scalable systems.
-          I love combining technology and creativity to craft solutions that feel modern, smooth and impactful. Whether it's backend APIs,
+          Hi, I&apos;m Jay Patel — a Python-first Software Developer with 2 years of experience building fast, secure and scalable systems.
+          I love combining technology and creativity to craft solutions that feel modern, smooth and impactful. Whether it&apos;s backend APIs,
           full-stack apps, automation or AI/ML — I build with clarity, quality and purpose.
         </p>
 

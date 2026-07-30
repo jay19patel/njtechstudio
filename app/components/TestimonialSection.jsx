@@ -133,7 +133,7 @@ const TestimonialCard = ({ testimonial }) => {
     <div className="shrink-0 w-[350px] sm:w-[450px] md:w-[500px] bg-white border border-gray-300 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
       {/* Testimonial Text */}
       <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">
-        "{testimonial.text}"
+        &quot;{testimonial.text}&quot;
       </p>
 
       {/* Author Name - Bottom */}

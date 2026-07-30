@@ -230,3 +230,9 @@
     background-color: #9333ea;
     color: white;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .moving-text-bg .moving-text-row {
+    animation-play-state: paused;
+  }
+}

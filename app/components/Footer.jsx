@@ -2,6 +2,7 @@
 
 import { Instagram, Linkedin, Youtube } from "lucide-react";
 import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -18,8 +19,8 @@ export default function Footer() {
           {/* Copyright */}
           <div className="text-center md:text-left">
             <p className="text-gray-600 text-xs">
-              © {new Date().getFullYear()} <span className="font-bold ml-2"><a href="#" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">NJTechStudio</a></span>. All rights reserved. |
-              <span className="font-bold ml-2">Developed by <a href="#" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">Jay Patel</a></span>
+              © {new Date().getFullYear()} <span className="font-bold ml-2"><Link href="/" className="text-indigo-600 hover:text-indigo-800 transition-colors">NJTechStudio</Link></span>. All rights reserved. |
+              <span className="font-bold ml-2">Developed by <a href="https://www.linkedin.com/in/jayy19patel/" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 transition-colors">Jay Patel</a></span>
             </p>
           </div>
 

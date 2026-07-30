@@ -206,7 +206,7 @@ export default function TechSkillSection() {
                     </h3>
 
                     <p className="text-lg font-medium mb-4 leading-relaxed text-gray-300">
-                      "{getContent().quote}"
+                      &quot;{getContent().quote}&quot;
                     </p>
 
                     <div className="flex items-center pt-4 border-t border-gray-500/30">

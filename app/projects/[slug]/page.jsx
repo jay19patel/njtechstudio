@@ -224,7 +224,7 @@ export default function ProjectDetailPage() {
           Project Not Found
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mb-8">
-          The project you're looking for doesn't exist.
+          The project you&apos;re looking for doesn&apos;t exist.
         </p>
         <Link
           href="/projects"
@@ -501,7 +501,7 @@ export default function ProjectDetailPage() {
                   Client Testimonial
                 </h2>
                 <blockquote className="text-lg text-gray-700 dark:text-gray-300 italic mb-4">
-                  "{project.testimonial.text}"
+                  &quot;{project.testimonial.text}&quot;
                 </blockquote>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">

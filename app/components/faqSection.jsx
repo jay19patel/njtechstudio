@@ -98,7 +98,7 @@ const FAQSection = () => {
                         {/* FAQ Content on Right */}
                         <div className="flex-1 w-full">
                             <div className="mb-6 sm:mb-8 text-center md:text-left">
-                                <p className="text-indigo-600 text-xs sm:text-sm font-medium mb-2">FAQ's</p>
+                                <p className="text-indigo-600 text-xs sm:text-sm font-medium mb-2">FAQ&apos;s</p>
                                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4">
                                     Got Questions? <span className="text-indigo-600">I Got Answers!</span>
                                 </h1>

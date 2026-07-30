@@ -63,11 +63,11 @@ export default function WhyChooseUs() {
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">Budget-Friendly</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">High Value, Fair Pricing</div>
                   </div>
-                  <img src="https://cdn-icons-png.flaticon.com/512/3135/3135682.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Budget-Friendly" />
+                  <img src="/icons/flaticon/budget-friendly.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Budget-Friendly" />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  "We keep quality high and costs practical. No over-engineering, no unnecessary complexity — just smart solutions that fit your budget and scale with your growth."
+                  &quot;We keep quality high and costs practical. No over-engineering, no unnecessary complexity — just smart solutions that fit your budget and scale with your growth.&quot;
                 </p>
 
                 <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-100">
@@ -88,11 +88,11 @@ export default function WhyChooseUs() {
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">Optimized Solutions</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">Designed to Perform</div>
                   </div>
-                  <img src="https://cdn-icons-png.flaticon.com/512/2920/2920349.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Optimized Solutions" />
+                  <img src="/icons/flaticon/optimized-solutions.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Optimized Solutions" />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  "We don't just build — we optimize. Faster systems, cleaner UX, automated workflows, and future-proof architecture that supports long-term business growth."
+                  &quot;We don&apos;t just build — we optimize. Faster systems, cleaner UX, automated workflows, and future-proof architecture that supports long-term business growth.&quot;
                 </p>
 
                 <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-100">
@@ -113,11 +113,11 @@ export default function WhyChooseUs() {
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">AI-Driven Approach</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">Smarter, Faster, Scalable</div>
                   </div>
-                  <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="AI-Driven" />
+                  <img src="/icons/flaticon/ai-driven.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="AI-Driven" />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  "From automations to custom LLM workflows, we integrate AI wherever it truly makes sense — improving speed, accuracy, and overall efficiency with measurable impact."
+                  &quot;From automations to custom LLM workflows, we integrate AI wherever it truly makes sense — improving speed, accuracy, and overall efficiency with measurable impact.&quot;
                 </p>
 
                 <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-100">
@@ -138,11 +138,11 @@ export default function WhyChooseUs() {
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">Reliable Delivery</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">On Time, Every Time</div>
                   </div>
-                  <img src="https://cdn-icons-png.flaticon.com/512/3281/3281289.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Reliable Delivery" />
+                  <img src="/icons/flaticon/reliable-delivery.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Reliable Delivery" />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  "Clear communication, transparent progress, and predictable delivery. We make development stress-free so your team can focus on what truly matters."
+                  &quot;Clear communication, transparent progress, and predictable delivery. We make development stress-free so your team can focus on what truly matters.&quot;
                 </p>
 
                 <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-100">

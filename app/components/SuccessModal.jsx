@@ -50,7 +50,7 @@ export default function SuccessModal({ isOpen, onClose, redirectUrl = "/", autoC
               </h3>
 
               <p className="text-zinc-400 text-base md:text-lg mb-8 leading-relaxed">
-                Thanks for reaching out. We'll get back to you shortly.
+                Thanks for reaching out. We&apos;ll get back to you shortly.
               </p>
 
               <div className="flex items-center gap-2 text-sm font-medium text-zinc-500 bg-zinc-800/50 px-4 py-2 rounded-full">

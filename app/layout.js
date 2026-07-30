@@ -4,9 +4,41 @@ import Footer from "./components/Footer.jsx";
 import Preloader from "./components/Preloader";
 import { TransitionProvider } from "./context/TransitionContext";
 
+const SITE_URL = "https://njtechstudio.in";
+const SITE_TITLE = "NJ Tech Studio";
+const SITE_DESCRIPTION = "Professional web development and design services";
+
 export const metadata = {
-  title: "NJ Tech Studio",
-  description: "Professional web development and design services",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: SITE_TITLE,
+    template: `%s | ${SITE_TITLE}`,
+  },
+  description: SITE_DESCRIPTION,
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/Logo.png",
+  },
+  manifest: "/site.webmanifest",
+  openGraph: {
+    type: "website",
+    url: SITE_URL,
+    siteName: SITE_TITLE,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [{ url: "/Logo.png" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/Logo.png"],
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {

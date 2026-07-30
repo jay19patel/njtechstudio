@@ -1074,7 +1074,7 @@ export default function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {paginatedTestimonials.map((test) => (
                         <div key={test.id} className="bg-white border border-slate-200 rounded-2xl p-6 flex flex-col justify-between gap-4 shadow-sm hover:border-slate-350 transition-colors">
-                          <p className="text-sm text-slate-600 italic leading-relaxed">"{test.text}"</p>
+                          <p className="text-sm text-slate-600 italic leading-relaxed">&quot;{test.text}&quot;</p>
                           <div className="flex items-center justify-between border-t border-slate-100 pt-4 mt-2">
                             <div>
                               <p className="text-sm font-bold text-slate-850">— {test.name}</p>

@@ -101,7 +101,7 @@ export default function ContactPage() {
               <div>
                 <div className="mb-8 lg:mb-10">
                   <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl font-black uppercase tracking-tight mb-4">Send a Message</h3>
-                  <p className="text-zinc-500 text-base lg:text-lg">Fill out the form below and we'll get back to you shortly.</p>
+                  <p className="text-zinc-500 text-base lg:text-lg">Fill out the form below and we&apos;ll get back to you shortly.</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-8 lg:space-y-10">

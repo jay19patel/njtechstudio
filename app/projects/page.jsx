@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ExternalLink, Calendar, Code2, Filter, Search } from 'lucide-react';
@@ -8,7 +8,6 @@ import MovingTextBg from '../components/MovingTextBg';
 
 export default function ProjectsPage() {
   const [projects, setProjects] = useState([]);
-  const [filteredProjects, setFilteredProjects] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [categories, setCategories] = useState(['All']);
@@ -19,7 +18,6 @@ export default function ProjectsPage() {
       .then(res => res.json())
       .then(data => {
         setProjects(data);
-        setFilteredProjects(data);
 
         // Extract unique categories
         const uniqueCategories = ['All', ...new Set(data.map(p => p.category))];
@@ -28,8 +26,8 @@ export default function ProjectsPage() {
       .catch(err => console.error('Error loading projects:', err));
   }, []);
 
-  // Filter projects
-  useEffect(() => {
+  // Derive the filtered list instead of syncing it via a second effect
+  const filteredProjects = useMemo(() => {
     let filtered = projects;
 
     // Filter by category
@@ -46,7 +44,7 @@ export default function ProjectsPage() {
       );
     }
 
-    setFilteredProjects(filtered);
+    return filtered;
   }, [selectedCategory, searchQuery, projects]);
 
   return (

@@ -9,14 +9,11 @@ const Preloader = () => {
     const percentRef = useRef(null);
 
     useEffect(() => {
-        const tl = gsap.timeline();
-
-        // 1. Percentage counter logic
-        // We can use a GSAP tween to animate the number for smoother counting visually if desired,
-        // but the interval approach gives that "loading" feel better sometimes.
-        // Let's stick to the interval for the logic, but ensuring it matches the feel.
-
+        // Percentage counter logic. The interval approach gives that
+        // "loading" feel better than a straight GSAP tween here.
         let currentPercentage = 0;
+        let exitTl = null;
+
         const interval = setInterval(() => {
             currentPercentage += Math.floor(Math.random() * 3) + 1; // Random increment for realism
             if (currentPercentage > 100) currentPercentage = 100;
@@ -26,8 +23,8 @@ const Preloader = () => {
             if (currentPercentage === 100) {
                 clearInterval(interval);
 
-                // 2. Exit Animation
-                const exitTl = gsap.timeline();
+                // Exit Animation
+                exitTl = gsap.timeline();
 
                 exitTl
                     .to(percentRef.current, {
@@ -47,7 +44,10 @@ const Preloader = () => {
             }
         }, 40); // Slightly slower for more impact
 
-        return () => clearInterval(interval);
+        return () => {
+            clearInterval(interval);
+            exitTl?.kill();
+        };
     }, []);
 
     return (
