@@ -15,10 +15,9 @@ export const metadata = {
     template: `%s | ${SITE_TITLE}`,
   },
   description: SITE_DESCRIPTION,
-  icons: {
-    icon: "/favicon.ico",
-    apple: "/Logo.png",
-  },
+  // favicon.ico / icon.png / apple-icon.png in app/ are picked up
+  // automatically by Next.js's file-convention metadata — no explicit
+  // `icons` field needed here.
   manifest: "/site.webmanifest",
   openGraph: {
     type: "website",
@@ -26,13 +25,13 @@ export const metadata = {
     siteName: SITE_TITLE,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: [{ url: "/Logo.png" }],
+    images: [{ url: "/icon.png" }],
   },
   twitter: {
     card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
-    images: ["/Logo.png"],
+    images: ["/icon.png"],
   },
 };
 

@@ -3,7 +3,7 @@
   "short_name": "NJ Tech Studio",
   "icons": [
     {
-      "src": "/Logo.png",
+      "src": "/icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
