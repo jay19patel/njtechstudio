@@ -2,32 +2,11 @@
 import React, { useState, useEffect } from "react";
 import MovingTextBg from "./MovingTextBg";
 import { motion } from "framer-motion";
+import initialVideos from "../data/youtube.json";
 
 export default function YoutubeSection() {
   const [playingVideo, setPlayingVideo] = useState(null);
-  const [cards, setCards] = useState([
-    {
-      videoId: "tiBeLLv5GJo",
-      title: "Build an Analytics API using FastAPI + TimescaleDB",
-      description:
-        "A comprehensive guide on building a high-performance time-series analytics API using Python, FastAPI, and TimescaleDB.",
-      badge: "FASTAPI & DB",
-    },
-    {
-      videoId: "5Z9bHlZv16Q",
-      title: "Finally Found an AI Agent Worth Using | Hermes Agent",
-      description:
-        "Step-by-step tutorial on setting up and self-hosting Hermes AI agent with Discord, GitHub, and browser automation integrations.",
-      badge: "AI AGENTS",
-    },
-    {
-      videoId: "6dvYioHX328",
-      title: "Next.js E-Commerce App & Admin Panel UI Design",
-      description:
-        "Learn to design a modern e-commerce UI and administrative panel dashboard using Next.js and Tailwind CSS.",
-      badge: "NEXT.JS & UI",
-    },
-  ]);
+  const [cards, setCards] = useState(initialVideos);
 
   useEffect(() => {
     fetch('/api/admin/data?type=youtube')
