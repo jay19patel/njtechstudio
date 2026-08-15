@@ -42,26 +42,30 @@ export default function YoutubeSection() {
 
 
   return (
-    <MovingTextBg text="CONTENT" textColor="text-gray-400">
-      <section className="pt-6 sm:pt-7 md:pt-8 pb-4 sm:pb-5 md:pb-6 px-4 bg-white">
+    <div className="bg-black">
+      <MovingTextBg text="CONTENT" textColor="text-white">
+        <section className="pt-6 sm:pt-7 md:pt-8 pb-4 sm:pb-5 md:pb-6 px-4 bg-transparent">
         <div className="max-w-[1400px] mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-black rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 shadow-xl border border-gray-800"
+            className="relative bg-transparent p-6 sm:p-8 md:p-12 lg:p-16 overflow-hidden"
           >
-            <div className="text-center mb-8 sm:mb-10 md:mb-12">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-bold text-white mb-2">
-                Code. Create. Teach.
-              </h2>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-bold text-white">
-                Everything you need to build & scale tech products. 🎬
+            {/* Subtle grid pattern overlay */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000002_1px,transparent_1px),linear-gradient(to_bottom,#00000002_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+
+            <div className="relative z-10 text-center mb-8 sm:mb-10 md:mb-12 flex flex-col items-center">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-white text-xs sm:text-sm font-semibold tracking-wide uppercase backdrop-blur-md mb-3">
+                Content & Tutorials
+              </div>
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-black text-white max-w-4xl mx-auto">
+                Everything you need to build & scale tech products 🎬
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {cards.map((card, index) => (
                 <motion.div
                   key={index}
@@ -69,9 +73,9 @@ export default function YoutubeSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-gray-800 rounded-lg sm:rounded-xl overflow-hidden border border-gray-700 hover:border-indigo-500 hover:shadow-indigo-500/40 hover:shadow-lg transition-all duration-300 group"
+                  className="bg-zinc-900/50 backdrop-blur-md rounded-lg sm:rounded-xl overflow-hidden border border-zinc-800/80 hover:border-indigo-500/50 hover:shadow-indigo-500/10 hover:shadow-xl transition-all duration-300 group"
                 >
-                  <div className="relative aspect-video bg-gray-900">
+                  <div className="relative aspect-video bg-zinc-950">
                     {playingVideo === card.videoId ? (
                       <iframe
                         src={`https://www.youtube.com/embed/${card.videoId}?autoplay=1`}
@@ -120,10 +124,10 @@ export default function YoutubeSection() {
 
                   {/* Card Content */}
                   <div className="p-4 sm:p-6">
-                    <h3 className="text-base sm:text-[18px] font-semibold leading-[1.4] mb-2 sm:mb-3 text-white">
+                    <h3 className="text-base sm:text-[18px] font-semibold leading-[1.4] mb-2 sm:mb-3 text-white line-clamp-2 group-hover:text-indigo-200 transition-colors">
                       {card.title}
                     </h3>
-                    <div className="text-gray-300 text-xs sm:text-[14px] leading-[1.6]">
+                    <div className="text-white text-xs sm:text-[14px] leading-[1.6] line-clamp-2">
                       {card.description}
                     </div>
                   </div>
@@ -134,5 +138,6 @@ export default function YoutubeSection() {
         </div>
       </section>
     </MovingTextBg>
+    </div>
   );
 }

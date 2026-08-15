@@ -83,10 +83,21 @@ export default function HeroSection() {
   // Typing animation control
   useEffect(() => {
     let isCancelled = false;
+    const timeouts = [];
+
+    const safeTimeout = (fn, delay) => {
+      const id = setTimeout(() => {
+        if (!isCancelled) fn();
+      }, delay);
+      timeouts.push(id);
+      return id;
+    };
 
     const typeMessage = (fullText, role, pending = false) =>
       new Promise((resolve) => {
         const align = role === "user" ? "right" : "left";
+
+        if (isCancelled) return resolve();
 
         setDisplayedMessages((prev) => {
           const next = [
@@ -99,7 +110,7 @@ export default function HeroSection() {
         });
 
         if (pending) {
-          setTimeout(() => {
+          safeTimeout(() => {
             setDisplayedMessages((prev) => {
               const lastIndex = prev.length - 1;
               return prev.map((m, idx) =>
@@ -138,13 +149,14 @@ export default function HeroSection() {
             return resolve();
           }
 
-          setTimeout(tick, speed);
+          safeTimeout(tick, speed);
         };
 
-        setTimeout(tick, speed);
+        safeTimeout(tick, speed);
       });
 
     const play = async () => {
+      if (isCancelled) return;
       setDisplayedMessages([]);
       setCurrentTypingIndex(-1);
       setTypingProgress("");
@@ -153,14 +165,15 @@ export default function HeroSection() {
         if (isCancelled) break;
         const msg = scriptedConversation[i];
         await typeMessage(msg.content, msg.role, msg.pending);
-        await new Promise((r) => setTimeout(r, 350));
+        await new Promise((r) => safeTimeout(r, 350));
       }
     };
 
-    const start = setTimeout(() => play(), 350);
+    const start = safeTimeout(() => play(), 350);
+
     return () => {
       isCancelled = true;
-      clearTimeout(start);
+      timeouts.forEach((id) => clearTimeout(id));
     };
   }, [scriptedConversation]);
 

@@ -6,52 +6,66 @@ import MovingTextBg from "./MovingTextBg";
 
 const AUTOPLAY_DELAY = 3500;
 
-const containerVariants = {
-  enter: {},
-  center: {},
-  exit: {},
-};
-
 const textVariants = {
-  enter: (direction) => ({ opacity: 0, y: 30, x: direction > 0 ? 50 : -50 }),
-  center: { opacity: 1, y: 0, x: 0, transition: { duration: 0.45, ease: "easeOut" } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.25, ease: "easeIn" } },
+  enter: (direction) => ({
+    opacity: 0,
+    x: direction > 0 ? 100 : -100,
+    filter: "blur(4px)",
+  }),
+  center: {
+    opacity: 1,
+    x: 0,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.5,
+      ease: [0.16, 1, 0.3, 1], // easeOutQuart
+    },
+  },
+  exit: (direction) => ({
+    opacity: 0,
+    x: direction > 0 ? -100 : 100,
+    filter: "blur(4px)",
+    transition: {
+      duration: 0.4,
+      ease: [0.7, 0, 0.84, 0], // easeInQuart
+    },
+  }),
 };
 
 export default function HorizontalScrollSection() {
   const [sections, setSections] = useState([
     {
       id: 1,
-      label: "CONTENT & YOUTUBE CREATION",
-      title: "CREATIVE TECH CONTENT THAT TEACHES & ENTERTAINS",
+      label: "Content & YouTube Creation",
+      title: "Creative Tech Content That Teaches & Entertains",
       description:
         "I create fun, engaging and value-packed content around programming, startups, software development and real-world tech journeys. With a joyful delivery style, I turn complex tech topics into simple, enjoyable and relatable experiences through YouTube, reels and storytelling.",
     },
     {
       id: 2,
-      label: "WEB + AI DEVELOPMENT",
-      title: "MODERN WEB APPS SUPERCHARGED WITH AI",
+      label: "Web & AI Development",
+      title: "Modern Web Apps Supercharged with AI",
       description:
         "I build fast, scalable and intelligent applications using Next.js, React, FastAPI, Django and GenAI tools. From backend APIs to smart automation, vector search, AI agents and real-time dashboards — your digital product becomes faster, smarter and future-ready.",
     },
     {
       id: 3,
-      label: "ERP & BUSINESS AUTOMATION",
-      title: "CUSTOM ERP FOR SMALL & MEDIUM BUSINESSES",
+      label: "ERP & Business Automation",
+      title: "Custom ERP for Small & Medium Businesses",
       description:
         "Automate your business with tailored ERP systems built using Frappe/ERPNext + React. From inventory and HR to approvals and finance dashboards — I deliver fast, clean and efficient workflows that boost productivity and reduce manual work.",
     },
     {
       id: 4,
-      label: "IOT & SMART AUTOMATION",
-      title: "CONNECT DEVICES WITH REAL-WORLD SOFTWARE",
+      label: "IoT & Smart Automation",
+      title: "Connect Devices with Real-World Software",
       description:
         "I design IoT-enabled systems that combine sensors, cloud services and smart automation. From real-time monitoring to device dashboards and industry automation — I bridge hardware, software and AI to bring ideas to life.",
     },
     {
       id: 5,
-      label: "SCHOOL & COLLEGE PROJECTS",
-      title: "HIGH-SCORING MODERN STUDENT PROJECTS",
+      label: "Academic Projects",
+      title: "High-Scoring Modern Student Projects",
       description:
         "Helping students build impactful, presentation-ready academic projects using Web Development, Python, AI, ML, automation and IoT. Clean code, proper documentation and impressive UI — perfect for final-year submissions and demos.",
     }
@@ -98,19 +112,18 @@ export default function HorizontalScrollSection() {
   }, [current, isPaused, sections.length]);
 
   return (
-    <section className="relative bg-black py-16 sm:py-20 md:py-24">
-      <div
-        className="relative overflow-hidden"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-      >
-        <AnimatePresence initial={false} mode="wait">
+    <MovingTextBg text="WHAT I CAN DO" textColor="text-white" className="bg-black">
+      <section className="relative w-full bg-transparent text-white py-16 sm:py-20 md:py-24 overflow-hidden border-y border-zinc-900/60">
+        {/* Subtle grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000002_1px,transparent_1px),linear-gradient(to_bottom,#00000002_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+
+        <div
+          className="relative overflow-hidden"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          {/* Stable drag container - handles swipes smoothly without unmounting */}
           <motion.div
-            key={sections[current].id}
-            variants={containerVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
             drag="x"
             dragConstraints={{ left: 0, right: 0 }}
             dragElastic={0.2}
@@ -119,73 +132,78 @@ export default function HorizontalScrollSection() {
               handleDragEnd(e, info);
               setIsPaused(false);
             }}
+            className="w-full cursor-grab active:cursor-grabbing"
           >
-            <SectionCard section={sections[current]} direction={direction} />
+            <AnimatePresence initial={false} mode="wait">
+              <motion.div
+                key={sections[current].id}
+                custom={direction}
+                variants={textVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="w-full"
+              >
+                <SectionCard section={sections[current]} />
+              </motion.div>
+            </AnimatePresence>
           </motion.div>
-        </AnimatePresence>
 
-        {/* Prev / Next arrows */}
-        <button
-          type="button"
-          onClick={() => paginate(-1)}
-          aria-label="Previous service"
-          className="hidden sm:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-black/60 text-white hover:bg-white/20 transition-colors"
-        >
-          <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button
-          type="button"
-          onClick={() => paginate(1)}
-          aria-label="Next service"
-          className="hidden sm:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-black/60 text-white hover:bg-white/20 transition-colors"
-        >
-          <ChevronRight className="w-6 h-6" />
-        </button>
-      </div>
-
-      {/* Dots navigation */}
-      <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
-        {sections.map((section, index) => (
+          {/* Prev / Next arrows */}
           <button
-            key={section.id}
             type="button"
-            onClick={() => goTo(index)}
-            aria-label={`Go to ${section.label}`}
-            className={`h-2.5 rounded-full transition-all ${
-              index === current ? "w-10 bg-indigo-500" : "w-2.5 bg-white/30 hover:bg-white/50"
-            }`}
-          />
-        ))}
-      </div>
-    </section>
+            onClick={() => paginate(-1)}
+            aria-label="Previous service"
+            className="hidden sm:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-black/60 text-white hover:bg-white/20 transition-colors"
+          >
+            <ChevronLeft className="w-6 h-6" />
+          </button>
+          <button
+            type="button"
+            onClick={() => paginate(1)}
+            aria-label="Next service"
+            className="hidden sm:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-black/60 text-white hover:bg-white/20 transition-colors"
+          >
+            <ChevronRight className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Dots navigation */}
+        <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
+          {sections.map((section, index) => (
+            <button
+              key={section.id}
+              type="button"
+              onClick={() => goTo(index)}
+              aria-label={`Go to ${section.label}`}
+              className={`h-2.5 rounded-full transition-all ${
+                index === current ? "w-10 bg-indigo-500" : "w-2.5 bg-zinc-600/30 hover:bg-zinc-500/50"
+              }`}
+            />
+          ))}
+        </div>
+      </section>
+    </MovingTextBg>
   );
 }
 
-const SectionCard = ({ section, direction }) => {
+const SectionCard = ({ section }) => {
   return (
-    <div className="w-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-20">
+    <div className="w-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-20 select-none">
       <div className="w-full max-w-5xl">
-        <MovingTextBg text="WHAT I CAN DO" textColor="text-gray-100">
-          <motion.div
-            custom={direction}
-            variants={textVariants}
-            className="w-full space-y-6 sm:space-y-8 text-center py-8 sm:py-12"
-          >
-            <div className="inline-block px-5 py-2 border border-white/30 rounded-full bg-white/5 backdrop-blur-sm">
-              <span className="text-white text-xs sm:text-sm font-bold tracking-widest uppercase">
-                {section.label}
-              </span>
-            </div>
+        <div className="w-full space-y-6 sm:space-y-8 text-center py-8 sm:py-12">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 text-white text-xs sm:text-sm font-semibold tracking-wide uppercase backdrop-blur-md mb-3">
+            {section.label}
+          </div>
 
-            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight uppercase">
-              {section.title}
-            </h2>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-black text-white max-w-4xl mx-auto">
+            {section.title}
+          </h2>
 
-            <p className="text-base sm:text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-normal">
-              {section.description}
-            </p>
-          </motion.div>
-        </MovingTextBg>
+          <p className="text-base sm:text-xl md:text-2xl text-white leading-relaxed max-w-3xl mx-auto font-normal">
+            {section.description}
+          </p>
+        </div>
       </div>
     </div>
   );

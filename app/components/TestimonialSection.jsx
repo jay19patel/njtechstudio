@@ -117,10 +117,16 @@ export default function TestimonialSection() {
 
           .animate-scroll-left {
             animation: scroll-left 60s linear infinite;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
           }
 
           .animate-scroll-right {
             animation: scroll-right 60s linear infinite;
+            will-change: transform;
+            transform: translate3d(0, 0, 0);
+            backface-visibility: hidden;
           }
         `}</style>
       </section>

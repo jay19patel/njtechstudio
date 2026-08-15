@@ -146,8 +146,8 @@
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
-  gap: 0;
+  justify-content: center;
+  gap: 1rem;
   pointer-events: none;
 }
 
@@ -162,6 +162,11 @@
   gap: 3rem;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  /* Hardware/GPU acceleration for smooth rendering */
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
 }
 
 /* Responsive font sizes for MovingTextBg */
