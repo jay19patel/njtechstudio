@@ -4,10 +4,8 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import MovingTextBg from "./MovingTextBg";
 
-const AUTOPLAY_DELAY = 3000;
+const AUTOPLAY_DELAY = 3500;
 
-// Container has no visual motion of its own — it only drives mount/unmount
-// timing for AnimatePresence. Text and image animate independently below.
 const containerVariants = {
   enter: {},
   center: {},
@@ -15,20 +13,9 @@ const containerVariants = {
 };
 
 const textVariants = {
-  enter: (direction) => ({ opacity: 0, y: 24, x: direction > 0 ? 40 : -40 }),
+  enter: (direction) => ({ opacity: 0, y: 30, x: direction > 0 ? 50 : -50 }),
   center: { opacity: 1, y: 0, x: 0, transition: { duration: 0.45, ease: "easeOut" } },
-  exit: { opacity: 0, y: -16, transition: { duration: 0.25, ease: "easeIn" } },
-};
-
-const imageVariants = {
-  enter: (direction) => ({ opacity: 0, scale: 0.9, x: direction > 0 ? 60 : -60 }),
-  center: {
-    opacity: 1,
-    scale: 1,
-    x: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.12 },
-  },
-  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.25, ease: "easeIn" } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.25, ease: "easeIn" } },
 };
 
 export default function HorizontalScrollSection() {
@@ -39,8 +26,6 @@ export default function HorizontalScrollSection() {
       title: "CREATIVE TECH CONTENT THAT TEACHES & ENTERTAINS",
       description:
         "I create fun, engaging and value-packed content around programming, startups, software development and real-world tech journeys. With a joyful delivery style, I turn complex tech topics into simple, enjoyable and relatable experiences through YouTube, reels and storytelling.",
-      image: "/content-creation.png",
-      layout: "left",
     },
     {
       id: 2,
@@ -48,8 +33,6 @@ export default function HorizontalScrollSection() {
       title: "MODERN WEB APPS SUPERCHARGED WITH AI",
       description:
         "I build fast, scalable and intelligent applications using Next.js, React, FastAPI, Django and GenAI tools. From backend APIs to smart automation, vector search, AI agents and real-time dashboards — your digital product becomes faster, smarter and future-ready.",
-      image: "/web-development.jpg",
-      layout: "right",
     },
     {
       id: 3,
@@ -57,8 +40,6 @@ export default function HorizontalScrollSection() {
       title: "CUSTOM ERP FOR SMALL & MEDIUM BUSINESSES",
       description:
         "Automate your business with tailored ERP systems built using Frappe/ERPNext + React. From inventory and HR to approvals and finance dashboards — I deliver fast, clean and efficient workflows that boost productivity and reduce manual work.",
-      image: "/erp-system.jpg",
-      layout: "left",
     },
     {
       id: 4,
@@ -66,8 +47,6 @@ export default function HorizontalScrollSection() {
       title: "CONNECT DEVICES WITH REAL-WORLD SOFTWARE",
       description:
         "I design IoT-enabled systems that combine sensors, cloud services and smart automation. From real-time monitoring to device dashboards and industry automation — I bridge hardware, software and AI to bring ideas to life.",
-      image: "/iot-automation.jpg",
-      layout: "right",
     },
     {
       id: 5,
@@ -75,8 +54,6 @@ export default function HorizontalScrollSection() {
       title: "HIGH-SCORING MODERN STUDENT PROJECTS",
       description:
         "Helping students build impactful, presentation-ready academic projects using Web Development, Python, AI, ML, automation and IoT. Clean code, proper documentation and impressive UI — perfect for final-year submissions and demos.",
-      image: "/student-projects.jpg",
-      layout: "left",
     }
   ]);
 
@@ -121,7 +98,7 @@ export default function HorizontalScrollSection() {
   }, [current, isPaused, sections.length]);
 
   return (
-    <section className="relative bg-black py-12 sm:py-16 md:py-20">
+    <section className="relative bg-black py-16 sm:py-20 md:py-24">
       <div
         className="relative overflow-hidden"
         onMouseEnter={() => setIsPaused(true)}
@@ -152,30 +129,30 @@ export default function HorizontalScrollSection() {
           type="button"
           onClick={() => paginate(-1)}
           aria-label="Previous service"
-          className="hidden sm:flex absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 bg-black/40 text-white hover:bg-white/10 transition-colors"
+          className="hidden sm:flex absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-black/60 text-white hover:bg-white/20 transition-colors"
         >
-          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
+          <ChevronLeft className="w-6 h-6" />
         </button>
         <button
           type="button"
           onClick={() => paginate(1)}
           aria-label="Next service"
-          className="hidden sm:flex absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full border border-white/20 bg-black/40 text-white hover:bg-white/10 transition-colors"
+          className="hidden sm:flex absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-12 h-12 rounded-full border border-white/20 bg-black/60 text-white hover:bg-white/20 transition-colors"
         >
-          <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
+          <ChevronRight className="w-6 h-6" />
         </button>
       </div>
 
       {/* Dots navigation */}
-      <div className="flex items-center justify-center gap-2 mt-6 sm:mt-8">
+      <div className="flex items-center justify-center gap-2 mt-8 sm:mt-10">
         {sections.map((section, index) => (
           <button
             key={section.id}
             type="button"
             onClick={() => goTo(index)}
             aria-label={`Go to ${section.label}`}
-            className={`h-2 rounded-full transition-all ${
-              index === current ? "w-8 bg-white" : "w-2 bg-white/30 hover:bg-white/50"
+            className={`h-2.5 rounded-full transition-all ${
+              index === current ? "w-10 bg-indigo-500" : "w-2.5 bg-white/30 hover:bg-white/50"
             }`}
           />
         ))}
@@ -184,52 +161,30 @@ export default function HorizontalScrollSection() {
   );
 }
 
-
 const SectionCard = ({ section, direction }) => {
-  const isLeftLayout = section.layout === "left";
-
   return (
-    <div className="w-full flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-24">
-      <div className="w-full max-w-7xl">
+    <div className="w-full flex items-center justify-center px-4 sm:px-8 md:px-12 lg:px-20">
+      <div className="w-full max-w-5xl">
         <MovingTextBg text="WHAT I CAN DO" textColor="text-gray-100">
-          <div className={`flex flex-col ${isLeftLayout ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-6 sm:gap-8 md:gap-10 lg:gap-16 items-center`}>
-            {/* Text Content — animates independently (slide + fade) */}
-            <motion.div
-              custom={direction}
-              variants={textVariants}
-              className="w-full lg:w-1/2 space-y-4 sm:space-y-6 text-center lg:text-left"
-            >
-              <div className="inline-block px-3 sm:px-4 py-1.5 sm:py-2 border border-white/30 rounded-full">
-                <span className="text-white text-xs sm:text-sm font-medium tracking-wider">
-                  {section.label}
-                </span>
-              </div>
+          <motion.div
+            custom={direction}
+            variants={textVariants}
+            className="w-full space-y-6 sm:space-y-8 text-center py-8 sm:py-12"
+          >
+            <div className="inline-block px-5 py-2 border border-white/30 rounded-full bg-white/5 backdrop-blur-sm">
+              <span className="text-white text-xs sm:text-sm font-bold tracking-widest uppercase">
+                {section.label}
+              </span>
+            </div>
 
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight px-2 sm:px-0">
-                {section.title}
-              </h2>
+            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white leading-[1.05] tracking-tight uppercase">
+              {section.title}
+            </h2>
 
-              <p className="text-base sm:text-lg md:text-xl text-gray-400 leading-relaxed px-2 sm:px-0">
-                {section.description}
-              </p>
-            </motion.div>
-
-            {/* Image Content — animates independently (scale + fade, slight delay) */}
-            <motion.div
-              custom={direction}
-              variants={imageVariants}
-              className="w-full lg:w-1/2"
-            >
-              <div className="relative rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src={section.image}
-                  alt={section.title}
-                  className="w-full h-[280px] sm:h-[350px] md:h-[400px] lg:h-[500px] xl:h-[600px] object-cover"
-                />
-                <div className="absolute inset-0 bg-liner-to-t from-black/20 to-transparent"></div>
-              </div>
-            </motion.div>
-          </div>
+            <p className="text-base sm:text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-normal">
+              {section.description}
+            </p>
+          </motion.div>
         </MovingTextBg>
       </div>
     </div>

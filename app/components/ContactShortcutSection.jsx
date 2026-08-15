@@ -1,7 +1,7 @@
 "use client";
 
-import ContactSection from "./ContactSection";
+import CTASection from "./CTASection";
 
 export default function ContactShortcutSection() {
-  return <ContactSection />;
+  return <CTASection />;
 }
