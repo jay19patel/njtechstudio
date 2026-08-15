@@ -1,30 +1,55 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { 
   Heart, MessageSquare, ExternalLink, RefreshCw, 
-  CheckCircle2, Send, MoreHorizontal, User, Sparkles 
+  CheckCircle2, Send, MoreHorizontal, Sparkles
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import Avatar from "boring-avatars";
 import MovingTextBg from "../components/MovingTextBg";
+
+const AVATAR_COLORS = ["#6366F1", "#8B5CF6", "#EC4899", "#F59E0B", "#10B981"];
+const VISITOR_ID_KEY = "channel_visitor_id";
+
+// Anonymous per-browser identity — avoids relying on users to type a real name/designation
+const getOrCreateVisitorId = () => {
+  let id = localStorage.getItem(VISITOR_ID_KEY);
+  if (!id) {
+    const random =
+      typeof crypto !== "undefined" && crypto.randomUUID
+        ? crypto.randomUUID().replace(/-/g, "").slice(0, 6)
+        : Math.random().toString(36).slice(2, 8);
+    id = `Guest-${random.toUpperCase()}`;
+    localStorage.setItem(VISITOR_ID_KEY, id);
+  }
+  return id;
+};
 
 export default function ChannelPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   // Infinite Scroll Count
   const [visibleCount, setVisibleCount] = useState(3);
-  
+
   // Social States
   const [likes, setLikes] = useState({});
   const [comments, setComments] = useState({});
-  
+
   // UI states
   const [expandedComments, setExpandedComments] = useState({});
   const [expandedText, setExpandedText] = useState({});
   const [commentInputs, setCommentInputs] = useState({});
-  const [headlineInputs, setHeadlineInputs] = useState({});
-  const [authorInputs, setAuthorInputs] = useState({});
+  const [visitorId, setVisitorId] = useState("");
+
+  // Auto-scroll Refs
+  const commentsContainerRefs = useRef({});
+  const commentsEndRefs = useRef({});
+
+  useEffect(() => {
+    setVisitorId(getOrCreateVisitorId());
+  }, []);
 
   useEffect(() => {
     fetch("/api/admin/data?type=channel")
@@ -126,20 +151,17 @@ export default function ChannelPage() {
   const handleAddComment = (e, postId) => {
     e.preventDefault();
     const text = commentInputs[postId] || "";
-    const author = authorInputs[postId] || "";
-    const headline = headlineInputs[postId] || "";
-    
+
     if (!text.trim()) return;
 
-    const authorName = author.trim() || "Anonymous Contributor";
-    const authorHeadline = headline.trim() || "Tech Enthusiast";
+    // Ensure comments section is open
+    setExpandedComments((prev) => ({ ...prev, [postId]: true }));
 
     setComments((prev) => {
       const currentList = prev[postId] || [];
       const newComment = {
         id: `c_${Date.now()}`,
-        author: authorName,
-        headline: authorHeadline,
+        author: visitorId,
         text: text.trim(),
         date: new Date().toISOString(),
       };
@@ -151,17 +173,48 @@ export default function ChannelPage() {
       };
     });
 
-    // Clear inputs
+    // Clear input
     setCommentInputs((prev) => ({ ...prev, [postId]: "" }));
-    setAuthorInputs((prev) => ({ ...prev, [postId]: "" }));
-    setHeadlineInputs((prev) => ({ ...prev, [postId]: "" }));
+
+    // Scroll to newest comment
+    setTimeout(() => {
+      const container = commentsContainerRefs.current[postId];
+      if (container) {
+        container.scrollTo({
+          top: container.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+      const endEl = commentsEndRefs.current[postId];
+      if (endEl) {
+        endEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }, 100);
   };
 
   const toggleComments = (postId) => {
-    setExpandedComments((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }));
+    setExpandedComments((prev) => {
+      const isOpening = !prev[postId];
+      if (isOpening) {
+        setTimeout(() => {
+          const container = commentsContainerRefs.current[postId];
+          if (container) {
+            container.scrollTo({
+              top: container.scrollHeight,
+              behavior: "smooth",
+            });
+          }
+          const endEl = commentsEndRefs.current[postId];
+          if (endEl) {
+            endEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+          }
+        }, 200);
+      }
+      return {
+        ...prev,
+        [postId]: isOpening,
+      };
+    });
   };
 
   const toggleTextExpansion = (postId) => {
@@ -169,17 +222,6 @@ export default function ChannelPage() {
       ...prev,
       [postId]: !prev[postId],
     }));
-  };
-
-  // Helper to extract initials
-  const getInitials = (name) => {
-    if (!name) return "?";
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .slice(0, 2)
-      .join("")
-      .toUpperCase();
   };
 
   // Helper for human-readable relative time
@@ -396,12 +438,15 @@ export default function ChannelPage() {
                             
                             {/* Comments List */}
                             {postComments.length > 0 && (
-                              <div className="space-y-3.5 max-h-64 overflow-y-auto pr-1 no-scrollbar">
+                              <div
+                                ref={(el) => (commentsContainerRefs.current[post.id] = el)}
+                                className="space-y-3.5 max-h-64 overflow-y-auto pr-1 no-scrollbar scroll-smooth"
+                              >
                                 {postComments.map((cmt) => (
                                   <div key={cmt.id} className="flex gap-2.5 items-start">
-                                    {/* User circle initials */}
-                                    <div className="w-8 h-8 rounded-full bg-slate-200 border border-slate-300 flex items-center justify-center shrink-0 text-[10px] font-bold text-slate-600">
-                                      {getInitials(cmt.author)}
+                                    {/* Generated avatar, seeded by anonymous visitor id */}
+                                    <div className="shrink-0 rounded-full overflow-hidden border border-slate-200">
+                                      <Avatar size={32} name={cmt.author} variant="beam" colors={AVATAR_COLORS} />
                                     </div>
                                     {/* comment bubble */}
                                     <div className="flex-1 bg-white border border-slate-200/80 p-3 rounded-2xl text-xs">
@@ -426,36 +471,22 @@ export default function ChannelPage() {
                                     </div>
                                   </div>
                                 ))}
+                                <div ref={(el) => (commentsEndRefs.current[post.id] = el)} />
                               </div>
                             )}
 
                             {/* Add Comment Form */}
-                            <form 
+                            <form
                               onSubmit={(e) => handleAddComment(e, post.id)}
                               className="space-y-2 mt-2 pt-2 border-t border-slate-200/60"
                             >
-                              <div className="grid grid-cols-2 gap-2">
-                                <input
-                                  type="text"
-                                  placeholder="Your Name"
-                                  value={authorInputs[post.id] || ""}
-                                  onChange={(e) => setAuthorInputs({
-                                    ...authorInputs,
-                                    [post.id]: e.target.value
-                                  })}
-                                  className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-800 font-medium"
-                                  required
-                                />
-                                <input
-                                  type="text"
-                                  placeholder="Your Headline (e.g. Developer)"
-                                  value={headlineInputs[post.id] || ""}
-                                  onChange={(e) => setHeadlineInputs({
-                                    ...headlineInputs,
-                                    [post.id]: e.target.value
-                                  })}
-                                  className="px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-800 font-medium"
-                                />
+                              <div className="flex items-center gap-1.5 px-0.5 text-[10px] text-slate-400 font-semibold">
+                                <div className="shrink-0 rounded-full overflow-hidden border border-slate-200">
+                                  <Avatar size={18} name={visitorId} variant="beam" colors={AVATAR_COLORS} />
+                                </div>
+                                <span>
+                                  Commenting as <span className="text-slate-600 font-bold">{visitorId}</span>
+                                </span>
                               </div>
                               <div className="flex gap-2 items-center">
                                 <input
