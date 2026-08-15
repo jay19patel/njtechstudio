@@ -7,25 +7,25 @@ export default function YoutubeSection() {
   const [playingVideo, setPlayingVideo] = useState(null);
   const [cards, setCards] = useState([
     {
-      videoId: "VWPyx_L3zzY",
-      title: "Latest Tech Insights & Tutorials",
+      videoId: "tiBeLLv5GJo",
+      title: "Build an Analytics API using FastAPI + TimescaleDB",
       description:
-        "Deep dive into modern web development, AI tools, and software engineering practices. Join me as we explore the latest tech trends.",
-      badge: "NEW UPLOAD",
+        "A comprehensive guide on building a high-performance time-series analytics API using Python, FastAPI, and TimescaleDB.",
+      badge: "FASTAPI & DB",
     },
     {
-      videoId: "9_ILhEnsG4k",
-      title: "Building Scalable Systems",
+      videoId: "5Z9bHlZv16Q",
+      title: "Finally Found an AI Agent Worth Using | Hermes Agent",
       description:
-        "Learn how to design and build scalable applications that can handle real-world traffic and data loads efficiently.",
-      badge: "SYSTEM DESIGN",
+        "Step-by-step tutorial on setting up and self-hosting Hermes AI agent with Discord, GitHub, and browser automation integrations.",
+      badge: "AI AGENTS",
     },
     {
-      videoId: "Q1EkS5tFQK4",
-      title: "Developer Roadmap & Tips",
+      videoId: "6dvYioHX328",
+      title: "Next.js E-Commerce App & Admin Panel UI Design",
       description:
-        "Essential tips for developers, roadmap guides, and career advice to help you navigate your journey in the tech industry.",
-      badge: "CAREER GROWTH",
+        "Learn to design a modern e-commerce UI and administrative panel dashboard using Next.js and Tailwind CSS.",
+      badge: "NEXT.JS & UI",
     },
   ]);
 
@@ -90,13 +90,10 @@ export default function YoutubeSection() {
                         onClick={() => setPlayingVideo(card.videoId)}
                       >
                         <img
-                          src={`https://img.youtube.com/vi/${card.videoId}/maxresdefault.jpg`}
+                          src={`https://i.ytimg.com/vi/${card.videoId}/hqdefault.jpg`}
                           alt={card.title}
                           className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                           loading="lazy"
-                          onError={(e) => {
-                            e.target.src = `https://img.youtube.com/vi/${card.videoId}/hqdefault.jpg`;
-                          }}
                         />
 
                         {/* Play Button Overlay */}

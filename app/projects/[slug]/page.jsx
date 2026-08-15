@@ -264,7 +264,7 @@ export default function ProjectDetailPage() {
               aria-label="Play video"
             >
               <Image
-                src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+                src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`}
                 alt="Video thumbnail"
                 fill
                 className="object-cover transition-opacity group-hover:opacity-90"
