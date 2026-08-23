@@ -8,9 +8,11 @@ import { motion, AnimatePresence, useScroll, useMotionValueEvent, MotionConfig }
 import MovingTextBg from "./MovingTextBg";
 import AudioPlayer from "./AudioPlayer";
 import { Menu, X } from "lucide-react";
+import { useContactModal } from "../context/ContactModalContext";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { openContactModal } = useContactModal();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hoveredImage, setHoveredImage] = useState(null);
@@ -60,26 +62,11 @@ export default function Navbar() {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const menuLinks = [
-    {
-      label: "Home",
-      href: "/",
-      image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=900&q=60"
-    },
-    {
-      label: "Projects",
-      href: "/projects",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=900&q=60"
-    },
-    {
-      label: "Channel",
-      href: "/channel",
-      image: "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?auto=format&fit=crop&w=900&q=60"
-    },
-    {
-      label: "Contact",
-      href: "/contact",
-      image: "https://images.unsplash.com/photo-1503264116251-35a269479413?auto=format&fit=crop&w=900&q=60"
-    },
+    { label: "Home", href: "/", num: "01", desc: "Return to Homepage" },
+    { label: "About", href: "/about", num: "02", desc: "Studio & Founder Bio" },
+    { label: "Projects", href: "/projects", num: "03", desc: "Crafted Solutions & Apps" },
+    { label: "Channel", href: "/channel", num: "04", desc: "Tech Content & Videos" },
+    { label: "Contact", href: "modal", num: "05", desc: "Start A Project Inquiry" },
   ];
 
   const socialLinks = [
@@ -101,14 +88,14 @@ export default function Navbar() {
       >
 
         {/* Unified Container for Mobile / Transparent Wrapper for Desktop */}
-        <div className="w-full max-w-7xl mx-auto bg-black sm:bg-transparent border border-indigo-500/50 sm:border-none rounded-md px-3 py-2 sm:px-0 sm:py-0 shadow-lg sm:shadow-none flex items-center justify-between pointer-events-auto sm:pointer-events-none">
+        <div className="w-full max-w-7xl mx-auto bg-black sm:bg-transparent border border-indigo-900 sm:border-none px-3 py-2 sm:px-0 sm:py-0 shadow-lg sm:shadow-none flex items-center justify-between pointer-events-auto sm:pointer-events-none">
 
           {/* Left: Logo */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
-            className={`flex items-center justify-center pointer-events-auto sm:bg-black sm:border sm:border-indigo-500/50 sm:rounded-md sm:px-4 sm:py-0 sm:shadow-lg`}
+            className={`flex items-center justify-center pointer-events-auto sm:bg-black sm:border sm:border-indigo-900 sm:px-4 sm:py-0 sm:shadow-lg`}
           >
             <Link href="/" onClick={handleLogoClick} className="flex items-center justify-center">
               <span className="font-normal tracking-tight sm:tracking-wide text-2xl sm:text-4xl md:text-5xl leading-[0.85] pt-1 pb-1" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
@@ -119,7 +106,7 @@ export default function Navbar() {
 
           {/* Right: Actions Group */}
           <motion.div
-            className="flex items-center gap-2 sm:gap-4 pointer-events-auto sm:bg-black sm:border sm:border-indigo-500/50 sm:rounded-md sm:px-4 sm:py-2 sm:shadow-lg"
+            className="flex items-center gap-2 sm:gap-4 pointer-events-auto sm:bg-black sm:border sm:border-indigo-900 sm:px-4 sm:py-2 sm:shadow-lg"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
@@ -133,7 +120,7 @@ export default function Navbar() {
                 className="hidden lg:flex flex-col items-end text-xs font-medium text-white mr-4"
               >
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                  <span className="w-2 h-2 bg-indigo-500 animate-pulse"></span>
                   <span>Available 9 AM - 6 PM</span>
                 </div>
                 <div>Valsad, Gujarat, India</div>
@@ -158,7 +145,7 @@ export default function Navbar() {
                 animate={isMenuOpen ? "open" : "closed"}
                 onClick={toggleMenu}
                 whileTap={{ scale: 0.95 }}
-                className="relative h-10 w-10 rounded-full z-[110]"
+                className="relative h-10 w-10 border border-zinc-700 bg-zinc-900 z-[110]"
                 aria-label="Toggle menu"
               >
                 <motion.span
@@ -227,123 +214,124 @@ export default function Navbar() {
             {/* No separate close button here - the header button handles it */}
 
             <MovingTextBg text="MENU ">
-              <div className="relative w-full h-full grid grid-cols-1 lg:grid-cols-2 gap-0">
-                {/* Left Side - Preview Image */}
-                <div className="hidden lg:flex items-center justify-center p-12 xl:p-16 border-r border-white/10">
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
-                    animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                    exit={{ opacity: 0, scale: 0.8, rotateY: 15 }}
-                    transition={{ duration: 1, delay: 0.3, ease: [0.76, 0, 0.24, 1] }}
-                    className="relative w-full max-w-sm aspect-[3/4] rounded-xl overflow-hidden shadow-2xl"
-                    style={{ perspective: "1000px" }}
-                  >
-                    <AnimatePresence mode="wait">
-                      <motion.div
-                        key={hoveredImage || menuLinks[0].image}
-                        initial={{ opacity: 0, scale: 1.1, rotateY: 10 }}
-                        animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-                        exit={{ opacity: 0, scale: 0.9, rotateY: -10 }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        className="relative w-full h-full"
-                      >
-                        <Image
-                          src={hoveredImage || menuLinks[0].image}
-                          alt="Preview"
-                          fill
-                          className="object-cover"
-                        />
-                      </motion.div>
-                    </AnimatePresence>
-                  </motion.div>
+              <div className="relative w-full h-full grid grid-cols-1 lg:grid-cols-12 gap-0">
+                {/* Left Side - Studio Info Panel */}
+                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-12 xl:p-16 border-r border-zinc-800/80 bg-zinc-950/90 pt-44 lg:pt-48 xl:pt-52">
+                  <div className="space-y-6">
+                    <div className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-700 text-white text-xs font-bold uppercase tracking-widest font-mono shadow-md">
+                      // STUDIO PHILOSOPHY
+                    </div>
+                    
+                    <h3 className="text-3xl xl:text-4xl font-black text-white leading-tight">
+                      Code with clarity, <br />
+                      build with purpose, <br />
+                      deliver with joy.
+                    </h3>
+
+                    <p className="text-zinc-400 text-sm leading-relaxed max-w-md">
+                      We design and develop smart, scalable digital solutions for individuals, startups and growing businesses.
+                    </p>
+                  </div>
+
+                  <div className="space-y-4 border-t border-zinc-800/80 pt-8 pb-12">
+                    <div className="flex items-center justify-between text-xs text-zinc-400">
+                      <span className="uppercase tracking-widest font-mono text-zinc-500">Founder</span>
+                      <span className="text-white font-bold">Jay Patel</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-zinc-400">
+                      <span className="uppercase tracking-widest font-mono text-zinc-500">Location</span>
+                      <span className="text-zinc-200 font-medium">Valsad, Gujarat, India</span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs text-zinc-400">
+                      <span className="uppercase tracking-widest font-mono text-zinc-500">Status</span>
+                      <span className="text-indigo-400 font-bold flex items-center gap-2">
+                        <span className="w-2 h-2 bg-indigo-400 animate-pulse"></span> Open for Projects
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Right Side - Menu Content */}
-                <div className="flex flex-col h-full">
-                  <div className="flex-1 flex flex-col justify-start px-8 sm:px-12 lg:px-16 pt-32 sm:pt-40 pb-16 gap-2 lg:gap-3">
+                <div className="lg:col-span-7 flex flex-col justify-between h-full pt-36 lg:pt-48 xl:pt-52 px-8 sm:px-12 lg:px-16 pb-12">
+                  <div className="flex-1 flex flex-col justify-center space-y-3 lg:space-y-4 my-auto">
                     {menuLinks.map((link, index) => (
                       <motion.div
                         key={link.label}
-                        initial={{ opacity: 0, y: 100, rotateX: -90 }}
-                        animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                        exit={{ opacity: 0, y: -80, rotateX: 90 }}
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: 40 }}
                         transition={{
-                          duration: 0.8,
-                          delay: 0.4 + index * 0.1,
+                          duration: 0.5,
+                          delay: 0.2 + index * 0.08,
                           ease: [0.76, 0, 0.24, 1]
                         }}
-                        className="overflow-hidden"
-                        style={{ perspective: "1000px" }}
                       >
-                        <Link
-                          href={link.href}
-                          onClick={toggleMenu}
-                          onMouseEnter={() => setHoveredImage(link.image)}
-                          onMouseLeave={() => setHoveredImage(null)}
-                          className={`block text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold transition-colors duration-500 tracking-tighter leading-[1.1] group relative ${pathname === link.href ? 'text-white' : 'text-zinc-600 hover:text-white'}`}
-                        >
-                          <span className="inline-block group-hover:translate-x-3 transition-transform duration-500">
-                            {link.label}
-                          </span>
-                        </Link>
+                        {link.href === "modal" ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              toggleMenu();
+                              openContactModal();
+                            }}
+                            className="group flex items-center gap-4 text-4xl sm:text-5xl lg:text-6xl font-black transition-all duration-300 tracking-tight py-2 border-b border-zinc-900/60 text-zinc-500 hover:text-white hover:border-zinc-700 w-full text-left cursor-pointer"
+                          >
+                            <span className="text-xs sm:text-sm font-mono text-indigo-400 font-bold">
+                              {link.num}
+                            </span>
+                            <span className="inline-block group-hover:translate-x-3 transition-transform duration-300">
+                              {link.label}
+                            </span>
+                            <span className="hidden sm:inline-block text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity ml-auto">
+                              — {link.desc}
+                            </span>
+                          </button>
+                        ) : (
+                          <Link
+                            href={link.href}
+                            onClick={toggleMenu}
+                            className={`group flex items-center gap-4 text-4xl sm:text-5xl lg:text-6xl font-black transition-all duration-300 tracking-tight py-2 border-b border-zinc-900/60 ${
+                              pathname === link.href ? 'text-white border-indigo-900' : 'text-zinc-500 hover:text-white hover:border-zinc-700'
+                            }`}
+                          >
+                            <span className="text-xs sm:text-sm font-mono text-indigo-400 font-bold">
+                              {link.num}
+                            </span>
+                            <span className="inline-block group-hover:translate-x-3 transition-transform duration-300">
+                              {link.label}
+                            </span>
+                            <span className="hidden sm:inline-block text-xs font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity ml-auto">
+                              — {link.desc}
+                            </span>
+                          </Link>
+                        )}
                       </motion.div>
                     ))}
                   </div>
 
                   {/* Social Links */}
-                  <div className="px-8 sm:px-12 lg:px-16 pb-24 lg:pb-32">
-                    <motion.p
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 20 }}
-                      transition={{ duration: 0.5, delay: 0.8 }}
-                      className="text-white/40 text-xs uppercase tracking-widest mb-4"
-                    >
-                      Follow Us
-                    </motion.p>
+                  <div className="pt-8 border-t border-zinc-900">
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mb-3">
+                      Follow Us & Admin
+                    </p>
                     <div className="flex flex-wrap gap-x-6 gap-y-2">
-                      {socialLinks.map((social, index) => (
-                        <motion.div
+                      {socialLinks.map((social) => (
+                        <a
                           key={social.name}
-                          initial={{ opacity: 0, x: -40 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -40 }}
-                          transition={{
-                            duration: 0.6,
-                            delay: 0.9 + index * 0.08,
-                            ease: [0.76, 0, 0.24, 1]
-                          }}
+                          href={social.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-zinc-400 hover:text-white text-xs sm:text-sm font-medium transition-colors"
                         >
-                          <a
-                            href={social.href}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-block text-zinc-400 hover:text-white text-sm transition-colors duration-300 relative group"
-                          >
-                            {social.name}
-                          </a>
-                        </motion.div>
+                          {social.name}
+                        </a>
                       ))}
-                      
-                      {/* Admin Redirect Link */}
-                      <motion.div
-                        initial={{ opacity: 0, x: -40 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -40 }}
-                        transition={{
-                          duration: 0.6,
-                          delay: 0.9 + socialLinks.length * 0.08,
-                          ease: [0.76, 0, 0.24, 1]
-                        }}
+                      <Link
+                        href="/admin"
+                        onClick={toggleMenu}
+                        className="text-zinc-400 hover:text-white text-xs sm:text-sm font-medium transition-colors"
                       >
-                        <Link
-                          href="/admin"
-                          onClick={toggleMenu}
-                          className="inline-block text-zinc-400 hover:text-white text-sm transition-colors duration-300"
-                        >
-                          Admin
-                        </Link>
-                      </motion.div>
+                        Admin
+                      </Link>
                     </div>
                   </div>
                 </div>

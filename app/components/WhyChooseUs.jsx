@@ -9,18 +9,19 @@ export default function WhyChooseUs() {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.12
       }
     }
   };
 
   const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 15 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.5
+        duration: 0.4,
+        ease: "easeOut"
       }
     }
   };
@@ -33,14 +34,14 @@ export default function WhyChooseUs() {
 
             {/* Heading Section */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5 }}
               className="mb-6 sm:mb-8 text-left"
             >
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight">
-                Why <span className="text-indigo-600">People Love Working With Us</span>
+                Why <span className="text-indigo-800">People Love Working With Us</span>
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 mt-3 max-w-xl">
                 Smart execution, reliable delivery, budget-friendly solutions, and the joy of working with a team that actually understands your goals.
@@ -52,105 +53,105 @@ export default function WhyChooseUs() {
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-50px" }}
               className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5"
             >
 
               {/* Card 1 */}
-              <motion.div variants={itemVariants} className="rounded-xl sm:rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-xl hover:border-indigo-400 transition-all duration-300 p-4 sm:p-5">
+              <motion.div variants={itemVariants} className="border border-gray-300 bg-white shadow-sm hover:shadow-xl hover:border-indigo-800 transition-shadow transition-colors duration-300 p-4 sm:p-5">
                 <div className="flex justify-between items-center mb-3 sm:mb-4">
                   <div>
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">Budget-Friendly</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">High Value, Fair Pricing</div>
                   </div>
-                  <img src="/icons/flaticon/budget-friendly.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Budget-Friendly" />
+                  <img src="/icons/flaticon/budget-friendly.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Budget-Friendly" width={48} height={48} />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   &quot;We keep quality high and costs practical. No over-engineering, no unnecessary complexity — just smart solutions that fit your budget and scale with your growth.&quot;
                 </p>
 
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-100">
-                  <div className="p-1.5 bg-indigo-50 rounded-full">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-200">
+                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
+                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
                   </div>
                   <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-900">Affordable Excellence</div>
+                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Affordable Excellence</div>
                     <div className="text-[10px] sm:text-xs text-gray-500">Maximum ROI for your investment</div>
                   </div>
                 </div>
               </motion.div>
 
               {/* Card 2 */}
-              <motion.div variants={itemVariants} className="rounded-xl sm:rounded-2xl border border-indigo-300 bg-linear-to-br from-indigo-50 to-white shadow-sm hover:shadow-xl hover:border-indigo-500 transition-all duration-300 p-4 sm:p-5">
+              <motion.div variants={itemVariants} className="border-2 border-indigo-900 bg-indigo-50/40 shadow-sm hover:shadow-xl transition-shadow duration-300 p-4 sm:p-5">
                 <div className="flex justify-between items-center mb-3 sm:mb-4">
                   <div>
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">Optimized Solutions</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">Designed to Perform</div>
                   </div>
-                  <img src="/icons/flaticon/optimized-solutions.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Optimized Solutions" />
+                  <img src="/icons/flaticon/optimized-solutions.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Optimized Solutions" width={48} height={48} />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   &quot;We don&apos;t just build — we optimize. Faster systems, cleaner UX, automated workflows, and future-proof architecture that supports long-term business growth.&quot;
                 </p>
 
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-100">
-                  <div className="p-1.5 bg-indigo-50 rounded-full">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-200">
+                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
+                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
                   </div>
                   <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-900">Performance First</div>
+                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Performance First</div>
                     <div className="text-[10px] sm:text-xs text-gray-500">Built for speed and scalability</div>
                   </div>
                 </div>
               </motion.div>
 
               {/* Card 3 */}
-              <motion.div variants={itemVariants} className="rounded-xl sm:rounded-2xl border border-indigo-300 bg-linear-to-br from-indigo-50 to-white shadow-sm hover:shadow-xl hover:border-indigo-500 transition-all duration-300 p-4 sm:p-5">
+              <motion.div variants={itemVariants} className="border-2 border-indigo-900 bg-indigo-50/40 shadow-sm hover:shadow-xl transition-shadow duration-300 p-4 sm:p-5">
                 <div className="flex justify-between items-center mb-3 sm:mb-4">
                   <div>
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">AI-Driven Approach</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">Smarter, Faster, Scalable</div>
                   </div>
-                  <img src="/icons/flaticon/ai-driven.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="AI-Driven" />
+                  <img src="/icons/flaticon/ai-driven.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="AI-Driven" width={48} height={48} />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   &quot;From automations to custom LLM workflows, we integrate AI wherever it truly makes sense — improving speed, accuracy, and overall efficiency with measurable impact.&quot;
                 </p>
 
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-100">
-                  <div className="p-1.5 bg-indigo-50 rounded-full">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-200">
+                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
+                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
                   </div>
                   <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-900">Future Ready</div>
+                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Future Ready</div>
                     <div className="text-[10px] sm:text-xs text-gray-500">Leveraging cutting-edge AI tech</div>
                   </div>
                 </div>
               </motion.div>
 
               {/* Card 4 */}
-              <motion.div variants={itemVariants} className="rounded-xl sm:rounded-2xl border border-gray-200 bg-linear-to-br from-gray-50 to-white shadow-sm hover:shadow-xl hover:border-indigo-400 transition-all duration-300 p-4 sm:p-5">
+              <motion.div variants={itemVariants} className="border border-gray-300 bg-white shadow-sm hover:shadow-xl hover:border-indigo-800 transition-shadow transition-colors duration-300 p-4 sm:p-5">
                 <div className="flex justify-between items-center mb-3 sm:mb-4">
                   <div>
                     <div className="text-xl sm:text-2xl font-bold text-gray-900">Reliable Delivery</div>
                     <div className="text-gray-500 text-sm sm:text-base font-medium">On Time, Every Time</div>
                   </div>
-                  <img src="/icons/flaticon/reliable-delivery.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Reliable Delivery" />
+                  <img src="/icons/flaticon/reliable-delivery.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Reliable Delivery" width={48} height={48} />
                 </div>
 
                 <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
                   &quot;Clear communication, transparent progress, and predictable delivery. We make development stress-free so your team can focus on what truly matters.&quot;
                 </p>
 
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-100">
-                  <div className="p-1.5 bg-indigo-50 rounded-full">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-600" />
+                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-200">
+                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
+                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
                   </div>
                   <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-900">Peace of Mind</div>
+                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Peace of Mind</div>
                     <div className="text-[10px] sm:text-xs text-gray-500">Consistent updates & support</div>
                   </div>
                 </div>

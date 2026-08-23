@@ -1,11 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
+import { useContactModal } from "../context/ContactModalContext";
 
 export default function CTASection() {
+  const { openContactModal } = useContactModal();
+
   return (
     <MovingTextBg text="LET'S TALK" textColor="text-white" className="bg-black" rows={2}>
       <section className="relative w-full bg-transparent text-white py-14 sm:py-16 lg:py-20 border-y border-zinc-800/80 overflow-hidden group">
@@ -23,9 +25,9 @@ export default function CTASection() {
           >
             {/* Left Column Text */}
             <div className="space-y-3 text-left max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs sm:text-sm font-semibold tracking-wide uppercase backdrop-blur-md">
-                <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                <span>Start A Project</span>
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-700 text-white text-xs font-mono font-bold uppercase tracking-widest shadow-md">
+                <span className="w-2 h-2 bg-indigo-500 inline-block"></span>
+                <span>// START A PROJECT</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[1.05]">
@@ -42,13 +44,14 @@ export default function CTASection() {
 
             {/* Right Column Button */}
             <div className="shrink-0 w-full md:w-auto pt-2 md:pt-0">
-              <Link
-                href="/contact"
-                className="group inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 sm:px-10 sm:py-5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-full uppercase tracking-wider text-sm sm:text-base transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-xl shadow-indigo-600/40 hover:shadow-indigo-500/60 cursor-pointer"
+              <button
+                type="button"
+                onClick={openContactModal}
+                className="group inline-flex items-center justify-center gap-3 w-full md:w-auto px-8 py-4 sm:px-10 sm:py-5 bg-indigo-900 hover:bg-indigo-800 border border-indigo-950 text-white font-bold uppercase tracking-wider text-sm sm:text-base transition-all duration-300 cursor-pointer shadow-xl"
               >
-                <span>Go to Contact Page</span>
+                <span>Start Project Inquiry</span>
                 <ArrowUpRight className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-              </Link>
+              </button>
             </div>
           </motion.div>
         </div>

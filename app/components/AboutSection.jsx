@@ -1,31 +1,27 @@
 "use client";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import MovingTextBg from "./MovingTextBg";
 
 export default function AboutSection() {
   return (
-    <div className="min-h-screen bg-linear-to-b from-white to-gray-50">
-      <MovingTextBg text="ABOUT" textColor="text-gray-400">
-        <section className="px-4 pt-12 sm:pt-16 md:pt-20 pb-8 sm:pb-10 md:pb-12 bg-transparent relative z-10">
-          <div className="max-w-6xl mx-auto">
-            <motion.div
-              initial="initial"
-              whileInView="animate"
-              viewport={{ once: true }}
-              transition={{ staggerChildren: 0.05 }}
-              className="grid grid-cols-12 gap-3"
-            >
-              <StudioHeader />
-              <StudioIntro />
-              <FounderCard />
-              <MissionBlock />
-              <VisionBlock />
-            </motion.div>
-          </div>
-        </section>
-      </MovingTextBg>
-    </div>
+    <section className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 bg-transparent relative z-10">
+      <div className="max-w-6xl mx-auto space-y-8">
+        <motion.div
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true }}
+          transition={{ staggerChildren: 0.08 }}
+          className="grid grid-cols-12 gap-4 sm:gap-6"
+        >
+          <StudioHeader />
+          <StudioIntro />
+          <StatsRow />
+          <FounderCard />
+          <MissionBlock />
+          <VisionBlock />
+        </motion.div>
+      </div>
+    </section>
   );
 }
 
@@ -34,16 +30,16 @@ export default function AboutSection() {
 const Block = ({ className, children, ...rest }) => (
   <motion.div
     variants={{
-      initial: { scale: 0.5, y: 50, opacity: 0 },
+      initial: { scale: 0.96, y: 25, opacity: 0 },
       animate: { scale: 1, y: 0, opacity: 1 },
     }}
     transition={{
       type: "spring",
-      mass: 3,
-      stiffness: 400,
-      damping: 50,
+      mass: 1.5,
+      stiffness: 300,
+      damping: 25,
     }}
-    className={`rounded-2xl border border-gray-200 bg-white p-4 sm:p-5 shadow-lg ${className}`}
+    className={`border-2 border-zinc-200 bg-white p-6 sm:p-8 shadow-md ${className}`}
     {...rest}
   >
     {children}
@@ -53,19 +49,16 @@ const Block = ({ className, children, ...rest }) => (
 /* ---------------------- Studio Header ---------------------- */
 
 const StudioHeader = () => (
-  <Block className="col-span-12 md:col-span-6 flex flex-col justify-center items-center">
-    <div className="text-center md:text-left">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900">
-        <span
-          className="bg-linear-to-r from-indigo-600 to-indigo-600 bg-clip-text text-transparent"
-          style={{ fontFamily: "'Jersey 10', 'Arial Black', sans-serif" }}
-        >
-          NJ Tech Studio
-        </span>
-      </h1>
-
-      <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed mt-2">
-        Building smart digital solutions with clean code, creativity, and a joyful spirit.
+  <Block className="col-span-12 md:col-span-6 flex flex-col justify-center">
+    <div className="space-y-3">
+      <div className="inline-block px-3 py-1 bg-zinc-950 border border-zinc-800 text-white text-xs font-bold uppercase tracking-wider font-mono">
+        // NJ TECH STUDIO
+      </div>
+      <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight text-gray-900">
+        Building Smart Digital Solutions
+      </h2>
+      <p className="text-base sm:text-lg text-gray-600 leading-relaxed font-medium">
+        With clean code, creativity, and a joyful spirit.
       </p>
     </div>
   </Block>
@@ -75,23 +68,48 @@ const StudioHeader = () => (
 
 const StudioIntro = () => (
   <Block className="col-span-12 md:col-span-6 flex items-center">
-    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
-      <span className="text-gray-500">
-        We design and develop smart, scalable digital solutions for individuals, startups and growing businesses.
-        From modern web platforms to automation systems and AI-enhanced tools —
-        our work focuses on clarity, performance and smooth user experience.
-        Our motto: <span className="text-indigo-700 font-bold">&quot;Code with clarity, build with purpose, deliver with joy.&quot;</span>
+    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900 font-medium">
+      We design and develop smart, scalable digital solutions for individuals, startups and growing businesses.
+      From modern web platforms to automation systems and AI-enhanced tools —
+      our work focuses on clarity, performance and smooth user experience.
+      <br />
+      <span className="block mt-4 text-indigo-900 font-black text-lg border-l-4 border-indigo-900 pl-3">
+        &quot;Code with clarity, build with purpose, deliver with joy.&quot;
       </span>
     </p>
   </Block>
 );
 
+/* ---------------------- Stats Row ---------------------- */
+
+const StatsRow = () => (
+  <Block className="col-span-12 !p-0 border-0 bg-transparent shadow-none">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="p-6 bg-zinc-950 border-2 border-indigo-900 text-white text-center shadow-md">
+        <p className="text-3xl sm:text-4xl font-black text-white">2+ Years</p>
+        <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-400 mt-1">Experience</p>
+      </div>
+      <div className="p-6 bg-zinc-950 border-2 border-indigo-900 text-white text-center shadow-md">
+        <p className="text-3xl sm:text-4xl font-black text-white">15+ Apps</p>
+        <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-400 mt-1">Built & Scaled</p>
+      </div>
+      <div className="p-6 bg-zinc-950 border-2 border-indigo-900 text-white text-center shadow-md">
+        <p className="text-3xl sm:text-4xl font-black text-white">100%</p>
+        <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-400 mt-1">Clean Code</p>
+      </div>
+      <div className="p-6 bg-zinc-950 border-2 border-indigo-900 text-white text-center shadow-md">
+        <p className="text-3xl sm:text-4xl font-black text-white">Full-Stack</p>
+        <p className="text-xs sm:text-sm font-bold uppercase tracking-wider text-zinc-400 mt-1">Systems & APIs</p>
+      </div>
+    </div>
+  </Block>
+);
 
 /* ---------------------- Founder Card ---------------------- */
 
 const FounderCard = () => (
-  <Block className="col-span-12">
-    <div className="w-full max-w-6xl bg-[#1E1E22] text-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-xl flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8 items-center min-h-[200px] sm:min-h-[220px]">
+  <Block className="col-span-12 !p-0 border-0 bg-transparent shadow-none">
+    <div className="w-full bg-zinc-950 border-2 border-indigo-900 text-white p-6 sm:p-8 md:p-10 shadow-xl flex flex-col md:flex-row gap-6 md:gap-10 items-center">
 
       {/* Avatar */}
       <div className="relative flex-shrink-0">
@@ -100,45 +118,43 @@ const FounderCard = () => (
           alt="Jay Patel"
           width={192}
           height={192}
-          className="w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 rounded-2xl object-cover border-2 border-gray-700 shadow-lg"
+          className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 object-cover border-2 border-indigo-900 shadow-xl"
           priority
         />
 
-        {/* Name Tag (Better fit + centered + single line) */}
-        <span className="absolute -bottom-3 sm:-bottom-4 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-1 text-[11px] sm:text-sm font-semibold rounded-xl shadow-md whitespace-nowrap">
+        {/* Name Tag */}
+        <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-white text-black px-4 py-1 text-xs sm:text-sm font-black border border-zinc-950 shadow-md whitespace-nowrap uppercase tracking-wider">
           Jay Patel
         </span>
       </div>
 
       {/* Text */}
-      <div className="flex-1 space-y-2 sm:space-y-3 text-center md:text-left">
-        <p className="text-gray-200 text-base sm:text-lg md:text-xl leading-relaxed">
+      <div className="flex-1 space-y-4 text-center md:text-left pt-2 md:pt-0">
+        <div className="inline-block px-3 py-1 bg-indigo-900 text-white text-xs font-bold uppercase tracking-widest">
+          Founder & Lead Engineer
+        </div>
+
+        <p className="text-gray-200 text-base sm:text-lg leading-relaxed font-medium">
           Hi, I&apos;m Jay Patel — a Python-first Software Developer with 2 years of experience building fast, secure and scalable systems.
           I love combining technology and creativity to craft solutions that feel modern, smooth and impactful. Whether it&apos;s backend APIs,
           full-stack apps, automation or AI/ML — I build with clarity, quality and purpose.
-        </p>
-
-        <p className="text-sm sm:text-base font-semibold pt-2">
-          Founder — <span className="text-gray-400 font-normal">NJ Tech Studio</span>
         </p>
       </div>
     </div>
   </Block>
 );
 
-
 /* ---------------------- Mission ---------------------- */
 
 const MissionBlock = () => (
-  <Block className="col-span-12 md:col-span-6">
-    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
-      <span className="text-indigo-700 font-bold">The Mission</span>
-      <br />
-      <span className="text-gray-500">
-        To build clean, scalable tech that solves real problems.
-        Helping businesses automate workflows, develop fast applications,
-        integrate AI/ML where it matters, and create smooth digital experiences.
-      </span>
+  <Block className="col-span-12 md:col-span-6 space-y-3">
+    <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950 border border-zinc-800 text-white text-xs font-mono font-bold uppercase tracking-wider">
+      // THE MISSION
+    </div>
+    <p className="text-base sm:text-lg leading-relaxed text-gray-700 font-medium">
+      To build clean, scalable tech that solves real problems.
+      Helping businesses automate workflows, develop fast applications,
+      integrate AI/ML where it matters, and create smooth digital experiences.
     </p>
   </Block>
 );
@@ -146,15 +162,14 @@ const MissionBlock = () => (
 /* ---------------------- Vision ---------------------- */
 
 const VisionBlock = () => (
-  <Block className="col-span-12 md:col-span-6">
-    <p className="text-base sm:text-lg md:text-xl leading-relaxed text-gray-900">
-      <span className="text-indigo-700 font-bold">The Vision</span>
-      <br />
-      <span className="text-gray-500">
-        To grow a joyful, impactful tech studio that builds modern solutions,
-        inspires developers, and brings creativity into engineering.
-        A place where code, content and collaboration meet — and ideas from small towns reach the world.
-      </span>
+  <Block className="col-span-12 md:col-span-6 space-y-3">
+    <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950 border border-zinc-800 text-white text-xs font-mono font-bold uppercase tracking-wider">
+      // THE VISION
+    </div>
+    <p className="text-base sm:text-lg leading-relaxed text-gray-700 font-medium">
+      To grow a joyful, impactful tech studio that builds modern solutions,
+      inspires developers, and brings creativity into engineering.
+      A place where code, content and collaboration meet — and ideas from small towns reach the world.
     </p>
   </Block>
 );

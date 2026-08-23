@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import MovingTextBg from '../../components/MovingTextBg';
 
 export default function ProjectDetailPage() {
   const params = useParams();
@@ -290,246 +291,248 @@ export default function ProjectDetailPage() {
   };
 
   return (
-    <div className="min-h-screen py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <div className="max-w-6xl mx-auto px-4">
-        {/* Back Button - Top */}
+    <MovingTextBg text={project?.title?.toUpperCase() || "PROJECT"} textColor="text-gray-400">
+      <div className="min-h-screen py-20 bg-transparent relative z-10">
+        <div className="max-w-6xl mx-auto px-4">
+          {/* Back Button - Top */}
 
-        <article className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-xl overflow-hidden">
-          {/* Hero Image */}
-          <div className="relative h-[500px] w-full bg-gradient-to-br from-indigo-500 to-indigo-600">
-            {project.image ? (
-              <Image
-                src={project.image}
-                alt={project.title}
-                fill
-                className="object-cover"
-                priority
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Code2 className="w-32 h-32 text-white opacity-50" />
-              </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+          <article className="bg-white dark:bg-gray-800 border-2 border-zinc-200 dark:border-gray-700 shadow-xl overflow-hidden">
+            {/* Hero Image */}
+            <div className="relative h-[500px] w-full bg-gradient-to-br from-indigo-900 to-indigo-950">
+              {project.image ? (
+                <Image
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Code2 className="w-32 h-32 text-white opacity-50" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
-            {/* Hero Content */}
-            <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
-              <div className="flex flex-wrap gap-3 mb-4">
-                <span className="px-4 py-1.5 bg-indigo-600/80 backdrop-blur-sm rounded-full text-sm font-medium">
-                  {project.category}
-                </span>
+              {/* Hero Content */}
+              <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                <div className="flex flex-wrap gap-3 mb-4">
+                  <span className="px-4 py-1.5 bg-indigo-950 border border-indigo-800 text-white text-xs font-bold uppercase tracking-wider">
+                    {project.category}
+                  </span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-3">
+                  {project.title}
+                </h1>
+                <p className="text-xl text-gray-200 mb-4">
+                  {project.subtitle}
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-3">
-                {project.title}
-              </h1>
-              <p className="text-xl text-gray-200 mb-4">
-                {project.subtitle}
-              </p>
             </div>
-          </div>
 
-          {/* Project Info Bar */}
-          <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 p-6">
-            <div className="flex flex-wrap gap-6">
-              {project.client && (
+            {/* Project Info Bar */}
+            <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 p-6">
+              <div className="flex flex-wrap gap-6">
+                {project.client && (
+                  <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+                    <User className="w-5 h-5 text-indigo-800 dark:text-indigo-400" />
+                    <div>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">Client</p>
+                      <p className="font-medium">{project.client}</p>
+                    </div>
+                  </div>
+                )}
                 <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                  <User className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                  <Calendar className="w-5 h-5 text-indigo-800 dark:text-indigo-400" />
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">Client</p>
-                    <p className="font-medium">{project.client}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Duration</p>
+                    <p className="font-medium">
+                      {new Date(project.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                      {' - '}
+                      {new Date(project.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    </p>
+                  </div>
+                </div>
+                <div className="ml-auto flex gap-3">
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-900 border border-indigo-950 text-white hover:bg-indigo-800 transition-colors font-bold text-xs uppercase tracking-wider"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      {project.liveUrl.replace(/^https?:\/\//, '')}
+                    </a>
+                  )}
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-2.5 bg-zinc-900 border border-zinc-950 text-white hover:bg-black transition-colors font-bold text-xs uppercase tracking-wider"
+                    >
+                      <Github className="w-4 h-4" />
+                      GitHub
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-8 md:p-12">
+              {/* Technologies */}
+              <div className="mb-12">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                  Technologies Used
+                </h2>
+                <div className="flex flex-wrap gap-3">
+                  {project.technologies.map((tech, index) => (
+                    <span
+                      key={index}
+                      className="px-4 py-2 bg-indigo-50 border border-indigo-200 text-indigo-900 text-sm font-semibold"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* YouTube Video Section */}
+              {project.youtubeUrl && <VideoPlayer url={project.youtubeUrl} />}
+
+              {/* Overview */}
+              {project.content?.overview && (
+                <div className="mb-12">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Project Overview
+                  </h2>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                    {project.content.overview}
+                  </p>
+                </div>
+              )}
+
+              {/* Challenge */}
+              {project.content?.challenge && (
+                <div className="mb-12">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    The Challenge
+                  </h2>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                    {project.content.challenge}
+                  </p>
+                </div>
+              )}
+
+              {/* Solution */}
+              {project.content?.solution && (
+                <div className="mb-12">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Our Solution
+                  </h2>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                    {project.content.solution}
+                  </p>
+                </div>
+              )}
+
+              {/* Sections */}
+              {project.content?.sections?.map((section, index) => renderSection(section, index))}
+
+              {/* Results */}
+              {project.content?.results && (
+                <div className="mb-12">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+                    Results & Impact
+                  </h2>
+                  <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-6 rounded-r-lg">
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
+                      {project.content.results}
+                    </p>
                   </div>
                 </div>
               )}
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                <Calendar className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                <div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Duration</p>
-                  <p className="font-medium">
-                    {new Date(project.startDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                    {' - '}
-                    {new Date(project.endDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
-                  </p>
+
+              {/* Gallery */}
+              {project.gallery && project.gallery.length > 0 && (
+                <div className="mb-12">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+                    Project Gallery
+                  </h2>
+                  <div className="space-y-4">
+                    {/* Main Image */}
+                    <div className="relative h-[500px] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                      <Image
+                        src={project.gallery[activeGalleryImage]}
+                        alt={`${project.title} - Image ${activeGalleryImage + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+
+                    {/* Thumbnails */}
+                    <div className="grid grid-cols-4 gap-4">
+                      {project.gallery.map((image, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setActiveGalleryImage(index)}
+                          className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${activeGalleryImage === index
+                            ? 'border-indigo-600 dark:border-indigo-400'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-400'
+                            }`}
+                        >
+                          <Image
+                            src={image}
+                            alt={`Thumbnail ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="ml-auto flex gap-3">
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    {project.liveUrl.replace(/^https?:\/\//, '')}
-                  </a>
-                )}
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-2.5 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors font-medium"
-                  >
-                    <Github className="w-5 h-5" />
-                    GitHub
-                  </a>
-                )}
-              </div>
+              )}
+
+              {/* Testimonial */}
+              {project.testimonial && (
+                <div className="mt-12 bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 rounded-2xl p-8 border border-indigo-200 dark:border-indigo-800">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                    Client Testimonial
+                  </h2>
+                  <blockquote className="text-lg text-gray-700 dark:text-gray-300 italic mb-4">
+                    &quot;{project.testimonial.text}&quot;
+                  </blockquote>
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
+                      {project.testimonial.author.charAt(0)}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-900 dark:text-white">
+                        {project.testimonial.author}
+                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {project.testimonial.position}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
+          </article>
 
-          {/* Content */}
-          <div className="p-8 md:p-12">
-            {/* Technologies */}
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Technologies Used
-              </h2>
-              <div className="flex flex-wrap gap-3">
-                {project.technologies.map((tech, index) => (
-                  <span
-                    key={index}
-                    className="px-4 py-2 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg text-sm font-medium border border-indigo-200 dark:border-indigo-800"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* YouTube Video Section */}
-            {project.youtubeUrl && <VideoPlayer url={project.youtubeUrl} />}
-
-            {/* Overview */}
-            {project.content?.overview && (
-              <div className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                  Project Overview
-                </h2>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                  {project.content.overview}
-                </p>
-              </div>
-            )}
-
-            {/* Challenge */}
-            {project.content?.challenge && (
-              <div className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                  The Challenge
-                </h2>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                  {project.content.challenge}
-                </p>
-              </div>
-            )}
-
-            {/* Solution */}
-            {project.content?.solution && (
-              <div className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                  Our Solution
-                </h2>
-                <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                  {project.content.solution}
-                </p>
-              </div>
-            )}
-
-            {/* Sections */}
-            {project.content?.sections?.map((section, index) => renderSection(section, index))}
-
-            {/* Results */}
-            {project.content?.results && (
-              <div className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                  Results & Impact
-                </h2>
-                <div className="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-500 p-6 rounded-r-lg">
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-lg">
-                    {project.content.results}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Gallery */}
-            {project.gallery && project.gallery.length > 0 && (
-              <div className="mb-12">
-                <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                  Project Gallery
-                </h2>
-                <div className="space-y-4">
-                  {/* Main Image */}
-                  <div className="relative h-[500px] rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                    <Image
-                      src={project.gallery[activeGalleryImage]}
-                      alt={`${project.title} - Image ${activeGalleryImage + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-
-                  {/* Thumbnails */}
-                  <div className="grid grid-cols-4 gap-4">
-                    {project.gallery.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setActiveGalleryImage(index)}
-                        className={`relative h-24 rounded-lg overflow-hidden border-2 transition-all ${activeGalleryImage === index
-                          ? 'border-indigo-600 dark:border-indigo-400'
-                          : 'border-gray-200 dark:border-gray-700 hover:border-gray-400'
-                          }`}
-                      >
-                        <Image
-                          src={image}
-                          alt={`Thumbnail ${index + 1}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Testimonial */}
-            {project.testimonial && (
-              <div className="mt-12 bg-gradient-to-r from-indigo-50 to-indigo-50 dark:from-indigo-900/20 dark:to-indigo-900/20 rounded-2xl p-8 border border-indigo-200 dark:border-indigo-800">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                  Client Testimonial
-                </h2>
-                <blockquote className="text-lg text-gray-700 dark:text-gray-300 italic mb-4">
-                  &quot;{project.testimonial.text}&quot;
-                </blockquote>
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                    {project.testimonial.author.charAt(0)}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">
-                      {project.testimonial.author}
-                    </p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
-                      {project.testimonial.position}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </article>
-
-        {/* Back Button - Bottom */}
-        <Link
-          href="/projects"
-          className="inline-flex items-center gap-2 px-4 py-2 text-indigo-600 dark:text-indigo-400 hover:text-white hover:bg-indigo-600 dark:hover:bg-indigo-500 border-2 border-indigo-600 dark:border-indigo-400 rounded-lg mt-6 transition-all font-medium"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Projects
-        </Link>
+          {/* Back Button - Bottom */}
+          <Link
+            href="/projects"
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-white text-indigo-900 border-2 border-indigo-900 hover:bg-indigo-900 hover:text-white transition-all font-bold text-xs uppercase tracking-wider mt-6 shadow-md"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Projects
+          </Link>
+        </div>
       </div>
-    </div>
+    </MovingTextBg>
   );
 }

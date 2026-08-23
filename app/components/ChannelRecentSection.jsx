@@ -84,8 +84,8 @@ export default function ChannelRecentSection() {
                   {/* Card Body */}
                   <div className="p-6 sm:p-8 space-y-4">
                     <div className="flex flex-wrap items-center gap-3 text-xs">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/50 text-indigo-700 dark:text-indigo-300 font-bold tracking-wide uppercase text-[10px]">
-                        <Tag className="w-3 h-3" />
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-zinc-950 text-white font-mono font-bold tracking-widest uppercase text-[10px] border border-zinc-800">
+                        <Tag className="w-3 h-3 text-indigo-400" />
                         {post.category}
                       </span>
                       <span className="flex items-center gap-1 text-gray-500 dark:text-zinc-400 font-medium">

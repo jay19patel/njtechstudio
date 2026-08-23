@@ -80,7 +80,7 @@ export default function TechSkillSection() {
           <div className="relative mb-12 flex justify-end">
             <div className="space-y-2 text-right">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900">
-                Our Skills & <span className="text-indigo-600">Expertise</span>
+                Our Skills & <span className="text-indigo-800">Expertise</span>
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl ml-auto">
                 Powered by expertise, driven by innovation. We master the tools that turn ambitious ideas into real-world solutions, delivering speed, scalability, and success.
@@ -94,28 +94,28 @@ export default function TechSkillSection() {
             <div className="w-full flex flex-col items-center">
               <Tabs defaultValue="backend" className="w-full" onValueChange={setActiveTab}>
                 <div className="mb-6 flex justify-center overflow-x-auto w-full">
-                  <TabsList className="inline-flex items-center gap-0 bg-white/80 backdrop-blur-sm rounded-full shadow-sm border border-gray-200 p-1 flex-wrap lg:flex-nowrap">
+                  <TabsList className="inline-flex items-center gap-1 bg-white border border-gray-300 p-1 flex-wrap lg:flex-nowrap">
                     <TabsTrigger
                       value="backend"
-                      className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
+                      className="px-4 lg:px-6 py-2 text-gray-700 font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-900 data-[state=active]:text-white whitespace-nowrap"
                     >
                       Backend
                     </TabsTrigger>
                     <TabsTrigger
                       value="frontend"
-                      className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
+                      className="px-4 lg:px-6 py-2 text-gray-700 font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-900 data-[state=active]:text-white whitespace-nowrap"
                     >
                       Frontend
                     </TabsTrigger>
                     <TabsTrigger
                       value="database"
-                      className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
+                      className="px-4 lg:px-6 py-2 text-gray-700 font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-900 data-[state=active]:text-white whitespace-nowrap"
                     >
                       Database
                     </TabsTrigger>
                     <TabsTrigger
                       value="other-tools"
-                      className="px-4 lg:px-6 py-2 rounded-full text-gray-600 hover:text-black font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-100 data-[state=active]:text-indigo-700 data-[state=active]:border data-[state=active]:border-indigo-300 whitespace-nowrap"
+                      className="px-4 lg:px-6 py-2 text-gray-700 font-medium transition-colors text-sm lg:text-base data-[state=active]:bg-indigo-900 data-[state=active]:text-white whitespace-nowrap"
                     >
                       Other Tools
                     </TabsTrigger>
@@ -128,7 +128,7 @@ export default function TechSkillSection() {
                     {toolsData["backend"].map((tool, index) => (
                       <span
                         key={index}
-                        className="flex items-center gap-2.5 bg-gray-200/50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300"
+                        className="flex items-center gap-2.5 bg-white border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 shadow-xs"
                       >
                         {tool.icon && (
                           <img src={tool.icon} alt={tool.name} className="w-5 h-5 object-contain" />
@@ -143,7 +143,7 @@ export default function TechSkillSection() {
                     {toolsData["frontend"].map((tool, index) => (
                       <span
                         key={index}
-                        className="flex items-center gap-2.5 bg-gray-200/50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300"
+                        className="flex items-center gap-2.5 bg-white border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 shadow-xs"
                       >
                         {tool.icon && (
                           <img src={tool.icon} alt={tool.name} className="w-5 h-5 object-contain" />
@@ -158,7 +158,7 @@ export default function TechSkillSection() {
                     {toolsData["database"].map((tool, index) => (
                       <span
                         key={index}
-                        className="flex items-center gap-2.5 bg-gray-200/50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300"
+                        className="flex items-center gap-2.5 bg-white border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 shadow-xs"
                       >
                         {tool.icon && (
                           <img src={tool.icon} alt={tool.name} className="w-5 h-5 object-contain" />
@@ -173,7 +173,7 @@ export default function TechSkillSection() {
                     {toolsData["other-tools"].map((tool, index) => (
                       <span
                         key={index}
-                        className="flex items-center gap-2.5 bg-gray-200/50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 px-4 py-2 rounded-full text-sm font-medium text-gray-700 dark:text-gray-300"
+                        className="flex items-center gap-2.5 bg-white border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900 shadow-xs"
                       >
                         {tool.icon && (
                           <img src={tool.icon} alt={tool.name} className="w-5 h-5 object-contain" />
@@ -186,18 +186,12 @@ export default function TechSkillSection() {
               </Tabs>
             </div>
 
-            {/* Right Side - Content Description (Updated Styling) */}
+            {/* Right Side - Content Description */}
             <div className="w-full lg:sticky lg:top-8">
               <div className="max-w-md mx-auto">
-                <div className="relative overflow-hidden bg-linear-to-b from-black via-gray-900 to-gray-800 rounded-xl shadow-2xl p-8 text-white">
-                  {/* Subtle indigo Glow Layer */}
-
-
-                  {/* Soft Skew Highlight */}
-                  <div className="absolute top-0 left-0 w-full h-full bg-gray-200/5 transform -skew-x-12"></div>
-
+                <div className="relative border-2 border-indigo-900 bg-black p-8 text-white shadow-2xl">
                   <div className="relative z-10">
-                    <svg className="w-12 h-12 mb-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-12 h-12 mb-4 text-indigo-400" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
                     </svg>
 
@@ -209,7 +203,7 @@ export default function TechSkillSection() {
                       &quot;{getContent().quote}&quot;
                     </p>
 
-                    <div className="flex items-center pt-4 border-t border-gray-500/30">
+                    <div className="flex items-center pt-4 border-t border-zinc-800">
                       <div className="flex-1">
                         <h4 className="font-semibold text-white">Expert Solutions</h4>
                         <p className="text-gray-400 text-sm">{getContent().subtitle}</p>

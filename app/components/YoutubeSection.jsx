@@ -36,8 +36,9 @@ export default function YoutubeSection() {
             <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000002_1px,transparent_1px),linear-gradient(to_bottom,#00000002_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
             <div className="relative z-10 text-center mb-8 sm:mb-10 md:mb-12 flex flex-col items-center">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-white text-xs sm:text-sm font-semibold tracking-wide uppercase backdrop-blur-md mb-3">
-                Content & Tutorials
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-700 text-white text-xs font-mono font-bold uppercase tracking-widest mb-3 shadow-md">
+                <span className="w-2 h-2 bg-indigo-500 inline-block"></span>
+                <span>// CONTENT & TUTORIALS</span>
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-black text-white max-w-4xl mx-auto">
                 Everything you need to build & scale tech products 🎬
@@ -52,7 +53,7 @@ export default function YoutubeSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-zinc-900/50 backdrop-blur-md rounded-lg sm:rounded-xl overflow-hidden border border-zinc-800/80 hover:border-indigo-500/50 hover:shadow-indigo-500/10 hover:shadow-xl transition-all duration-300 group"
+                  className="bg-zinc-950 border-2 border-zinc-800 hover:border-indigo-800 hover:shadow-xl transition-all duration-300 group"
                 >
                   <div className="relative aspect-video bg-zinc-950">
                     {playingVideo === card.videoId ? (
@@ -77,7 +78,7 @@ export default function YoutubeSection() {
 
                         {/* Play Button Overlay */}
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
-                          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/90 group-hover:bg-white rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300">
+                          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white border border-zinc-800 flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300">
                             <svg
                               className="w-6 h-6 sm:w-8 sm:h-8 text-red-600 ml-1"
                               viewBox="0 0 24 24"
@@ -90,7 +91,7 @@ export default function YoutubeSection() {
 
                         {/* Badge */}
                         {card.badge && (
-                          <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 bg-indigo-600 text-white px-2 sm:px-3 py-0.5 sm:py-1 rounded text-[10px] sm:text-xs font-bold shadow-md z-10">
+                          <div className="absolute bottom-3 sm:bottom-4 left-3 sm:left-4 bg-indigo-900 border border-indigo-950 text-white px-2 sm:px-3 py-0.5 sm:py-1 text-[10px] sm:text-xs font-bold shadow-md z-10">
                             {card.badge}
                           </div>
                         )}

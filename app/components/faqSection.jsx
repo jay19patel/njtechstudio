@@ -89,7 +89,7 @@ const FAQSection = () => {
                         {/* Image on Left */}
                         <div className="w-full md:w-auto flex justify-center">
                             <img
-                                className="max-w-xs sm:max-w-sm w-full rounded-lg sm:rounded-xl h-[400px] sm:h-[500px] md:h-[600px] shadow-lg object-cover object-center"
+                                className="max-w-xs sm:max-w-sm w-full h-[400px] sm:h-[500px] md:h-[600px] border-2 border-zinc-900 shadow-lg object-cover object-center"
                                 src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=830&h=844&auto=format&fit=crop"
                                 alt="FAQ illustration"
                             />
@@ -98,9 +98,9 @@ const FAQSection = () => {
                         {/* FAQ Content on Right */}
                         <div className="flex-1 w-full">
                             <div className="mb-6 sm:mb-8 text-center md:text-left">
-                                <p className="text-indigo-600 text-xs sm:text-sm font-medium mb-2">FAQ&apos;s</p>
+                                <p className="text-indigo-800 text-xs sm:text-sm font-bold uppercase tracking-wider mb-2">FAQ&apos;s</p>
                                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4">
-                                    Got Questions? <span className="text-indigo-600">I Got Answers!</span>
+                                    Got Questions? <span className="text-indigo-800">I Got Answers!</span>
                                 </h1>
                             </div>
 
@@ -109,9 +109,9 @@ const FAQSection = () => {
                                 {faqItems.map((item) => (
                                     <div
                                         key={item.id}
-                                        className={`rounded-lg border bg-white px-4 sm:px-6 py-1 transition-all duration-200 ${openItem === item.id
-                                            ? "border-indigo-600 ring-2 ring-indigo-600/20"
-                                            : "border-gray-200 hover:border-gray-300"
+                                        className={`border-2 bg-white px-4 sm:px-6 py-1 transition-all duration-200 ${openItem === item.id
+                                            ? "border-indigo-900 bg-indigo-50/40"
+                                            : "border-gray-300 hover:border-gray-400"
                                             }`}
                                     >
                                         {/* Trigger */}

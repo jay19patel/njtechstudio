@@ -188,13 +188,13 @@ export default function HeroSection() {
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.8, delay: 0.2 }}
-                  className="mb-4 w-fit mx-auto lg:mx-0 rounded-full bg-zinc-600"
+                  className="mb-4 w-fit mx-auto lg:mx-0 bg-zinc-900"
                 >
                   <a
                     href="#"
-                    className="flex origin-top-left items-center justify-start rounded-full border border-zinc-900 bg-white p-0.5 text-xs sm:text-sm transition-transform hover:-rotate-2"
+                    className="flex origin-top-left items-center justify-start border border-zinc-900 bg-white p-0.5 text-xs sm:text-sm transition-transform hover:-rotate-1"
                   >
-                    <span className="rounded-full bg-linear-to-r from-indigo-600 to-indigo-600 px-2 sm:px-3 py-0.5 font-medium text-white">
+                    <span className="bg-indigo-800 px-2 sm:px-3 py-0.5 font-medium text-white">
                       Hey I’m NJ!
                     </span>
                     <span className="ml-2 mr-1 inline-block font-medium text-gray-900">
@@ -234,69 +234,59 @@ export default function HeroSection() {
                 </div>
               </div>
 
-              {/* RIGHT SIDE CHAT UI (unchanged except text) */}
+              {/* RIGHT SIDE CHAT UI */}
               <div className="w-full lg:col-span-6 flex justify-center lg:justify-end mt-8 lg:mt-0">
                 <div className="relative w-full max-w-2xl px-4 sm:px-0">
-                  {/* (No text changes here) */}
-
-                  <div className="absolute -top-10 -left-10 w-24 h-24 sm:w-32 sm:h-32 bg-linear-to-br from-indigo-400 to-indigo-500 opacity-20 rounded-full blur-3xl animate-pulse"></div>
-                  <div className="absolute -bottom-10 -right-10 w-32 h-32 sm:w-40 sm:h-40 bg-linear-to-br from-indigo-400 to-pink-500 opacity-20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-                  <div className="absolute top-1/2 left-0 w-20 h-20 sm:w-24 sm:h-24 bg-linear-to-br from-pink-400 to-indigo-500 opacity-15 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-
-                  <div className="relative rounded-2xl sm:rounded-3xl bg-linear-to-br from-indigo-500 via-indigo-500 to-pink-500 p-[2px] shadow-2xl overflow-hidden">
-                    <div className="absolute inset-0 bg-linear-to-r from-indigo-500 via-indigo-500 to-pink-500 opacity-75 animate-pulse"></div>
-
-                    <div className="relative bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-inner">
-                      <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-500 shadow-sm hover:scale-110 transition-transform cursor-pointer"></div>
-                          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-500 shadow-sm hover:scale-110 transition-transform cursor-pointer"></div>
-                          <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-500 shadow-sm hover:scale-110 transition-transform cursor-pointer"></div>
-                        </div>
-                        <div className="flex-1 ml-2 sm:ml-4 bg-linear-to-r from-gray-50 to-gray-100 rounded-lg px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200">
-                          <p className="text-[10px] sm:text-xs text-gray-500 font-medium truncate">🔒 njtechstudio.com/chat</p>
-                        </div>
+                  <div className="relative border-2 border-indigo-900 bg-white p-4 sm:p-6 md:p-8 shadow-2xl">
+                    <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
+                        <div className="w-3 h-3 bg-red-500 hover:scale-110 transition-transform cursor-pointer"></div>
+                        <div className="w-3 h-3 bg-yellow-500 hover:scale-110 transition-transform cursor-pointer"></div>
+                        <div className="w-3 h-3 bg-green-500 hover:scale-110 transition-transform cursor-pointer"></div>
                       </div>
+                      <div className="flex-1 ml-2 sm:ml-4 bg-gray-50 px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200">
+                        <p className="text-[10px] sm:text-xs text-gray-600 font-medium truncate">🔒 njtechstudio.com/chat</p>
+                      </div>
+                    </div>
 
-                      {/* Chat Messages (already updated above) */}
-                      <div className="flex flex-col gap-3 sm:gap-4">
-                        <div ref={messagesRef} className="bg-linear-to-br from-gray-50 to-indigo-50/30 rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-indigo-100/50 h-[240px] sm:h-[280px] overflow-y-auto flex flex-col gap-2 sm:gap-3 custom-scrollbar">
-                          {displayedMessages.map((m, idx) => {
-                            let displayText = m.displayedContent;
-                            const isTypingThisMessage = idx === currentTypingIndex && m.isTyping;
-                            if (isTypingThisMessage) {
-                              displayText = typingProgress;
-                            }
+                    {/* Chat Messages */}
+                    <div className="flex flex-col gap-3 sm:gap-4">
+                      <div ref={messagesRef} className="bg-gray-50 p-3 sm:p-4 border border-zinc-200 h-[240px] sm:h-[280px] overflow-y-auto flex flex-col gap-2 sm:gap-3 custom-scrollbar">
+                        {displayedMessages.map((m, idx) => {
+                          let displayText = m.displayedContent;
+                          const isTypingThisMessage = idx === currentTypingIndex && m.isTyping;
+                          if (isTypingThisMessage) {
+                            displayText = typingProgress;
+                          }
 
-                            return (
-                              <div key={idx} className={`flex ${m.align === "right" ? "justify-end" : "justify-start"} animate-slideIn`}>
-                                <div className={
-                                  m.align === "right"
-                                    ? "max-w-[85%] bg-linear-to-br from-indigo-600 to-indigo-700 text-white rounded-xl sm:rounded-2xl rounded-br-md px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm shadow-lg shadow-indigo-500/30 transform hover:scale-[1.02] transition-transform"
-                                    : "max-w-[85%] bg-white text-gray-800 border border-gray-200 rounded-xl sm:rounded-2xl rounded-bl-md px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm shadow-md hover:shadow-lg transition-shadow"
-                                }>
-                                  {m.pending ? (
-                                    <span className="inline-flex items-center gap-2">
-                                      <span className="text-xs sm:text-sm font-medium">Processing your request</span>
-                                      <span className="inline-flex gap-1">
-                                        <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce" style={{ animationDelay: '-0.3s' }}></span>
-                                        <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce" style={{ animationDelay: '-0.15s' }}></span>
-                                        <span className="w-1.5 h-1.5 bg-current rounded-full animate-bounce"></span>
-                                      </span>
+                          return (
+                            <div key={idx} className={`flex ${m.align === "right" ? "justify-end" : "justify-start"} animate-slideIn`}>
+                              <div className={
+                                m.align === "right"
+                                  ? "max-w-[85%] bg-indigo-900 text-white border border-indigo-950 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm shadow-md"
+                                  : "max-w-[85%] bg-white text-gray-900 border border-gray-300 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm shadow-sm"
+                              }>
+                                {m.pending ? (
+                                  <span className="inline-flex items-center gap-2">
+                                    <span className="text-xs sm:text-sm font-medium">Processing your request</span>
+                                    <span className="inline-flex gap-1">
+                                      <span className="w-1.5 h-1.5 bg-current animate-bounce" style={{ animationDelay: '-0.3s' }}></span>
+                                      <span className="w-1.5 h-1.5 bg-current animate-bounce" style={{ animationDelay: '-0.15s' }}></span>
+                                      <span className="w-1.5 h-1.5 bg-current animate-bounce"></span>
                                     </span>
-                                  ) : (
-                                    <span className="leading-relaxed">
-                                      {displayText}
-                                      {isTypingThisMessage && displayText.length < m.content.length && (
-                                        <span className="inline-block w-0.5 h-3 sm:h-4 bg-current ml-1 animate-pulse"></span>
-                                      )}
-                                    </span>
-                                  )}
-                                </div>
+                                  </span>
+                                ) : (
+                                  <span className="leading-relaxed">
+                                    {displayText}
+                                    {isTypingThisMessage && displayText.length < m.content.length && (
+                                      <span className="inline-block w-0.5 h-3 sm:h-4 bg-current ml-1 animate-pulse"></span>
+                                    )}
+                                  </span>
+                                )}
                               </div>
-                            );
-                          })}
-                        </div>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>

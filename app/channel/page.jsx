@@ -260,16 +260,14 @@ export default function ChannelPage() {
         <div className="max-w-xl mx-auto pt-28 pb-20 px-4">
           
           {/* Channel Header Profile Summary */}
-          <div className="bg-white border border-slate-200 rounded-2xl p-6 mb-8 text-center shadow-xs relative overflow-hidden group">
+          <div className="bg-white border-2 border-zinc-900 p-6 mb-8 text-center shadow-md relative overflow-hidden group">
             {/* Design accents */}
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-indigo-500 via-indigo-650 to-purple-650" />
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-indigo-900" />
             
-            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-indigo-650 to-purple-650 p-[3px] mx-auto mb-3 shadow-md">
-              <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                <span className="text-indigo-650 font-black text-lg tracking-tighter" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
-                  NJ
-                </span>
-              </div>
+            <div className="w-16 h-16 border-2 border-indigo-900 bg-zinc-950 flex items-center justify-center mx-auto mb-3 shadow-md">
+              <span className="text-white font-black text-xl tracking-tighter" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
+                NJ
+              </span>
             </div>
             
             <h1 className="text-2xl font-black text-slate-950 flex items-center justify-center gap-1.5 leading-tight">
@@ -277,12 +275,11 @@ export default function ChannelPage() {
               <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500 shrink-0" />
             </h1>
             
-            <p className="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1 flex items-center justify-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Technology & Design Studio</span>
+            <p className="text-xs text-indigo-900 font-mono font-bold uppercase tracking-widest mt-1 flex items-center justify-center gap-1">
+              <span>// TECHNOLOGY & DESIGN STUDIO</span>
             </p>
             
-            <p className="text-xs text-slate-500 mt-3 max-w-sm mx-auto leading-relaxed">
+            <p className="text-xs text-slate-600 mt-3 max-w-sm mx-auto leading-relaxed font-medium">
               Sharing our latest engineering updates, live workshops, open-source releases, and behind-the-scenes logs in real time.
             </p>
           </div>
@@ -290,13 +287,13 @@ export default function ChannelPage() {
           {/* Feed Content */}
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <RefreshCw className="w-6 h-6 text-indigo-650 animate-spin" />
-              <p className="text-slate-400 text-xs font-bold uppercase tracking-wider">Loading updates...</p>
+              <RefreshCw className="w-6 h-6 text-indigo-800 animate-spin" />
+              <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Loading updates...</p>
             </div>
           ) : visiblePosts.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-slate-200 rounded-2xl shadow-xs">
-              <MessageSquare className="w-12 h-12 text-slate-200 mx-auto mb-3" />
-              <p className="text-slate-400 text-sm font-semibold">No announcements posted yet.</p>
+            <div className="text-center py-20 bg-white border-2 border-zinc-300 shadow-sm">
+              <MessageSquare className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+              <p className="text-slate-500 text-sm font-semibold">No announcements posted yet.</p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -318,18 +315,16 @@ export default function ChannelPage() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="bg-white border border-slate-200 rounded-2xl shadow-xs overflow-hidden flex flex-col hover:shadow-md transition-shadow duration-300"
+                    className="bg-white border-2 border-zinc-200 hover:border-indigo-900 shadow-md transition-colors duration-300 flex flex-col"
                   >
                     {/* Header */}
-                    <div className="p-4 flex items-center justify-between border-b border-slate-100 bg-white">
+                    <div className="p-4 flex items-center justify-between border-b border-slate-200 bg-white">
                       <div className="flex items-center gap-3">
                         {/* Custom Studio Avatar Ring */}
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-600 via-indigo-500 to-purple-650 p-[2px] shadow-sm shrink-0">
-                          <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                            <span className="text-indigo-650 font-black text-xs tracking-tighter" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
-                              NJ
-                            </span>
-                          </div>
+                        <div className="w-10 h-10 border border-indigo-900 bg-zinc-950 flex items-center justify-center shrink-0">
+                          <span className="text-white font-black text-sm tracking-tighter" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
+                            NJ
+                          </span>
                         </div>
                         
                         <div>
@@ -344,14 +339,14 @@ export default function ChannelPage() {
                           <div className="flex items-center gap-1.5 mt-1 text-[11px] text-slate-400 font-semibold leading-none">
                             <span>{getRelativeTimeString(post.date)}</span>
                             <span>•</span>
-                            <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 rounded text-[9px] font-bold uppercase tracking-wider">
+                            <span className="px-2 py-0.5 bg-indigo-950 border border-indigo-800 text-white text-[9px] font-bold uppercase tracking-wider">
                               {post.category || "Update"}
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      <button className="text-slate-400 hover:text-slate-600 p-1.5 rounded-full hover:bg-slate-50 transition-colors">
+                      <button className="text-slate-400 hover:text-slate-600 p-1.5 hover:bg-slate-100 transition-colors">
                         <MoreHorizontal className="w-4 h-4" />
                       </button>
                     </div>
@@ -366,7 +361,7 @@ export default function ChannelPage() {
                         {shouldTruncate && (
                           <button
                             onClick={() => toggleTextExpansion(post.id)}
-                            className="font-bold text-indigo-650 hover:underline cursor-pointer focus:outline-none ml-1"
+                            className="font-bold text-indigo-800 hover:underline cursor-pointer focus:outline-none ml-1"
                           >
                             {isTextExpanded ? "show less" : "see more"}
                           </button>
@@ -376,25 +371,25 @@ export default function ChannelPage() {
 
                     {/* Image block */}
                     {post.image && (
-                      <div className="relative w-full max-h-[440px] bg-slate-100 border-y border-slate-100 flex items-center justify-center overflow-hidden">
+                      <div className="relative w-full max-h-[440px] bg-slate-100 border-y border-slate-200 flex items-center justify-center overflow-hidden">
                         <img
                           src={post.image}
                           alt={post.title}
-                          className="w-full h-auto max-h-[440px] object-cover hover:scale-[1.01] transition-transform duration-500"
+                          className="w-full h-auto max-h-[440px] object-cover"
                           loading="lazy"
                         />
                       </div>
                     )}
 
                     {/* Action Bar (Likes and Comments) */}
-                    <div className="px-4 py-2 border-t border-slate-100 flex items-center justify-between bg-slate-50/40">
+                    <div className="px-4 py-2.5 border-t border-slate-200 flex items-center justify-between bg-slate-50">
                       <div className="flex items-center gap-2">
                         {/* Like pop trigger */}
                         <motion.button
-                          whileTap={{ scale: 1.2 }}
+                          whileTap={{ scale: 1.1 }}
                           onClick={() => handleLike(post.id)}
-                          className={`flex items-center gap-1.5 py-1.5 px-3 rounded-lg hover:bg-slate-100/80 transition-all font-bold text-xs cursor-pointer ${
-                            postLikes.liked ? "text-rose-600" : "text-slate-500 hover:text-slate-800"
+                          className={`flex items-center gap-1.5 py-1.5 px-3 border border-gray-300 bg-white hover:border-indigo-900 transition-all font-bold text-xs cursor-pointer ${
+                            postLikes.liked ? "text-rose-600 border-rose-400" : "text-slate-700"
                           }`}
                         >
                           <Heart className={`w-4 h-4 transition-colors ${postLikes.liked ? "fill-rose-600" : ""}`} />
@@ -403,7 +398,7 @@ export default function ChannelPage() {
 
                         <button
                           onClick={() => toggleComments(post.id)}
-                          className="flex items-center gap-1.5 py-1.5 px-3 rounded-lg hover:bg-slate-100/80 text-slate-500 hover:text-slate-800 transition-all font-bold text-xs cursor-pointer"
+                          className="flex items-center gap-1.5 py-1.5 px-3 border border-gray-300 bg-white text-slate-700 hover:border-indigo-900 transition-all font-bold text-xs cursor-pointer"
                         >
                           <MessageSquare className="w-4 h-4" />
                           <span>{postComments.length}</span>
@@ -416,7 +411,7 @@ export default function ChannelPage() {
                           href={post.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-xs font-bold text-indigo-650 hover:text-indigo-800 py-1.5 px-3 rounded-lg hover:bg-indigo-50/70 transition-all shrink-0"
+                          className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white bg-indigo-900 border border-indigo-950 py-1.5 px-3.5 hover:bg-indigo-800 transition-all shrink-0 shadow-xs"
                         >
                           <span>{post.linkText || "Explore"}</span>
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -432,7 +427,7 @@ export default function ChannelPage() {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="border-t border-slate-100 bg-slate-50/50 overflow-hidden"
+                          className="border-t border-slate-200 bg-slate-50 overflow-hidden"
                         >
                           <div className="p-4 sm:p-5 space-y-4">
                             
@@ -444,19 +439,19 @@ export default function ChannelPage() {
                               >
                                 {postComments.map((cmt) => (
                                   <div key={cmt.id} className="flex gap-2.5 items-start">
-                                    {/* Generated avatar, seeded by anonymous visitor id */}
-                                    <div className="shrink-0 rounded-full overflow-hidden border border-slate-200">
+                                    {/* Generated avatar */}
+                                    <div className="shrink-0 border border-slate-300 overflow-hidden">
                                       <Avatar size={32} name={cmt.author} variant="beam" colors={AVATAR_COLORS} />
                                     </div>
                                     {/* comment bubble */}
-                                    <div className="flex-1 bg-white border border-slate-200/80 p-3 rounded-2xl text-xs">
+                                    <div className="flex-1 bg-white border border-slate-200 p-3 text-xs">
                                       <div className="flex justify-between items-start mb-0.5">
                                         <div>
                                           <span className="font-extrabold text-slate-900 block leading-tight">
                                             {cmt.author}
                                           </span>
                                           {cmt.headline && (
-                                            <span className="text-[10px] text-slate-400 block mt-0.5 leading-none font-medium">
+                                            <span className="text-[10px] text-slate-500 block mt-0.5 leading-none font-medium">
                                               {cmt.headline}
                                             </span>
                                           )}
@@ -478,14 +473,14 @@ export default function ChannelPage() {
                             {/* Add Comment Form */}
                             <form
                               onSubmit={(e) => handleAddComment(e, post.id)}
-                              className="space-y-2 mt-2 pt-2 border-t border-slate-200/60"
+                              className="space-y-2 mt-2 pt-2 border-t border-slate-200"
                             >
-                              <div className="flex items-center gap-1.5 px-0.5 text-[10px] text-slate-400 font-semibold">
-                                <div className="shrink-0 rounded-full overflow-hidden border border-slate-200">
+                              <div className="flex items-center gap-1.5 px-0.5 text-[10px] text-slate-500 font-semibold">
+                                <div className="shrink-0 border border-slate-300 overflow-hidden">
                                   <Avatar size={18} name={visitorId} variant="beam" colors={AVATAR_COLORS} />
                                 </div>
                                 <span>
-                                  Commenting as <span className="text-slate-600 font-bold">{visitorId}</span>
+                                  Commenting as <span className="text-slate-900 font-bold">{visitorId}</span>
                                 </span>
                               </div>
                               <div className="flex gap-2 items-center">
@@ -498,11 +493,11 @@ export default function ChannelPage() {
                                     ...commentInputs,
                                     [post.id]: e.target.value
                                   })}
-                                  className="flex-1 px-3 py-2 bg-white border border-slate-200 rounded-lg text-xs outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-slate-800"
+                                  className="flex-1 px-3 py-2 bg-white border border-slate-300 text-xs outline-none focus:border-indigo-900 text-slate-900 font-medium"
                                 />
                                 <button
                                   type="submit"
-                                  className="p-2.5 bg-indigo-650 hover:bg-indigo-600 text-white rounded-lg transition-all shrink-0 cursor-pointer shadow-sm hover:shadow-indigo-650/20"
+                                  className="p-2.5 bg-indigo-900 hover:bg-indigo-800 text-white transition-colors border border-indigo-950 shrink-0 cursor-pointer shadow-xs"
                                 >
                                   <Send className="w-3.5 h-3.5" />
                                 </button>
@@ -523,9 +518,9 @@ export default function ChannelPage() {
           {/* Loader for Infinite Scroll */}
           {!loading && visibleCount < posts.length && (
             <div id="infinite-scroll-trigger" className="flex items-center justify-center py-8">
-              <div className="flex items-center gap-2 bg-white border border-slate-250 py-2 px-4 rounded-full shadow-xxs">
-                <RefreshCw className="w-3.5 h-3.5 text-indigo-600 animate-spin" />
-                <span className="text-slate-500 text-xs font-semibold">Loading more updates...</span>
+              <div className="flex items-center gap-2 bg-white border border-gray-300 py-2 px-4 shadow-xs">
+                <RefreshCw className="w-3.5 h-3.5 text-indigo-900 animate-spin" />
+                <span className="text-slate-600 text-xs font-bold uppercase tracking-wider">Loading more updates...</span>
               </div>
             </div>
           )}

@@ -64,7 +64,7 @@ export default function LatestProjects() {
           <div className="mb-8 flex justify-end">
             <div className="text-right">
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-3">
-                Crafted With Passion, <span className="text-indigo-600">Built to Impress</span>
+                Crafted With Passion, <span className="text-indigo-800">Built to Impress</span>
               </h2>
               <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl ml-auto">
                 Turning bold ideas into reality with precision and creativity. Every project tells a story of innovation and excellence.
@@ -72,7 +72,7 @@ export default function LatestProjects() {
               <div className="mt-4 flex justify-end">
                 <Link
                   href="/projects"
-                  className="inline-flex items-center px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 font-medium hover:bg-indigo-200 transition-colors text-sm"
+                  className="inline-flex items-center px-4 py-1.5 bg-indigo-900 hover:bg-indigo-800 text-white font-medium transition-colors text-sm border border-indigo-950 shadow-sm"
                 >
                   All Projects
                   <ArrowRight className="ml-2 w-4 h-4" />
@@ -95,10 +95,10 @@ export default function LatestProjects() {
                   x: { type: "spring", stiffness: 300, damping: 30 },
                   opacity: { duration: 0.2 }
                 }}
-                className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center border border-indigo-600 rounded-2xl p-4 sm:p-5 bg-white"
+                className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-center border-2 border-indigo-900 p-4 sm:p-5 bg-white shadow-xl"
               >
                 {/* Left Side - Image */}
-                <div className="relative h-[280px] sm:h-[320px] lg:h-[360px] rounded-2xl overflow-hidden shadow-2xl">
+                <div className="relative h-[280px] sm:h-[320px] lg:h-[360px] border border-gray-300 overflow-hidden shadow-md">
                   {project.image ? (
                     <Image
                       src={project.image}
@@ -115,68 +115,49 @@ export default function LatestProjects() {
 
                   {/* Category Badge */}
                   <div className="absolute top-6 left-6">
-                    <span className="px-4 py-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full text-sm font-semibold text-indigo-600 dark:text-indigo-400">
+                    <span className="px-4 py-2 bg-indigo-950 border border-indigo-800 text-white text-xs font-bold uppercase tracking-wider">
                       {project.category}
                     </span>
                   </div>
                 </div>
 
                 {/* Right Side - Details */}
-                <div className="space-y-3 sm:space-y-4">
+                <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                   {/* Title */}
                   <motion.h3
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2, duration: 0.5 }}
-                    className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white"
+                    transition={{ delay: 0.3 }}
+                    className="text-2xl sm:text-3xl font-black text-gray-900 dark:text-white"
                   >
                     {project.title}
                   </motion.h3>
 
                   {/* Subtitle */}
                   <motion.p
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                    className="text-base sm:text-lg text-gray-600 dark:text-gray-400"
+                    transition={{ delay: 0.4 }}
+                    className="text-indigo-800 dark:text-indigo-400 font-semibold text-sm sm:text-base"
                   >
                     {project.subtitle}
                   </motion.p>
 
                   {/* Description */}
                   <motion.p
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4, duration: 0.5 }}
-                    className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed"
+                    transition={{ delay: 0.5 }}
+                    className="text-gray-600 dark:text-gray-300 text-sm sm:text-base line-clamp-3 leading-relaxed"
                   >
                     {project.description}
                   </motion.p>
 
-                  {/* Website Link */}
-                  {project.liveUrl && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.5, duration: 0.5 }}
-                      className="pt-1"
-                    >
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-sm sm:text-base font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
-                      >
-                        {project.liveUrl}
-                      </a>
-                    </motion.div>
-                  )}
-
                   {/* Technologies */}
                   <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6, duration: 0.5 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
                     className="flex flex-wrap gap-1.5 sm:gap-2"
                   >
                     {project.technologies.slice(0, 6).map((tech, index) => (
@@ -185,7 +166,7 @@ export default function LatestProjects() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.7 + index * 0.05, duration: 0.3 }}
-                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-blue-50 dark:bg-blue-900/20 text-indigo-600 dark:text-indigo-400 rounded-lg text-xs sm:text-sm font-medium"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-indigo-50 border border-indigo-200 text-indigo-900 text-xs sm:text-sm font-semibold"
                       >
                         {tech}
                       </motion.span>
@@ -195,7 +176,7 @@ export default function LatestProjects() {
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.7 + 6 * 0.05, duration: 0.3 }}
-                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-lg text-xs sm:text-sm font-medium"
+                        className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gray-100 border border-gray-300 text-gray-700 text-xs sm:text-sm font-medium"
                       >
                         +{project.technologies.length - 6} more
                       </motion.span>
@@ -218,7 +199,7 @@ export default function LatestProjects() {
                     {/* View Details Link */}
                     <Link
                       href={`/projects/${project.slug}`}
-                      className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-semibold hover:gap-2 transition-all duration-300 text-sm sm:text-base"
+                      className="flex items-center gap-1.5 text-indigo-800 font-bold hover:gap-2 transition-all duration-300 text-sm sm:text-base"
                     >
                       View Details
                       <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
@@ -239,9 +220,9 @@ export default function LatestProjects() {
                   }}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
-                  className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                    ? 'w-8 bg-indigo-600'
-                    : 'w-2 bg-gray-300 dark:bg-gray-600'
+                  className={`h-2 transition-all duration-300 ${index === currentIndex
+                    ? 'w-8 bg-indigo-800'
+                    : 'w-2 bg-gray-400'
                     }`}
                   aria-label={`Go to project ${index + 1}`}
                 />
