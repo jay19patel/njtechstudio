@@ -2,12 +2,12 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence, useScroll, useMotionValueEvent, MotionConfig } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
 import AudioPlayer from "./AudioPlayer";
-import { Menu, X } from "lucide-react";
+import { Menu, X, MessageSquare, Bot, Send, Sparkles, Globe, ChevronUp, Layers } from "lucide-react";
 import { useContactModal } from "../context/ContactModalContext";
 
 export default function Navbar() {
@@ -15,28 +15,41 @@ export default function Navbar() {
   const { openContactModal } = useContactModal();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hoveredImage, setHoveredImage] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState([
+    {
+      id: 1,
+      sender: "assistant",
+      text: "👋 Hi! Thanks for visiting NJTechStudio. Ask me anything about custom Web+AI development, ERP automation, or start your project inquiry!",
+    },
+  ]);
   const [isNavigating, setIsNavigating] = useState(false);
+  const chatEndRef = useRef(null);
 
   const [hidden, setHidden] = useState(false);
   const router = useRouter();
 
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    if (isChatOpen) {
+      scrollToBottom();
+    }
+  }, [chatMessages, isChatOpen]);
+
   const handleLogoClick = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     if (pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
     setIsNavigating(true);
-
-    // Wait for enter animation
-    await new Promise(resolve => setTimeout(resolve, 800)); // Match transition duration
-
+    await new Promise((resolve) => setTimeout(resolve, 600));
     router.push("/");
-
-    // Wait for page load/route change then exit
-    await new Promise(resolve => setTimeout(resolve, 500));
     setIsNavigating(false);
   };
 
@@ -51,10 +64,43 @@ export default function Navbar() {
     }
   });
 
+  const getPageName = (path) => {
+    if (!path || path === "/") return "Home";
+    if (path.startsWith("/about")) return "About";
+    if (path.startsWith("/projects")) return "Projects";
+    if (path.startsWith("/channel")) return "Channel";
+    return "Studio";
+  };
 
+  const handleChatSubmit = (e) => {
+    e.preventDefault();
+    const text = chatInput.trim();
+    if (!text) return;
 
-  // Hide Navbar completely on the admin panel. This must come after every
-  // hook above so hook call order stays identical across renders.
+    const userMsg = { id: Date.now(), sender: "user", text };
+    const botMsg = {
+      id: Date.now() + 1,
+      sender: "assistant",
+      text: `Thanks for your query: "${text}"! 🚀 Jay Patel from NJ Tech Studio will review your message. Click 'Start A Project' below to share your project details directly!`,
+    };
+
+    setChatMessages((prev) => [...prev, userMsg, botMsg]);
+    setChatInput("");
+    if (!isChatOpen) setIsChatOpen(true);
+  };
+
+  const handleQuickPill = (label) => {
+    const userMsg = { id: Date.now(), sender: "user", text: `Tell me about ${label}` };
+    const botMsg = {
+      id: Date.now() + 1,
+      sender: "assistant",
+      text: `Thanks for inquiring about ${label}! 🚀 Click 'Start A Project' below to submit your project requirements directly.`,
+    };
+    setChatMessages((prev) => [...prev, userMsg, botMsg]);
+    if (!isChatOpen) setIsChatOpen(true);
+  };
+
+  // Hide Navbar completely on the admin panel
   if (pathname && pathname.startsWith("/admin")) {
     return null;
   }
@@ -66,17 +112,17 @@ export default function Navbar() {
     { label: "About", href: "/about", num: "02", desc: "Studio & Founder Bio" },
     { label: "Projects", href: "/projects", num: "03", desc: "Crafted Solutions & Apps" },
     { label: "Channel", href: "/channel", num: "04", desc: "Tech Content & Videos" },
-    { label: "Contact", href: "modal", num: "05", desc: "Start A Project Inquiry" },
   ];
 
   const socialLinks = [
     { name: "Instagram", href: "https://www.instagram.com/njtechstudio.in/" },
     { name: "YouTube", href: "https://www.youtube.com/@njtechstudio" },
-    { name: "LinkedIn", href: "https://www.linkedin.com/in/jayy19patel/" }
+    { name: "LinkedIn", href: "https://www.linkedin.com/in/jayy19patel/" },
   ];
 
   return (
     <>
+      {/* Top Left Logo Only */}
       <motion.nav
         variants={{
           visible: { y: 0 },
@@ -84,122 +130,179 @@ export default function Navbar() {
         }}
         animate={hidden ? "hidden" : "visible"}
         transition={{ duration: 0.35, ease: "easeInOut" }}
-        className={`fixed top-0 left-0 w-full z-[100] px-6 py-6 flex justify-between items-center pointer-events-none`}
+        className="fixed top-0 left-0 w-full z-[100] px-4 sm:px-8 py-6 flex justify-between items-center pointer-events-none"
       >
-
-        {/* Unified Container for Mobile / Transparent Wrapper for Desktop */}
-        <div className="w-full max-w-7xl mx-auto bg-black sm:bg-transparent border border-indigo-900 sm:border-none px-3 py-2 sm:px-0 sm:py-0 shadow-lg sm:shadow-none flex items-center justify-between pointer-events-auto sm:pointer-events-none">
-
-          {/* Left: Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className={`flex items-center justify-center pointer-events-auto sm:bg-black sm:border sm:border-indigo-900 sm:px-4 sm:py-0 sm:shadow-lg`}
-          >
-            <Link href="/" onClick={handleLogoClick} className="flex items-center justify-center">
-              <span className="font-normal tracking-tight sm:tracking-wide text-2xl sm:text-4xl md:text-5xl leading-[0.85] pt-1 pb-1" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
-                <span className="text-indigo-500">NJ</span><span className="text-white">TechStudio</span>
-              </span>
-            </Link>
-          </motion.div>
-
-          {/* Right: Actions Group */}
-          <motion.div
-            className="flex items-center gap-2 sm:gap-4 pointer-events-auto sm:bg-black sm:border sm:border-indigo-900 sm:px-4 sm:py-2 sm:shadow-lg"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-          >
-            {/* Info Text & Audio */}
-            <div className="flex items-center gap-4">
-              {/* Info Text - Hidden on small screens */}
-              <motion.div
-                initial={{ opacity: 1, x: 0 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="hidden lg:flex flex-col items-end text-xs font-medium text-white mr-4"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-indigo-500 animate-pulse"></span>
-                  <span>Available 9 AM - 6 PM</span>
-                </div>
-                <div>Valsad, Gujarat, India</div>
-              </motion.div>
-
-              {/* Audio Player */}
-              <div className={`mr-2 transition-all duration-300 opacity-100 translate-x-0`}>
-                <AudioPlayer />
-              </div>
-            </div>
-
-
-            {/* Unified Menu/Close Button */}
-            <MotionConfig
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          className="flex items-center justify-center pointer-events-auto bg-black border border-indigo-900 px-4 py-1 rounded-xl shadow-xl"
+        >
+          <Link href="/" onClick={handleLogoClick} className="flex items-center justify-center">
+            <span
+              className="font-normal tracking-tight sm:tracking-wide text-2xl sm:text-4xl md:text-5xl leading-[0.85] pt-1 pb-1"
+              style={{ fontFamily: "'Jersey 10', sans-serif" }}
             >
-              <motion.button
-                initial={false}
-                animate={isMenuOpen ? "open" : "closed"}
-                onClick={toggleMenu}
-                whileTap={{ scale: 0.95 }}
-                className="relative h-10 w-10 border border-zinc-700 bg-zinc-900 z-[110]"
-                aria-label="Toggle menu"
-              >
-                <motion.span
-                  variants={{
-                    open: {
-                      rotate: ["0deg", "0deg", "45deg"],
-                      top: ["35%", "50%", "50%"],
-                    },
-                    closed: {
-                      rotate: ["45deg", "0deg", "0deg"],
-                      top: ["50%", "50%", "35%"],
-                    },
-                  }}
-                  className="absolute h-[2px] w-6 bg-white"
-                  style={{ y: "-50%", left: "50%", x: "-50%", top: "35%" }}
-                />
-                <motion.span
-                  variants={{
-                    open: {
-                      rotate: ["0deg", "0deg", "-45deg"],
-                    },
-                    closed: {
-                      rotate: ["-45deg", "0deg", "0deg"],
-                    },
-                  }}
-                  className="absolute h-[2px] w-6 bg-white"
-                  style={{ left: "50%", x: "-50%", top: "50%", y: "-50%" }}
-                />
-                <motion.span
-                  variants={{
-                    open: {
-                      rotate: ["0deg", "0deg", "45deg"],
-                      bottom: ["35%", "50%", "50%"],
-                      left: "50%",
-                    },
-                    closed: {
-                      rotate: ["45deg", "0deg", "0deg"],
-                      bottom: ["50%", "50%", "35%"],
-                      left: "calc(50% + 10px)",
-                    },
-                  }}
-                  className="absolute h-[2px] w-4 bg-white"
-                  style={{
-                    x: "-50%",
-                    y: "50%",
-                    bottom: "35%",
-                    left: "calc(50% + 10px)",
-                  }}
-                />
-              </motion.button>
-            </MotionConfig>
-          </motion.div>
-        </div>
+              <span className="text-indigo-500">NJ</span>
+              <span className="text-white">TechStudio</span>
+            </span>
+          </Link>
+        </motion.div>
       </motion.nav>
+
+      {/* Floating Bottom Dock Container (WHITE THEME) */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[110] w-[95%] max-w-[840px] flex flex-col gap-2.5 pointer-events-auto"
+      >
+        {/* Top Popover: Studio AI Assistant Card (White Theme) */}
+        <AnimatePresence>
+          {isChatOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: 15, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 15, scale: 0.96 }}
+              transition={{ duration: 0.25 }}
+              className="bg-white border-2 border-zinc-200 text-zinc-900 rounded-2xl p-4 shadow-[0_20px_60px_rgba(0,0,0,0.18)] space-y-3.5 relative overflow-hidden"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md">
+                    <Bot className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-black text-zinc-900 uppercase tracking-tight">
+                      Studio AI Assistant
+                    </h4>
+                    <p className="text-[11px] text-zinc-500 font-semibold">
+                      Real-time project & deal intelligence
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsChatOpen(false)}
+                  className="w-7 h-7 bg-zinc-100 hover:bg-zinc-200 border border-zinc-300 text-zinc-600 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+                  aria-label="Close assistant"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Scrollable Chat History Log */}
+              <div className="max-h-56 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin">
+                {chatMessages.map((msg) => (
+                  <div
+                    key={msg.id}
+                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`p-3 rounded-2xl text-xs font-semibold leading-relaxed max-w-[88%] ${
+                        msg.sender === "user"
+                          ? "bg-indigo-600 text-white rounded-tr-none shadow-md"
+                          : "bg-zinc-100 text-zinc-900 border border-zinc-200 rounded-tl-none shadow-sm"
+                      }`}
+                    >
+                      {msg.text}
+                    </div>
+                  </div>
+                ))}
+                <div ref={chatEndRef} />
+              </div>
+
+              {/* Quick Action Suggestion Pills */}
+              <div className="flex flex-wrap gap-2 pt-1 border-t border-zinc-100">
+                <button
+                  type="button"
+                  onClick={() => handleQuickPill("Web & AI Dev")}
+                  className="px-3 py-1.5 bg-zinc-100 hover:bg-black border border-zinc-300 hover:border-black text-zinc-800 hover:text-white rounded-xl text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>📊 Web & AI Dev</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleQuickPill("ERP Systems")}
+                  className="px-3 py-1.5 bg-zinc-100 hover:bg-black border border-zinc-300 hover:border-black text-zinc-800 hover:text-white rounded-xl text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5"
+                >
+                  <span>👥 ERP Systems</span>
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Floating Bottom Card: Single Line Horizontal Dock (WHITE THEME) */}
+        <div className="bg-white/95 backdrop-blur-md border-2 border-zinc-200 rounded-full p-2 sm:p-2.5 shadow-[0_20px_60px_rgba(0,0,0,0.18)] flex items-center gap-2 sm:gap-2.5 w-full">
+          {/* Left Pill: Logo */}
+          <button
+            type="button"
+            onClick={handleLogoClick}
+            className="px-3 sm:px-3.5 py-1.5 sm:py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full text-[11px] sm:text-xs font-black uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 shadow-md shrink-0"
+          >
+            <Layers className="w-3.5 h-3.5 text-indigo-200" />
+            <span className="hidden sm:inline">NJTechStudio</span>
+            <span className="sm:hidden">NJ</span>
+          </button>
+
+          {/* AI Assistant Input Field (Flexible middle space) */}
+          <form onSubmit={handleChatSubmit} className="relative flex items-center flex-1 min-w-[120px]">
+            <div className="absolute left-3 text-indigo-600 pointer-events-none flex items-center">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </div>
+            <input
+              type="text"
+              placeholder="Ask AI Assistant or start inquiry..."
+              value={chatInput}
+              onFocus={() => setIsChatOpen(true)}
+              onChange={(e) => {
+                setChatInput(e.target.value);
+                if (!isChatOpen) setIsChatOpen(true);
+              }}
+              className="w-full bg-zinc-100 border border-zinc-200 focus:border-indigo-600 text-zinc-900 text-xs sm:text-sm pl-8 sm:pl-9 pr-9 sm:pr-10 py-1.5 sm:py-2 rounded-full outline-none font-semibold transition-colors placeholder:text-zinc-500 shadow-inner"
+            />
+            <button
+              type="submit"
+              className="absolute right-1 w-7 h-7 sm:w-8 sm:h-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-md transition-transform active:scale-95 cursor-pointer"
+              aria-label="Send query"
+            >
+              <Send className="w-3.5 h-3.5" />
+            </button>
+          </form>
+
+          {/* Audio Player, Home & Menu Toggle Controls (Right Group) */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+            <AudioPlayer />
+
+            {/* Home / Current Page Dropdown Pill & Menu Toggle Group */}
+            <div className="flex items-center bg-zinc-900 border border-zinc-800 rounded-full p-0.5 shadow-md">
+              <button
+                type="button"
+                onClick={toggleMenu}
+                className="px-3 sm:px-3.5 py-1.5 text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider transition-all cursor-pointer flex items-center gap-1.5 hover:text-indigo-300"
+              >
+                <Globe className="w-3.5 h-3.5 text-indigo-400" />
+                <span>{getPageName(pathname)}</span>
+                <ChevronUp className={`w-3.5 h-3.5 transition-transform duration-300 ${isMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              <span className="w-[1px] h-4 bg-zinc-700/80 my-auto" />
+
+              <button
+                type="button"
+                onClick={toggleMenu}
+                className="w-7 h-7 sm:w-8 sm:h-8 hover:bg-zinc-800 text-white rounded-full flex items-center justify-center transition-colors cursor-pointer"
+                aria-label="Toggle Menu"
+              >
+                {isMenuOpen ? <X className="w-4 h-4 text-indigo-400" /> : <Menu className="w-4 h-4" />}
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
 
       {/* Fullscreen Menu Overlay */}
       < AnimatePresence >
