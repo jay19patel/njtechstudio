@@ -27,7 +27,7 @@ export default function CTASection() {
             <div className="space-y-3 text-left max-w-3xl">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-700 text-white text-xs font-mono font-bold uppercase tracking-widest shadow-md">
                 <span className="w-2 h-2 bg-indigo-500 inline-block"></span>
-                <span>// START A PROJECT</span>
+                <span>{"// START A PROJECT"}</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight leading-[1.05]">

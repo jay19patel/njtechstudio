@@ -84,19 +84,21 @@ const FAQSection = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.6 }}
-                        className="flex flex-col md:flex-row items-center md:items-start justify-center gap-6 sm:gap-8 lg:gap-12"
+                        className="flex flex-col md:flex-row items-center md:items-stretch justify-center gap-6 sm:gap-8 lg:gap-12"
                     >
                         {/* Image on Left */}
-                        <div className="w-full md:w-auto flex justify-center">
-                            <img
-                                className="max-w-xs sm:max-w-sm w-full h-[400px] sm:h-[500px] md:h-[600px] border-2 border-zinc-900 shadow-lg object-cover object-center"
-                                src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=830&h=844&auto=format&fit=crop"
-                                alt="FAQ illustration"
-                            />
+                        <div className="w-full md:w-1/2 flex justify-center md:justify-end">
+                            <div className="relative w-full aspect-square md:aspect-auto md:h-full min-h-[300px] rounded-[2rem] overflow-hidden border border-zinc-200 shadow-md">
+                                <img
+                                    className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
+                                    src="/character.png"
+                                    alt="NJ Tech Studio Character"
+                                />
+                            </div>
                         </div>
 
                         {/* FAQ Content on Right */}
-                        <div className="flex-1 w-full">
+                        <div className="w-full md:w-1/2">
                             <div className="mb-6 sm:mb-8 text-center md:text-left">
                                 <p className="text-indigo-800 text-xs sm:text-sm font-bold uppercase tracking-wider mb-2">FAQ&apos;s</p>
                                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-gray-900 mb-4">

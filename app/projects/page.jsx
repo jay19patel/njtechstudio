@@ -55,7 +55,7 @@ export default function ProjectsPage() {
         <section className="relative w-full pt-32 lg:pt-40 pb-6 lg:pb-10 px-4 sm:px-8 lg:px-16">
           <div className="relative z-10 max-w-7xl mx-auto text-left space-y-4">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-700 text-white text-xs font-mono font-bold uppercase tracking-widest shadow-md">
-              // 02 . FEATURED WORK
+              {"// 02 . FEATURED WORK"}
             </div>
 
             <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter uppercase text-gray-900">

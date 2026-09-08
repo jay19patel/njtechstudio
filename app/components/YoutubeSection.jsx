@@ -38,7 +38,7 @@ export default function YoutubeSection() {
             <div className="relative z-10 text-center mb-8 sm:mb-10 md:mb-12 flex flex-col items-center">
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-700 text-white text-xs font-mono font-bold uppercase tracking-widest mb-3 shadow-md">
                 <span className="w-2 h-2 bg-indigo-500 inline-block"></span>
-                <span>// CONTENT & TUTORIALS</span>
+                <span>{"// CONTENT & TUTORIALS"}</span>
               </div>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight font-black text-white max-w-4xl mx-auto">
                 Everything you need to build & scale tech products 🎬
@@ -53,7 +53,7 @@ export default function YoutubeSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="bg-zinc-950 border-2 border-zinc-800 hover:border-indigo-800 hover:shadow-xl transition-all duration-300 group"
+                  className="bg-zinc-950 border border-zinc-800 hover:border-zinc-500 transition-colors duration-300 group"
                 >
                   <div className="relative aspect-video bg-zinc-950">
                     {playingVideo === card.videoId ? (

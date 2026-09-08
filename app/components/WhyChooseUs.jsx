@@ -48,116 +48,113 @@ export default function WhyChooseUs() {
               </p>
             </motion.div>
 
-            {/* Cards Grid — 4 cards, 2 rows of 2 */}
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5"
-            >
+          {/* Bento Box Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12 md:mt-20 relative">
+            {[
+              {
+                title: "Budget-Friendly",
+                subtitle: "High Value, Fair Pricing",
+                icon: "/icons/flaticon/budget-friendly.png",
+                text: "We keep quality high and costs practical. No over-engineering, no unnecessary complexity — just smart solutions that fit your budget and scale with your growth.",
+                badgeTitle: "Affordable Excellence",
+                badgeDesc: "Maximum ROI for your investment",
+                theme: "light",
+                span: "md:col-span-1 lg:col-span-2 row-span-1"
+              },
+              {
+                title: "Optimized Solutions",
+                subtitle: "Designed to Perform",
+                icon: "/icons/flaticon/optimized-solutions.png",
+                text: "Faster systems, cleaner UX, automated workflows, and future-proof architecture.",
+                badgeTitle: "Performance First",
+                badgeDesc: "Built for speed",
+                theme: "indigo",
+                span: "col-span-1 row-span-1"
+              },
+              {
+                title: "AI-Driven Approach",
+                subtitle: "Smarter, Faster, Scalable",
+                icon: "/icons/flaticon/ai-driven.png",
+                text: "Integrating AI wherever it truly makes sense — improving speed, accuracy, and overall efficiency.",
+                badgeTitle: "Future Ready",
+                badgeDesc: "Cutting-edge AI tech",
+                theme: "indigo",
+                span: "col-span-1 row-span-1"
+              },
+              {
+                title: "Reliable Delivery",
+                subtitle: "On Time, Every Time",
+                icon: "/icons/flaticon/reliable-delivery.png",
+                text: "Clear communication, transparent progress, and predictable delivery. We make development stress-free so your team can focus on what truly matters.",
+                badgeTitle: "Peace of Mind",
+                badgeDesc: "Consistent updates & support",
+                theme: "light",
+                span: "md:col-span-1 lg:col-span-2 row-span-1"
+              }
+            ].map((item, idx) => {
+              const isIndigo = item.theme === "indigo";
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ 
+                    duration: 0.5,
+                    ease: "easeOut",
+                    delay: idx * 0.1 
+                  }}
+                  className={`
+                    relative overflow-hidden group flex flex-col justify-between
+                    rounded-[2rem] p-6 sm:p-8 transition-colors duration-300 border
+                    ${item.span}
+                    ${isIndigo 
+                      ? 'bg-zinc-950 border-zinc-800 hover:border-zinc-600 hover:bg-zinc-900' 
+                      : 'bg-white border-gray-200 hover:border-gray-400'}
+                  `}
+                >
+                  {/* Top Content */}
+                  <div className="relative z-10 flex flex-col h-full justify-between gap-6">
+                    <div>
+                      <div className="flex items-center gap-4 mb-4">
+                        <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 ${isIndigo ? 'bg-zinc-900 border border-zinc-700' : 'bg-gray-100 border border-gray-200'}`}>
+                          <img 
+                            src={item.icon} 
+                            className="w-8 h-8 object-contain drop-shadow-sm" 
+                            alt={item.title} 
+                          />
+                        </div>
+                      </div>
+                      <h3 className={`text-xl sm:text-2xl font-black leading-tight mb-2 ${isIndigo ? 'text-white' : 'text-gray-900'}`}>
+                        {item.title}
+                      </h3>
+                      <p className={`text-sm font-medium ${isIndigo ? 'text-zinc-400' : 'text-gray-500'}`}>
+                        {item.subtitle}
+                      </p>
+                    </div>
 
-              {/* Card 1 */}
-              <motion.div variants={itemVariants} className="border border-gray-300 bg-white shadow-sm hover:shadow-xl hover:border-indigo-800 transition-shadow transition-colors duration-300 p-4 sm:p-5">
-                <div className="flex justify-between items-center mb-3 sm:mb-4">
-                  <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900">Budget-Friendly</div>
-                    <div className="text-gray-500 text-sm sm:text-base font-medium">High Value, Fair Pricing</div>
+                    <p className={`text-sm sm:text-base italic leading-relaxed font-medium mt-2 ${isIndigo ? 'text-zinc-300' : 'text-gray-600'}`}>
+                      &quot;{item.text}&quot;
+                    </p>
+
+                    <div className={`flex items-center gap-3 pt-4 border-t mt-auto ${isIndigo ? 'border-zinc-800' : 'border-gray-200'}`}>
+                      <div className={`p-2 rounded-lg border shadow-sm ${isIndigo ? 'bg-zinc-900 border-zinc-700' : 'bg-white border-gray-200'}`}>
+                        <CheckCircle2 className={`w-5 h-5 ${isIndigo ? 'text-indigo-500' : 'text-indigo-600'}`} />
+                      </div>
+                      <div>
+                        <div className={`text-sm font-bold ${isIndigo ? 'text-white' : 'text-gray-900'}`}>
+                          {item.badgeTitle}
+                        </div>
+                        <div className={`text-xs font-medium ${isIndigo ? 'text-zinc-400' : 'text-gray-500'}`}>
+                          {item.badgeDesc}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                  <img src="/icons/flaticon/budget-friendly.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Budget-Friendly" width={48} height={48} />
-                </div>
-
-                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  &quot;We keep quality high and costs practical. No over-engineering, no unnecessary complexity — just smart solutions that fit your budget and scale with your growth.&quot;
-                </p>
-
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-200">
-                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
-                  </div>
-                  <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Affordable Excellence</div>
-                    <div className="text-[10px] sm:text-xs text-gray-500">Maximum ROI for your investment</div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 2 */}
-              <motion.div variants={itemVariants} className="border-2 border-indigo-900 bg-indigo-50/40 shadow-sm hover:shadow-xl transition-shadow duration-300 p-4 sm:p-5">
-                <div className="flex justify-between items-center mb-3 sm:mb-4">
-                  <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900">Optimized Solutions</div>
-                    <div className="text-gray-500 text-sm sm:text-base font-medium">Designed to Perform</div>
-                  </div>
-                  <img src="/icons/flaticon/optimized-solutions.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Optimized Solutions" width={48} height={48} />
-                </div>
-
-                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  &quot;We don&apos;t just build — we optimize. Faster systems, cleaner UX, automated workflows, and future-proof architecture that supports long-term business growth.&quot;
-                </p>
-
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-200">
-                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
-                  </div>
-                  <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Performance First</div>
-                    <div className="text-[10px] sm:text-xs text-gray-500">Built for speed and scalability</div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 3 */}
-              <motion.div variants={itemVariants} className="border-2 border-indigo-900 bg-indigo-50/40 shadow-sm hover:shadow-xl transition-shadow duration-300 p-4 sm:p-5">
-                <div className="flex justify-between items-center mb-3 sm:mb-4">
-                  <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900">AI-Driven Approach</div>
-                    <div className="text-gray-500 text-sm sm:text-base font-medium">Smarter, Faster, Scalable</div>
-                  </div>
-                  <img src="/icons/flaticon/ai-driven.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="AI-Driven" width={48} height={48} />
-                </div>
-
-                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  &quot;From automations to custom LLM workflows, we integrate AI wherever it truly makes sense — improving speed, accuracy, and overall efficiency with measurable impact.&quot;
-                </p>
-
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-indigo-200">
-                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
-                  </div>
-                  <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Future Ready</div>
-                    <div className="text-[10px] sm:text-xs text-gray-500">Leveraging cutting-edge AI tech</div>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Card 4 */}
-              <motion.div variants={itemVariants} className="border border-gray-300 bg-white shadow-sm hover:shadow-xl hover:border-indigo-800 transition-shadow transition-colors duration-300 p-4 sm:p-5">
-                <div className="flex justify-between items-center mb-3 sm:mb-4">
-                  <div>
-                    <div className="text-xl sm:text-2xl font-bold text-gray-900">Reliable Delivery</div>
-                    <div className="text-gray-500 text-sm sm:text-base font-medium">On Time, Every Time</div>
-                  </div>
-                  <img src="/icons/flaticon/reliable-delivery.png" className="w-10 h-10 sm:w-12 sm:h-12 object-contain" alt="Reliable Delivery" width={48} height={48} />
-                </div>
-
-                <p className="text-sm sm:text-base md:text-lg text-gray-700 italic mb-3 sm:mb-4">
-                  &quot;Clear communication, transparent progress, and predictable delivery. We make development stress-free so your team can focus on what truly matters.&quot;
-                </p>
-
-                <div className="flex items-center gap-2 sm:gap-3 pt-3 border-t border-gray-200">
-                  <div className="p-1.5 bg-indigo-100 border border-indigo-300">
-                    <CheckCircle2 className="w-5 h-5 text-indigo-800" />
-                  </div>
-                  <div>
-                    <div className="text-xs sm:text-sm font-bold text-indigo-950">Peace of Mind</div>
-                    <div className="text-[10px] sm:text-xs text-gray-500">Consistent updates & support</div>
-                  </div>
-                </div>
-              </motion.div>
-
-            </motion.div>
+                </motion.div>
+              );
+            })}
+          </div>
           </div>
         </section>
       </MovingTextBg>

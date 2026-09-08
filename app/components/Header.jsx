@@ -312,14 +312,14 @@ export default function Navbar() {
             animate={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
             exit={{ clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" }}
             transition={{ duration: 1.2, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-black z-[90] text-white"
+            className="fixed top-0 left-0 w-screen h-[100dvh] bg-black z-[90] text-white overflow-y-auto"
           >
             {/* No separate close button here - the header button handles it */}
 
             <MovingTextBg text="MENU ">
               <div className="relative w-full h-full grid grid-cols-1 lg:grid-cols-12 gap-0">
                 {/* Left Side - Studio Info Panel */}
-                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-12 xl:p-16 border-r border-zinc-800/80 bg-zinc-950/90 pt-44 lg:pt-48 xl:pt-52">
+                <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-12 xl:p-16 border-r border-zinc-800/80 bg-zinc-950/90 pt-44 lg:pt-48 xl:pt-52 pb-28 xl:pb-32">
                   <div className="space-y-6">
                     <div className="inline-block px-3 py-1 bg-zinc-900 border border-zinc-700 text-white text-xs font-bold uppercase tracking-widest font-mono shadow-md">
                       // STUDIO PHILOSOPHY
@@ -336,7 +336,7 @@ export default function Navbar() {
                     </p>
                   </div>
 
-                  <div className="space-y-4 border-t border-zinc-800/80 pt-8 pb-12">
+                  <div className="space-y-4 border-t border-zinc-800/80 pt-8">
                     <div className="flex items-center justify-between text-xs text-zinc-400">
                       <span className="uppercase tracking-widest font-mono text-zinc-500">Founder</span>
                       <span className="text-white font-bold">Jay Patel</span>
@@ -355,7 +355,7 @@ export default function Navbar() {
                 </div>
 
                 {/* Right Side - Menu Content */}
-                <div className="lg:col-span-7 flex flex-col justify-between h-full pt-36 lg:pt-48 xl:pt-52 px-8 sm:px-12 lg:px-16 pb-12">
+                <div className="lg:col-span-7 flex flex-col justify-between h-full pt-36 lg:pt-48 xl:pt-52 px-8 sm:px-12 lg:px-16 pb-28 md:pb-32">
                   <div className="flex-1 flex flex-col justify-center space-y-3 lg:space-y-4 my-auto">
                     {menuLinks.map((link, index) => (
                       <motion.div
@@ -453,7 +453,7 @@ export default function Navbar() {
             animate={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
             exit={{ clipPath: "polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%)" }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 bg-black z-[200] flex items-center justify-center"
+            className="fixed top-0 left-0 w-screen h-[100dvh] bg-black z-[200] flex items-center justify-center overflow-hidden"
           >
             <motion.span
               initial={{ opacity: 0, y: 20 }}

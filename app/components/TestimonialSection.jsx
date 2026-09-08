@@ -128,6 +128,10 @@ export default function TestimonialSection() {
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
           }
+
+          .animate-scroll-left:hover, .animate-scroll-right:hover {
+            animation-play-state: paused;
+          }
         `}</style>
       </section>
     </MovingTextBg>

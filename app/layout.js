@@ -40,6 +40,8 @@ export const viewport = {
   initialScale: 1,
 };
 
+import SmoothScrolling from "./components/SmoothScrolling";
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
@@ -49,17 +51,19 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Stack+Sans+Notch:wght@300;400;500;600;700&family=Jersey+10&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
-        <ContactModalProvider>
-          <TransitionProvider>
-            <div className="min-h-screen w-full flex flex-col">
-              <Header />
-              <main className="flex-1">
-                {children}
-              </main>
-              <Footer />
-            </div>
-          </TransitionProvider>
-        </ContactModalProvider>
+        <SmoothScrolling>
+          <ContactModalProvider>
+            <TransitionProvider>
+              <div className="min-h-screen w-full flex flex-col">
+                <Header />
+                <main className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+              </div>
+            </TransitionProvider>
+          </ContactModalProvider>
+        </SmoothScrolling>
       </body>
     </html>
   );

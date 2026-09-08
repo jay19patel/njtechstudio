@@ -30,14 +30,14 @@ export default function AboutSection() {
 const Block = ({ className, children, ...rest }) => (
   <motion.div
     variants={{
-      initial: { scale: 0.96, y: 25, opacity: 0 },
+      initial: { scale: 0.9, y: 60, opacity: 0 },
       animate: { scale: 1, y: 0, opacity: 1 },
     }}
     transition={{
       type: "spring",
-      mass: 1.5,
-      stiffness: 300,
-      damping: 25,
+      mass: 1.2,
+      stiffness: 250,
+      damping: 20,
     }}
     className={`border-2 border-zinc-200 bg-white p-6 sm:p-8 shadow-md ${className}`}
     {...rest}
@@ -52,7 +52,7 @@ const StudioHeader = () => (
   <Block className="col-span-12 md:col-span-6 flex flex-col justify-center">
     <div className="space-y-3">
       <div className="inline-block px-3 py-1 bg-zinc-950 border border-zinc-800 text-white text-xs font-bold uppercase tracking-wider font-mono">
-        // NJ TECH STUDIO
+        {"// NJ TECH STUDIO"}
       </div>
       <h2 className="text-3xl sm:text-4xl md:text-5xl font-black leading-tight text-gray-900">
         Building Smart Digital Solutions
@@ -114,11 +114,11 @@ const FounderCard = () => (
       {/* Avatar */}
       <div className="relative flex-shrink-0">
         <Image
-          src="/photo.png"
+          src="/character.png"
           alt="Jay Patel"
           width={192}
           height={192}
-          className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 object-cover border-2 border-indigo-900 shadow-xl"
+          className="w-32 h-32 sm:w-36 sm:h-36 md:w-40 md:h-40 object-cover object-top border border-zinc-700 bg-zinc-900 rounded-3xl shadow-xl"
           priority
         />
 
@@ -149,7 +149,7 @@ const FounderCard = () => (
 const MissionBlock = () => (
   <Block className="col-span-12 md:col-span-6 space-y-3">
     <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950 border border-zinc-800 text-white text-xs font-mono font-bold uppercase tracking-wider">
-      // THE MISSION
+      {"// THE MISSION"}
     </div>
     <p className="text-base sm:text-lg leading-relaxed text-gray-700 font-medium">
       To build clean, scalable tech that solves real problems.
@@ -164,7 +164,7 @@ const MissionBlock = () => (
 const VisionBlock = () => (
   <Block className="col-span-12 md:col-span-6 space-y-3">
     <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950 border border-zinc-800 text-white text-xs font-mono font-bold uppercase tracking-wider">
-      // THE VISION
+      {"// THE VISION"}
     </div>
     <p className="text-base sm:text-lg leading-relaxed text-gray-700 font-medium">
       To grow a joyful, impactful tech studio that builds modern solutions,

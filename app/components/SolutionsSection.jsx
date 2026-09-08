@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
-import { ArrowRight, Video, Code2, Layers, Cpu, GraduationCap } from "lucide-react";
+import { ArrowRight, Video, Code2, Layers, Cpu, GraduationCap, Sparkles } from "lucide-react";
 import MovingTextBg from "./MovingTextBg";
 import { useContactModal } from "../context/ContactModalContext";
 
@@ -11,30 +11,24 @@ const DEFAULT_SERVICES = [
     id: 1,
     num: "01",
     label: "WEB + AI DEVELOPMENT",
-    title: "WEB + AI DEVELOPMENT",
-    description:
-      "Building fast, scalable, and intelligent applications using Next.js, React, FastAPI, Django, and GenAI. Backend APIs, smart automation, vector search, and AI agents.",
-    techStack: ["Next.js", "FastAPI", "React", "Python", "GenAI"],
+    title: "Web + AI Development",
+    description: "Building fast, scalable, and intelligent applications using Next.js, React, FastAPI, Django, and GenAI.",
     icon: Code2,
   },
   {
     id: 2,
     num: "02",
     label: "ERP & BUSINESS AUTOMATION",
-    title: "ERP & BUSINESS AUTOMATION",
-    description:
-      "Automating operations with custom ERP systems built using Frappe / ERPNext + React. Inventory, HR, automated approvals, and real-time business finance dashboards.",
-    techStack: ["Frappe / ERPNext", "React", "Python", "Workflows"],
+    title: "ERP & Automation",
+    description: "Automating operations with custom ERP systems. Inventory, HR, workflows, and real-time dashboards.",
     icon: Layers,
   },
   {
     id: 3,
     num: "03",
     label: "IOT & SMART AUTOMATION",
-    title: "IOT & SMART AUTOMATION",
-    description:
-      "Designing IoT systems combining sensors, cloud services, and smart automation. Real-time telemetry monitoring, device status dashboards, and industry automation.",
-    techStack: ["MQTT", "Raspberry Pi", "Arduino", "Sensors & Cloud"],
+    title: "IoT Systems",
+    description: "Designing IoT systems combining sensors, cloud services, and smart industry automation.",
     icon: Cpu,
   },
 ];
@@ -53,7 +47,6 @@ export default function SolutionsSection() {
             ...item,
             num: `0${idx + 1}`,
             title: item.title || item.label,
-            techStack: DEFAULT_SERVICES[idx]?.techStack || ["Custom Tech"],
             icon: DEFAULT_SERVICES[idx]?.icon || Code2,
           }));
           setServices(merged);
@@ -62,75 +55,92 @@ export default function SolutionsSection() {
       .catch((err) => console.error("Error fetching solutions:", err));
   }, []);
 
-  return (
-    <MovingTextBg text="WHAT WE DO" textColor="text-white" className="bg-black">
-      <section className="relative w-full bg-transparent text-white py-16 sm:py-20 lg:py-24 overflow-hidden border-y border-zinc-900">
-        {/* Subtle grid pattern overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+  // Card Content Component to match Mistral styling
+  const CardContent = ({ service, isLarge }) => {
+    const Icon = service.icon || Code2;
+    return (
+      <div className="flex flex-col h-full justify-between p-6 sm:p-8">
+        {/* Top Left Icon */}
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 flex items-center justify-center bg-indigo-600 text-white shadow-md">
+            <Icon className="w-5 h-5" />
+          </div>
+          <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest group-hover:text-zinc-400 transition-colors">
+            {service.num}
+          </span>
+        </div>
 
+        {/* Bottom Left Text */}
+        <div className="mt-16 sm:mt-24 lg:mt-32 relative z-10">
+          <h3 className={`font-medium text-white tracking-tight mb-2 flex items-center gap-2 group-hover:text-indigo-300 transition-colors ${isLarge ? 'text-3xl sm:text-4xl lg:text-5xl' : 'text-2xl sm:text-3xl'}`}>
+            {service.title}
+            <ArrowRight className="w-5 h-5 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
+          </h3>
+          <p className="text-zinc-400 text-sm sm:text-base leading-relaxed max-w-md group-hover:text-zinc-300 transition-colors">
+            {service.description}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <MovingTextBg text="WHAT WE DO" textColor="text-white" className="bg-[#050505]">
+      <section className="relative w-full bg-[#050505] py-20 lg:py-32 overflow-hidden border-y border-zinc-900">
+        
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
           {/* Section Header */}
-          <div className="text-left space-y-3 border-b border-zinc-900 pb-8">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-700 text-white text-xs font-mono font-bold uppercase tracking-widest shadow-md">
-              <span className="w-2 h-2 bg-indigo-500 inline-block"></span>
-              <span>// CORE CAPABILITIES</span>
-            </div>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tight text-white leading-none">
-              WHAT WE <span className="text-indigo-500">BUILD & AUTOMATE</span>
+          <div className="text-left space-y-4">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-medium tracking-tight text-white leading-tight">
+              Core Capabilities
             </h2>
-            <p className="text-zinc-400 text-base sm:text-lg max-w-2xl font-medium">
-              From full-stack web platforms and business ERPs to hardware IoT and student projects.
-            </p>
           </div>
 
-          {/* Static 3-Card Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {services.map((item, idx) => {
-              const ServiceIcon = item.icon || Code2;
-              return (
-                <motion.div
-                  key={item.id || idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="bg-zinc-950 border-2 border-zinc-800 hover:border-indigo-800 transition-all duration-300 p-6 sm:p-8 flex flex-col justify-between space-y-6 group shadow-xl"
-                >
-                  {/* Top Bar: Number & Icon */}
-                  <div className="flex items-center justify-between border-b border-zinc-900 pb-4">
-                    <span className="text-2xl font-black font-mono text-indigo-400">
-                      {item.num || `0${idx + 1}`}.
-                    </span>
-                    <div className="w-10 h-10 border border-zinc-800 bg-zinc-900 group-hover:border-indigo-800 text-indigo-400 flex items-center justify-center transition-colors">
-                      <ServiceIcon className="w-5 h-5" />
-                    </div>
-                  </div>
+          {/* Mistral-Style Grid Wrapper for 1px shared borders */}
+          <div className="bg-zinc-800/80 p-[1px] w-full">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-[1px] bg-zinc-800/80 w-full">
+              
+              {/* Row 1, Col 1: Empty Decorative Block */}
+              <div className="hidden lg:flex flex-col items-center justify-center bg-[#0a0a0a] min-h-[200px] relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="w-16 h-16 border border-zinc-800 rotate-45 group-hover:rotate-90 transition-transform duration-1000 ease-in-out"></div>
+              </div>
 
-                  {/* Title & Description */}
-                  <div className="space-y-3 text-left">
-                    <h3 className="text-xl sm:text-2xl font-black uppercase text-white leading-tight group-hover:text-indigo-300 transition-colors">
-                      {item.title || item.label}
-                    </h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed font-normal">
-                      {item.description}
-                    </p>
-                  </div>
+              {/* Row 1 & 2, Col 2 & 3: Web + AI (Large Block) */}
+              <motion.button
+                onClick={openContactModal}
+                whileHover="hover"
+                className="group relative flex flex-col justify-between bg-[#0a0a0a] hover:bg-[#111111] transition-colors duration-500 text-left col-span-1 md:col-span-2 lg:col-span-2 row-span-2 min-h-[300px] lg:min-h-[400px] overflow-hidden"
+              >
+                {/* Decorative subtle background graphic */}
+                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-30 group-hover:rotate-12 transition-all duration-700 pointer-events-none">
+                  <div className="w-32 h-32 border-2 border-zinc-500 rotate-45"></div>
+                </div>
+                <CardContent service={services[0]} isLarge={true} />
+              </motion.button>
 
-                  {/* Action Button */}
-                  <div className="pt-4 border-t border-zinc-900">
-                    <button
-                      type="button"
-                      onClick={openContactModal}
-                      className="w-full py-3.5 bg-zinc-900 hover:bg-indigo-900 border border-zinc-800 hover:border-indigo-950 text-white font-bold uppercase tracking-wider text-xs transition-all cursor-pointer flex items-center justify-center gap-2 group/btn"
-                    >
-                      <span>Inquire Service</span>
-                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
-                  </div>
-                </motion.div>
-              );
-            })}
+              {/* Row 1 & 2, Col 4: ERP & Automation (Tall Block) */}
+              <motion.button
+                onClick={openContactModal}
+                whileHover="hover"
+                className="group relative flex flex-col justify-between bg-[#0a0a0a] hover:bg-[#111111] transition-colors duration-500 text-left col-span-1 md:col-span-1 lg:col-span-1 row-span-2 min-h-[300px] lg:min-h-[400px]"
+              >
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-indigo-500/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                <CardContent service={services[1]} isLarge={false} />
+              </motion.button>
+
+              {/* Row 2, Col 1: IoT & Smart Automation (Small Block) */}
+              <motion.button
+                onClick={openContactModal}
+                whileHover="hover"
+                className="group relative flex flex-col justify-between bg-[#0a0a0a] hover:bg-[#111111] transition-colors duration-500 text-left col-span-1 md:col-span-1 lg:col-span-1 min-h-[200px]"
+              >
+                <CardContent service={services[2]} isLarge={false} />
+              </motion.button>
+
+            </div>
           </div>
+          
         </div>
       </section>
     </MovingTextBg>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
 
 const DURATION = 0.25;
@@ -62,6 +62,15 @@ export default function HeroSection() {
   const [currentTypingIndex, setCurrentTypingIndex] = useState(-1);
   const [typingProgress, setTypingProgress] = useState("");
   const messagesRef = useRef(null);
+
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const chatY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
 
   // Updated scripted conversation (text only)
   const scriptedConversation = useMemo(() => ([
@@ -179,11 +188,68 @@ export default function HeroSection() {
 
   return (
     <MovingTextBg text="NJTECHSTUDIO" textColor="text-gray-400">
-      <section className="relative w-full min-h-screen overflow-hidden flex items-center justify-center pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20">
-        <div className="w-full h-full flex items-center justify-center relative">
+      <section ref={containerRef} className="relative w-full min-h-screen overflow-hidden flex items-center justify-center pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20">
+        
+        {/* Mixed Media & Morphing Neumorphic Background */}
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          {/* Morphing Blob 1 */}
+          <motion.div 
+            animate={{
+              scale: [1, 1.2, 1],
+              rotate: [0, 90, 180, 270, 360],
+              borderRadius: ["40% 60% 70% 30%", "30% 70% 60% 40%", "40% 60% 70% 30%"]
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute top-[10%] -left-[10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-indigo-500/10 blur-[80px]"
+          />
+
+          {/* Morphing Blob 2 */}
+          <motion.div 
+            animate={{
+              scale: [1, 1.3, 1],
+              rotate: [360, 270, 180, 90, 0],
+              borderRadius: ["60% 40% 30% 70%", "70% 30% 40% 60%", "60% 40% 30% 70%"]
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            className="absolute bottom-[0%] right-[0%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-indigo-600/10 blur-[80px]"
+          />
+
+          {/* Doodle 1: Floating Star */}
+          <motion.svg
+            animate={{ rotate: 360, y: [0, -20, 0] }}
+            transition={{ 
+              rotate: { duration: 40, repeat: Infinity, ease: "linear" },
+              y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
+            }}
+            className="absolute top-[20%] right-[15%] w-12 h-12 text-indigo-400/30 drop-shadow-xl hidden md:block"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"
+          >
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
+          </motion.svg>
+
+          {/* Doodle 2: Squiggle */}
+          <motion.svg
+            animate={{ rotate: -15, y: [0, 20, 0], x: [0, 10, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[25%] left-[5%] w-16 h-16 text-zinc-400/30 drop-shadow-xl hidden md:block"
+            viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+          >
+            <path d="M10 50 Q 25 20 40 50 T 70 50 T 100 50" />
+          </motion.svg>
+        </div>
+
+        <div className="w-full h-full flex items-center justify-center relative z-10">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">
             <div className="grid grid-cols-1 gap-8 sm:gap-10 md:gap-14 items-center lg:grid-cols-12 lg:gap-32 overflow-visible">
-              <div className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0 overflow-visible">
+              <motion.div style={{ y: textY }} className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0 overflow-visible">
                 <motion.div
                   initial={{ opacity: 0, x: -50 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -232,11 +298,11 @@ export default function HeroSection() {
 
                   </motion.div>
                 </div>
-              </div>
+              </motion.div>
 
               {/* RIGHT SIDE CHAT UI */}
-              <div className="w-full lg:col-span-6 flex justify-center lg:justify-end mt-8 lg:mt-0">
-                <div className="relative w-full max-w-2xl px-4 sm:px-0">
+              <motion.div style={{ y: chatY }} className="w-full lg:col-span-6 flex justify-center lg:justify-end mt-8 lg:mt-0 relative">
+                <div className="relative w-full max-w-2xl px-4 sm:px-0 z-10">
                   <div className="relative border-2 border-indigo-900 bg-white p-4 sm:p-6 md:p-8 shadow-2xl">
                     <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
                       <div className="flex items-center gap-1.5 sm:gap-2">
@@ -291,7 +357,7 @@ export default function HeroSection() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
               <style jsx>{`
               .custom-scrollbar::-webkit-scrollbar {
