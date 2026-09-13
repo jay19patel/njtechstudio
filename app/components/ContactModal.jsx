@@ -88,18 +88,18 @@ export default function ContactModal({ isOpen, onClose }) {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/75">
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-zinc-900/40 backdrop-blur-sm">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 20 }}
+          exit={{ opacity: 0, scale: 0.95, y: 10 }}
           transition={{ type: "spring", stiffness: 350, damping: 30 }}
-          className="relative w-full max-w-md bg-zinc-950 border-2 border-indigo-900 text-white p-5 sm:p-6 shadow-2xl overflow-hidden"
+          className="relative w-full max-w-md bg-white border border-zinc-200 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.12)] overflow-hidden"
         >
           {/* Close Button */}
           <button
             onClick={handleCloseAll}
-            className="absolute top-4 right-4 w-8 h-8 border border-zinc-800 bg-zinc-900 hover:bg-zinc-800 hover:border-indigo-800 text-white flex items-center justify-center transition-colors cursor-pointer z-10"
+            className="absolute top-4 right-4 w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 hover:text-zinc-900 flex items-center justify-center transition-colors cursor-pointer z-10"
             aria-label="Close modal"
           >
             <X className="w-4 h-4" />
@@ -112,55 +112,60 @@ export default function ContactModal({ isOpen, onClose }) {
               animate={{ opacity: 1, y: 0 }}
               className="py-6 text-center space-y-4"
             >
-              <div className="w-12 h-12 bg-indigo-900 border-2 border-indigo-500 text-white flex items-center justify-center mx-auto shadow-lg">
-                <Check className="w-6 h-6 text-indigo-300" />
+              <div className="w-16 h-16 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 flex items-center justify-center mx-auto shadow-sm">
+                <Check className="w-8 h-8" />
               </div>
 
-              <div className="space-y-1.5">
-                <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white">
-                  INQUIRY RECEIVED!
+              <div className="space-y-2">
+                <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
+                  Inquiry Received!
                 </h3>
-                <p className="text-zinc-400 text-xs sm:text-sm max-w-xs mx-auto leading-relaxed font-medium">
-                  Thank you, <span className="text-white font-bold">{formData.name}</span>! Jay Patel from NJ Tech Studio will review your project and get back to you shortly.
+                <p className="text-zinc-500 text-sm max-w-xs mx-auto leading-relaxed">
+                  Thank you, <span className="text-zinc-900 font-medium">{formData.name}</span>! Jay Patel from NJ Tech Studio will review your project and get back to you shortly.
                 </p>
               </div>
 
-              <button
-                onClick={handleCloseAll}
-                className="w-full py-3 bg-indigo-900 hover:bg-indigo-800 border border-indigo-950 text-white font-bold uppercase tracking-wider text-xs shadow-xl transition-all cursor-pointer"
-              >
-                DONE
-              </button>
+              <div className="pt-4">
+                <button
+                  onClick={handleCloseAll}
+                  className="w-full py-3.5 bg-zinc-900 hover:bg-black text-white font-semibold rounded-full shadow-md transition-all cursor-pointer"
+                >
+                  Done
+                </button>
+              </div>
             </motion.div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-6">
               {/* Step Header Badge */}
-              <div className="flex flex-wrap items-center gap-2 pt-1">
-                <span className="px-2.5 py-1 bg-zinc-900 border border-zinc-700 text-white text-[11px] font-mono font-bold uppercase tracking-widest shadow-md">
-                  STEP {step} OF 3
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-3 py-1 bg-zinc-100 border border-zinc-200 text-zinc-600 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm">
+                  Step {step} of 3
                 </span>
 
                 {/* Saved Badges */}
                 {step >= 2 && formData.name && (
-                  <span className="px-2 py-0.5 bg-zinc-900 border border-zinc-700 text-zinc-300 text-[10px] font-mono font-semibold flex items-center gap-1">
-                    <Check className="w-3 h-3 text-indigo-400" />
-                    <span>NAME: {formData.name}</span>
-                  </span>
-                )}
-                {step === 3 && formData.contact && (
-                  <span className="px-2 py-0.5 bg-zinc-900 border border-zinc-700 text-zinc-300 text-[10px] font-mono font-semibold flex items-center gap-1">
-                    <Check className="w-3 h-3 text-indigo-400" />
-                    <span>CONTACT: {formData.contact}</span>
+                  <span className="px-2.5 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-bold uppercase tracking-wider rounded-full flex items-center gap-1">
+                    <Check className="w-3 h-3" />
+                    <span>{formData.name.split(' ')[0]}</span>
                   </span>
                 )}
               </div>
 
               {/* Error Message */}
-              {errorMsg && (
-                <div className="px-3 py-1.5 bg-rose-950/80 border border-rose-800 text-rose-300 text-xs font-semibold">
-                  {errorMsg}
-                </div>
-              )}
+              <AnimatePresence>
+                {errorMsg && (
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 py-2.5 bg-red-50 border border-red-100 text-red-600 text-xs font-medium rounded-xl">
+                      {errorMsg}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* Step Content */}
               <AnimatePresence mode="wait">
@@ -171,13 +176,13 @@ export default function ContactModal({ isOpen, onClose }) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-4"
+                    className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-snug">
-                        WHAT SHOULD WE CALL YOU?
+                      <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">
+                        What should we call you?
                       </h2>
-                      <p className="text-zinc-400 text-xs mt-1 font-medium">
+                      <p className="text-zinc-500 text-sm mt-1">
                         First name or company name is plenty.
                       </p>
                     </div>
@@ -190,15 +195,15 @@ export default function ContactModal({ isOpen, onClose }) {
                           placeholder="Your name..."
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full bg-zinc-900 border-2 border-zinc-800 focus:border-indigo-500 text-white text-sm sm:text-base p-3 outline-none font-semibold transition-colors placeholder:text-zinc-600"
+                          className="w-full bg-zinc-50 border border-zinc-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl text-zinc-900 text-sm sm:text-base p-4 outline-none font-medium transition-all placeholder:text-zinc-400"
                         />
                       </div>
 
                       <button
                         type="submit"
-                        className="w-full py-3 bg-indigo-900 hover:bg-indigo-800 border border-indigo-950 text-white font-bold uppercase tracking-wider text-xs shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                        className="w-full py-4 bg-zinc-900 hover:bg-black text-white font-semibold rounded-full shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 group"
                       >
-                        <span>NEXT</span>
+                        <span>Next step</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                       </button>
                     </form>
@@ -212,13 +217,13 @@ export default function ContactModal({ isOpen, onClose }) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-4"
+                    className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-snug">
-                        HOW CAN WE REACH YOU?
+                      <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">
+                        How can we reach you?
                       </h2>
-                      <p className="text-zinc-400 text-xs mt-1 font-medium">
+                      <p className="text-zinc-500 text-sm mt-1">
                         Your email or phone number. We do not spam.
                       </p>
                     </div>
@@ -231,24 +236,24 @@ export default function ContactModal({ isOpen, onClose }) {
                           placeholder="Email address or phone number..."
                           value={formData.contact}
                           onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-                          className="w-full bg-zinc-900 border-2 border-zinc-800 focus:border-indigo-500 text-white text-sm sm:text-base p-3 outline-none font-semibold transition-colors placeholder:text-zinc-600"
+                          className="w-full bg-zinc-50 border border-zinc-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl text-zinc-900 text-sm sm:text-base p-4 outline-none font-medium transition-all placeholder:text-zinc-400"
                         />
                       </div>
 
-                      <div className="flex gap-2.5">
+                      <div className="flex gap-3">
                         <button
                           type="button"
                           onClick={handleBack}
-                          className="w-1/3 py-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-bold uppercase tracking-wider text-xs transition-all cursor-pointer flex items-center justify-center gap-1"
+                          className="w-16 h-[56px] flex-shrink-0 bg-zinc-100 hover:bg-zinc-200 text-zinc-600 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+                          aria-label="Back"
                         >
-                          <ArrowLeft className="w-3.5 h-3.5" />
-                          <span>BACK</span>
+                          <ArrowLeft className="w-5 h-5" />
                         </button>
                         <button
                           type="submit"
-                          className="w-2/3 py-3 bg-indigo-900 hover:bg-indigo-800 border border-indigo-950 text-white font-bold uppercase tracking-wider text-xs shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 group"
+                          className="flex-1 h-[56px] bg-zinc-900 hover:bg-black text-white font-semibold rounded-full shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 group"
                         >
-                          <span>NEXT</span>
+                          <span>Next step</span>
                           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </button>
                       </div>
@@ -263,13 +268,13 @@ export default function ContactModal({ isOpen, onClose }) {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -20 }}
                     transition={{ duration: 0.2 }}
-                    className="space-y-4"
+                    className="space-y-6"
                   >
                     <div>
-                      <h2 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-white leading-snug">
-                        TELL US ABOUT YOUR PROJECT
+                      <h2 className="text-2xl font-semibold tracking-tight text-zinc-900">
+                        Tell us about your project
                       </h2>
-                      <p className="text-zinc-400 text-xs mt-1 font-medium">
+                      <p className="text-zinc-500 text-sm mt-1">
                         In short — what you do, and what you are looking to build or automate.
                       </p>
                     </div>
@@ -277,39 +282,39 @@ export default function ContactModal({ isOpen, onClose }) {
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div>
                         <textarea
-                          rows={3}
+                          rows={4}
                           autoFocus
                           placeholder="Tell us about your project, timeline, or requirements..."
                           value={formData.details}
                           onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                          className="w-full bg-zinc-900 border-2 border-zinc-800 focus:border-indigo-500 text-white text-sm p-3 outline-none font-medium transition-colors placeholder:text-zinc-600 resize-none"
+                          className="w-full bg-zinc-50 border border-zinc-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 rounded-2xl text-zinc-900 text-sm p-4 outline-none font-medium transition-all placeholder:text-zinc-400 resize-none"
                         />
                       </div>
 
-                      <div className="flex gap-2.5">
+                      <div className="flex gap-3">
                         <button
                           type="button"
                           onClick={handleBack}
                           disabled={isSubmitting}
-                          className="w-1/3 py-3 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-white font-bold uppercase tracking-wider text-xs transition-all cursor-pointer flex items-center justify-center gap-1 disabled:opacity-50"
+                          className="w-16 h-[56px] flex-shrink-0 bg-zinc-100 hover:bg-zinc-200 text-zinc-600 rounded-full flex items-center justify-center transition-colors cursor-pointer disabled:opacity-50"
+                          aria-label="Back"
                         >
-                          <ArrowLeft className="w-3.5 h-3.5" />
-                          <span>BACK</span>
+                          <ArrowLeft className="w-5 h-5" />
                         </button>
                         <button
                           type="submit"
                           disabled={isSubmitting}
-                          className="w-2/3 py-3 bg-indigo-900 hover:bg-indigo-800 border border-indigo-950 text-white font-bold uppercase tracking-wider text-xs shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70"
+                          className="flex-1 h-[56px] bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-full shadow-md transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70 group"
                         >
                           {isSubmitting ? (
                             <>
-                              <span>SENDING...</span>
-                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              <span>Sending...</span>
+                              <Loader2 className="w-4 h-4 animate-spin" />
                             </>
                           ) : (
                             <>
-                              <span>SEND IT</span>
-                              <ArrowRight className="w-3.5 h-3.5 text-white" />
+                              <span>Send Inquiry</span>
+                              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                             </>
                           )}
                         </button>
@@ -320,12 +325,12 @@ export default function ContactModal({ isOpen, onClose }) {
               </AnimatePresence>
 
               {/* Progress Indicators */}
-              <div className="flex items-center justify-center gap-2 pt-1 border-t border-zinc-900">
+              <div className="flex items-center justify-center gap-2 pt-2">
                 {[1, 2, 3].map((s) => (
                   <div
                     key={s}
-                    className={`h-1 transition-all duration-300 ${
-                      step === s ? "w-6 bg-indigo-500" : s < step ? "w-2 bg-indigo-900" : "w-2 bg-zinc-800"
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      step === s ? "w-8 bg-indigo-500" : s < step ? "w-3 bg-indigo-200" : "w-3 bg-zinc-200"
                     }`}
                   />
                 ))}

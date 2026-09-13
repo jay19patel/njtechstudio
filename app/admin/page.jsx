@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Mail, FolderGit2, MessageSquareQuote, Youtube, 
   Cpu, HelpCircle, Send, LogOut, KeyRound, Plus, Trash2, Edit, 
   CheckCircle2, XCircle, ExternalLink, Clock, Sparkles, AlertCircle,
-  Menu, X, ChevronRight, Check, RefreshCw
+  Menu, X, ChevronRight, Check, RefreshCw, ArrowLeft, Save
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -21,9 +21,9 @@ export default function AdminDashboard() {
   
   // Data states
   const [projects, setProjects] = useState([]);
+  const [editingProject, setEditingProject] = useState(null); // Full-page project editor state
   const [testimonials, setTestimonials] = useState([]);
   const [youtubeVideos, setYoutubeVideos] = useState([]);
-  const [solutions, setSolutions] = useState([]);
   const [skills, setSkills] = useState({ backend: [], frontend: [], database: [], 'other-tools': [] });
   const [faqs, setFaqs] = useState([]);
   const [leads, setLeads] = useState([]);
@@ -107,7 +107,6 @@ export default function AdminDashboard() {
         { key: 'projects', url: '/api/admin/data?type=projects' },
         { key: 'testimonials', url: '/api/admin/data?type=testimonials' },
         { key: 'youtube', url: '/api/admin/data?type=youtube' },
-        { key: 'solutions', url: '/api/admin/data?type=solutions' },
         { key: 'skills', url: '/api/admin/data?type=skills' },
         { key: 'faqs', url: '/api/admin/data?type=faqs' },
         { key: 'leads', url: '/api/admin/submissions' },
@@ -131,7 +130,6 @@ export default function AdminDashboard() {
         if (key === 'projects') setProjects(data);
         else if (key === 'testimonials') setTestimonials(data);
         else if (key === 'youtube') setYoutubeVideos(data);
-        else if (key === 'solutions') setSolutions(data);
         else if (key === 'skills') setSkills(data);
         else if (key === 'faqs') setFaqs(data);
         else if (key === 'leads') setLeads(data);
@@ -230,10 +228,6 @@ export default function AdminDashboard() {
       const updated = youtubeVideos.filter(y => y.videoId !== id);
       setYoutubeVideos(updated);
       saveJsonData('youtube', updated);
-    } else if (type === 'solutions') {
-      const updated = solutions.filter(s => s.id !== id);
-      setSolutions(updated);
-      saveJsonData('solutions', updated);
     } else if (type === 'faqs') {
       const updated = faqs.filter(f => f.id !== id);
       setFaqs(updated);
@@ -245,56 +239,63 @@ export default function AdminDashboard() {
     }
   };
 
-  // Edit / Add Item Submit
+  // Toggle technology in editing project (for interactive badges)
+  const toggleTech = (techName) => {
+    if (!editingProject) return;
+    const current = editingProject.technologies || [];
+    const exists = current.some(t => t.toLowerCase() === techName.toLowerCase());
+    let next;
+    if (exists) {
+      next = current.filter(t => t.toLowerCase() !== techName.toLowerCase());
+    } else {
+      next = [...current, techName];
+    }
+    setEditingProject({ ...editingProject, technologies: next });
+  };
+
+  // Full-Page Project Editor Submit
+  const handleSaveProject = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!editingProject) return;
+
+    if (!editingProject.title?.trim()) {
+      triggerMessage('error', 'Project Title is required');
+      return;
+    }
+    if (!editingProject.slug?.trim()) {
+      triggerMessage('error', 'Project Slug is required');
+      return;
+    }
+
+    const cleanProject = {
+      ...editingProject,
+      title: editingProject.title.trim(),
+      slug: editingProject.slug.trim(),
+      technologies: editingProject.technologies || [],
+      gallery: editingProject.gallery?.length ? editingProject.gallery : (editingProject.image ? [editingProject.image] : [])
+    };
+
+    let updated;
+    const isExisting = projects.some(p => p.id === cleanProject.id);
+    if (isExisting) {
+      updated = projects.map(p => p.id === cleanProject.id ? cleanProject : p);
+    } else {
+      updated = [...projects, cleanProject];
+    }
+
+    setProjects(updated);
+    saveJsonData('projects', updated);
+    triggerMessage('success', isExisting ? 'Project updated successfully!' : 'New project created successfully!');
+    setActiveTab('projects');
+    setEditingProject(null);
+  };
+
+  // Modal Edit / Add Item Submit (for testimonials, youtube, faqs, channel)
   const handleEditorSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     
-    if (editorType === 'projects') {
-      const techVal = formData.get('technologies') || '';
-      const techArray = techVal.split(',').map(t => t.trim()).filter(Boolean);
-      
-      const projectData = {
-        id: editItem ? editItem.id : Date.now(),
-        slug: formData.get('slug'),
-        title: formData.get('title'),
-        subtitle: formData.get('subtitle'),
-        description: formData.get('description'),
-        image: formData.get('image'),
-        featured: formData.get('featured') === 'true',
-        category: formData.get('category'),
-        technologies: techArray,
-        liveUrl: formData.get('liveUrl'),
-        githubUrl: formData.get('githubUrl'),
-        startDate: formData.get('startDate'),
-        endDate: formData.get('endDate') || 'Present',
-        status: formData.get('status') || 'Live',
-        client: formData.get('client') || 'NJ Tech Studio',
-        content: {
-          overview: formData.get('overview'),
-          challenge: formData.get('challenge'),
-          solution: formData.get('solution'),
-          sections: editItem?.content?.sections || [],
-          results: formData.get('results') || ''
-        },
-        gallery: editItem?.gallery || [formData.get('image')],
-        testimonial: {
-          text: formData.get('testimonialText') || '',
-          author: formData.get('testimonialAuthor') || '',
-          position: formData.get('testimonialPos') || ''
-        }
-      };
-
-      let updated;
-      if (editItem) {
-        updated = projects.map(p => p.id === editItem.id ? projectData : p);
-      } else {
-        updated = [...projects, projectData];
-      }
-      setProjects(updated);
-      saveJsonData('projects', updated);
-
-    } else if (editorType === 'testimonials') {
+    if (editorType === 'testimonials') {
       const itemData = {
         id: editItem ? editItem.id : Date.now(),
         name: formData.get('name'),
@@ -327,25 +328,6 @@ export default function AdminDashboard() {
       }
       setYoutubeVideos(updated);
       saveJsonData('youtube', updated);
-
-    } else if (editorType === 'solutions') {
-      const itemData = {
-        id: editItem ? editItem.id : Date.now(),
-        label: formData.get('label'),
-        title: formData.get('title'),
-        description: formData.get('description'),
-        image: formData.get('image'),
-        layout: formData.get('layout') || 'left'
-      };
-
-      let updated;
-      if (editItem) {
-        updated = solutions.map(s => s.id === editItem.id ? itemData : s);
-      } else {
-        updated = [...solutions, itemData];
-      }
-      setSolutions(updated);
-      saveJsonData('solutions', updated);
 
     } else if (editorType === 'faqs') {
       const itemData = {
@@ -469,7 +451,6 @@ export default function AdminDashboard() {
     { id: 'projects', label: 'Projects', icon: FolderGit2 },
     { id: 'testimonials', label: 'Testimonials', icon: MessageSquareQuote },
     { id: 'youtube', label: 'YouTube Videos', icon: Youtube },
-    { id: 'solutions', label: 'Home Sections', icon: Sparkles },
     { id: 'skills', label: 'Tech Stack', icon: Cpu },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
     { id: 'channel', label: 'Channel Posts', icon: Send },
@@ -959,9 +940,36 @@ export default function AdminDashboard() {
                       <h3 className="text-lg font-bold text-slate-800">Manage Portfolio Projects</h3>
                       <button
                         onClick={() => {
-                          setEditorType('projects');
-                          setEditItem(null);
-                          setIsEditorOpen(true);
+                          setEditingProject({
+                            id: Date.now(),
+                            slug: '',
+                            title: '',
+                            subtitle: '',
+                            description: '',
+                            image: '',
+                            featured: true,
+                            category: 'Web Application',
+                            technologies: [],
+                            liveUrl: '',
+                            githubUrl: '',
+                            startDate: '',
+                            endDate: 'Present',
+                            status: 'Live',
+                            client: 'NJ Tech Studio',
+                            content: {
+                              overview: '',
+                              challenge: '',
+                              solution: '',
+                              results: ''
+                            },
+                            gallery: [],
+                            testimonial: {
+                              text: '',
+                              author: '',
+                              position: ''
+                            }
+                          });
+                          setActiveTab('project-editor');
                         }}
                         className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm"
                       >
@@ -1004,12 +1012,11 @@ export default function AdminDashboard() {
                               <div className="flex gap-1.5">
                                 <button
                                   onClick={() => {
-                                    setEditorType('projects');
-                                    setEditItem(project);
-                                    setIsEditorOpen(true);
+                                    setEditingProject(JSON.parse(JSON.stringify(project)));
+                                    setActiveTab('project-editor');
                                   }}
                                   className="p-2 bg-slate-105 hover:bg-slate-200 text-slate-600 rounded-lg transition-colors border border-slate-200"
-                                  title="Edit"
+                                  title="Edit Project (Full Page)"
                                 >
                                   <Edit className="w-3.5 h-3.5" />
                                 </button>
@@ -1228,61 +1235,454 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
-                {/* --- 6. HOME SOLUTIONS TAB --- */}
-                {activeTab === 'solutions' && (
+                {/* --- 6. FULL-PAGE PROJECT EDITOR --- */}
+                {activeTab === 'project-editor' && editingProject && (
                   <div className="space-y-6">
-                    <div className="flex justify-between items-center">
-                      <h3 className="text-lg font-bold text-slate-800">Horizontal Scrolling Solutions (Home)</h3>
-                      <button
-                        onClick={() => {
-                          setEditorType('solutions');
-                          setEditItem(null);
-                          setIsEditorOpen(true);
-                        }}
-                        className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm"
-                      >
-                        <Plus className="w-4 h-4" /> Add Section
-                      </button>
+                    {/* Top Action Bar */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+                      <div className="flex items-center gap-3">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (confirm('Return to projects list? Any unsaved edits will be lost.')) {
+                              setActiveTab('projects');
+                              setEditingProject(null);
+                            }
+                          }}
+                          className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors"
+                          title="Back to Projects"
+                        >
+                          <ArrowLeft className="w-5 h-5" />
+                        </button>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
+                              Project Studio
+                            </span>
+                            <span className="text-xs text-slate-300">•</span>
+                            <span className="text-xs font-semibold text-slate-500">
+                              {projects.some((p) => p.id === editingProject.id) ? 'Editing Project' : 'New Project'}
+                            </span>
+                          </div>
+                          <h3 className="text-xl font-bold text-slate-900 mt-0.5">
+                            {editingProject.title?.trim() ? editingProject.title : 'Untitled Project'}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveTab('projects');
+                            setEditingProject(null);
+                          }}
+                          className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleSaveProject}
+                          disabled={savingData}
+                          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-sm transition-all"
+                        >
+                          {savingData ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                          <span>Save Project</span>
+                        </button>
+                      </div>
                     </div>
 
-                    <div className="space-y-4">
-                      {solutions.map((sol) => (
-                        <div key={sol.id} className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col md:flex-row items-center gap-6 shadow-sm hover:border-slate-350 transition-colors">
-                          <div className="w-24 h-24 bg-slate-100 border border-slate-150 rounded-xl overflow-hidden shrink-0 flex items-center justify-center shadow-xs">
-                            {sol.image ? (
-                              <img src={sol.image} alt={sol.title} className="w-full h-full object-cover" />
-                            ) : (
-                              <Sparkles className="w-8 h-8 text-slate-300" />
+                    {/* Section 1: Basic Info & Metadata */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 space-y-5 shadow-xs">
+                      <div className="border-b border-slate-100 pb-3">
+                        <h4 className="font-bold text-base text-slate-900">Project Overview & Identity</h4>
+                        <p className="text-xs text-slate-500 mt-0.5">Core identifiers, title, category, and display settings.</p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Project Title *</label>
+                          <input
+                            type="text"
+                            value={editingProject.title || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
+                            placeholder="e.g. Trade Buddy Broker"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 font-medium rounded-xl outline-none"
+                            required
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Subtitle</label>
+                          <input
+                            type="text"
+                            value={editingProject.subtitle || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, subtitle: e.target.value })}
+                            placeholder="e.g. Celery-Powered Algorithmic Crypto Trading & Real-time WebUI"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Unique URL Slug *</label>
+                          <input
+                            type="text"
+                            value={editingProject.slug || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') })}
+                            placeholder="e.g. trade-buddy-broker"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 font-mono rounded-xl outline-none"
+                            required
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Category</label>
+                          <input
+                            type="text"
+                            value={editingProject.category || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, category: e.target.value })}
+                            placeholder="e.g. Fintech & Automation, Web Application, SaaS"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5 md:col-span-2">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Cover Image URL / Path</label>
+                          <div className="flex gap-4 items-start">
+                            <input
+                              type="text"
+                              value={editingProject.image || ''}
+                              onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
+                              placeholder="e.g. /trade-buddy.png or https://images.unsplash.com/..."
+                              className="flex-1 px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 font-mono rounded-xl outline-none"
+                            />
+                            {editingProject.image && (
+                              <div className="w-20 h-14 rounded-xl border border-slate-200 overflow-hidden bg-slate-100 shrink-0">
+                                <img src={editingProject.image} alt="Preview" className="w-full h-full object-cover" />
+                              </div>
                             )}
                           </div>
-                          
-                          <div className="flex-1 space-y-1.5 text-center md:text-left">
-                            <span className="text-[10px] text-indigo-600 font-bold uppercase tracking-widest">{sol.label}</span>
-                            <h4 className="font-bold text-base text-slate-800 leading-snug">{sol.title}</h4>
-                            <p className="text-xs text-slate-500 leading-relaxed max-w-4xl">{sol.description}</p>
-                            <p className="text-[10px] text-slate-400 font-mono">Layout direction: {sol.layout === 'right' ? 'Text Right / Image Left' : 'Text Left / Image Right'}</p>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Featured on Homepage?</label>
+                          <select
+                            value={editingProject.featured ? 'true' : 'false'}
+                            onChange={(e) => setEditingProject({ ...editingProject, featured: e.target.value === 'true' })}
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 font-semibold rounded-xl outline-none"
+                          >
+                            <option value="true">Yes — Show in Homepage Bento Grid</option>
+                            <option value="false">No — Portfolio Only</option>
+                          </select>
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Status</label>
+                          <input
+                            type="text"
+                            value={editingProject.status || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, status: e.target.value })}
+                            placeholder="e.g. Live, Completed, In Development"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Live Website URL</label>
+                          <input
+                            type="text"
+                            value={editingProject.liveUrl || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, liveUrl: e.target.value })}
+                            placeholder="e.g. https://myproject.com"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">GitHub Repository URL</label>
+                          <input
+                            type="text"
+                            value={editingProject.githubUrl || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, githubUrl: e.target.value })}
+                            placeholder="e.g. https://github.com/jay19patel/project"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Start Date</label>
+                          <input
+                            type="text"
+                            value={editingProject.startDate || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, startDate: e.target.value })}
+                            placeholder="YYYY-MM-DD"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">End Date</label>
+                          <input
+                            type="text"
+                            value={editingProject.endDate || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, endDate: e.target.value })}
+                            placeholder="YYYY-MM-DD or Present"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section 2: Interactive Technology Stack Selector */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 space-y-6 shadow-xs">
+                      <div className="border-b border-slate-100 pb-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="font-bold text-base text-slate-900">Architecture & Technologies</h4>
+                          <span className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full border border-indigo-100">
+                            {(editingProject.technologies || []).length} Selected
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          Click any tech badge from your official tech stack to toggle selection, or type custom tags in the input below.
+                        </p>
+                      </div>
+
+                      {/* Interactive Categorized Badges */}
+                      <div className="space-y-5">
+                        {['backend', 'frontend', 'database', 'other-tools'].map((catKey) => {
+                          const catList = skills[catKey] || [];
+                          if (catList.length === 0) return null;
+                          return (
+                            <div key={catKey} className="space-y-2.5">
+                              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                                {catKey.replace('-', ' ')}
+                              </span>
+                              <div className="flex flex-wrap gap-2">
+                                {catList.map((tool) => {
+                                  const isSelected = (editingProject.technologies || []).some(
+                                    (t) => t.toLowerCase() === tool.name.toLowerCase()
+                                  );
+                                  return (
+                                    <button
+                                      type="button"
+                                      key={tool.name}
+                                      onClick={() => toggleTech(tool.name)}
+                                      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
+                                        isSelected
+                                          ? 'bg-indigo-600 border-indigo-600 text-white shadow-xs ring-2 ring-indigo-200 scale-102'
+                                          : 'bg-white border-slate-200 text-slate-700 hover:border-slate-300 hover:bg-slate-50'
+                                      }`}
+                                    >
+                                      {tool.icon && (
+                                        <img src={tool.icon} alt="" className="w-4 h-4 object-contain shrink-0" />
+                                      )}
+                                      <span>{tool.name}</span>
+                                      {isSelected && <Check className="w-3.5 h-3.5 ml-0.5" />}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Manual text input for comma-separated editing */}
+                      <div className="pt-4 border-t border-slate-100 space-y-1.5">
+                        <label className="text-xs font-bold text-slate-600 uppercase tracking-wider block">
+                          Technologies (Comma-separated text)
+                        </label>
+                        <input
+                          type="text"
+                          value={(editingProject.technologies || []).join(', ')}
+                          onChange={(e) => {
+                            const raw = e.target.value;
+                            const arr = raw.split(',').map((s) => s.trim()).filter(Boolean);
+                            setEditingProject({ ...editingProject, technologies: arr });
+                          }}
+                          placeholder="e.g. Django, Next.js, Redis, Celery, Delta Exchange"
+                          className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 font-mono text-xs rounded-xl outline-none"
+                        />
+                        <p className="text-[11px] text-slate-400">
+                          Technologies selected with the badges above are automatically synchronized with this input.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Section 3: Descriptions & Case Study Deep-Dive */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 space-y-5 shadow-xs">
+                      <div className="border-b border-slate-100 pb-3">
+                        <h4 className="font-bold text-base text-slate-900">Case Study & Content Deep-Dive</h4>
+                        <p className="text-xs text-slate-500 mt-0.5">Written copy for homepage preview and full case study page.</p>
+                      </div>
+
+                      <div className="space-y-4 text-xs">
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">
+                            Short Summary (Card Preview)
+                          </label>
+                          <textarea
+                            rows={3}
+                            value={editingProject.description || ''}
+                            onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
+                            placeholder="Brief 2-3 sentence overview displayed on the portfolio and homepage cards."
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none resize-none leading-relaxed"
+                            required
+                          />
+                        </div>
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">
+                            Project Overview
+                          </label>
+                          <textarea
+                            rows={4}
+                            value={editingProject.content?.overview || ''}
+                            onChange={(e) =>
+                              setEditingProject({
+                                ...editingProject,
+                                content: { ...(editingProject.content || {}), overview: e.target.value },
+                              })
+                            }
+                            placeholder="Detailed background of the project and product mission."
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none resize-none leading-relaxed"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="font-bold text-slate-600 uppercase tracking-wider block">The Challenge</label>
+                            <textarea
+                              rows={4}
+                              value={editingProject.content?.challenge || ''}
+                              onChange={(e) =>
+                                setEditingProject({
+                                  ...editingProject,
+                                  content: { ...(editingProject.content || {}), challenge: e.target.value },
+                                })
+                              }
+                              placeholder="Key engineering challenges, bottlenecks, or requirements."
+                              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none resize-none leading-relaxed"
+                            />
                           </div>
 
-                          <div className="flex gap-1.5 border-t md:border-t-0 md:border-l border-slate-105 pt-4 md:pt-0 md:pl-6 shrink-0">
-                            <button
-                              onClick={() => {
-                                  setEditorType('solutions');
-                                  setEditItem(sol);
-                                  setIsEditorOpen(true);
-                              }}
-                              className="p-2 bg-slate-105 hover:bg-slate-200 text-slate-655 rounded-lg transition-colors border border-slate-200"
-                            >
-                              <Edit className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteItem('solutions', sol.id)}
-                              className="p-2 bg-red-50 hover:bg-red-100 text-red-655 rounded-lg transition-colors border border-red-200"
-                            >
-                              <Trash2 className="w-3.5 h-3.5" />
-                            </button>
+                          <div className="space-y-1.5">
+                            <label className="font-bold text-slate-600 uppercase tracking-wider block">The Solution</label>
+                            <textarea
+                              rows={4}
+                              value={editingProject.content?.solution || ''}
+                              onChange={(e) =>
+                                setEditingProject({
+                                  ...editingProject,
+                                  content: { ...(editingProject.content || {}), solution: e.target.value },
+                                })
+                              }
+                              placeholder="How your engineering approach and architecture solved the problem."
+                              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none resize-none leading-relaxed"
+                            />
                           </div>
                         </div>
-                      ))}
+
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Results Achieved</label>
+                          <input
+                            type="text"
+                            value={editingProject.content?.results || ''}
+                            onChange={(e) =>
+                              setEditingProject({
+                                ...editingProject,
+                                content: { ...(editingProject.content || {}), results: e.target.value },
+                              })
+                            }
+                            placeholder="e.g. Sub-80ms render speeds, 100% automated execution, 25% velocity increase"
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section 4: Client Testimonial */}
+                    <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-7 space-y-5 shadow-xs">
+                      <div className="border-b border-slate-100 pb-3">
+                        <h4 className="font-bold text-base text-slate-900">Client Feedback / Testimonial</h4>
+                        <p className="text-xs text-slate-500 mt-0.5">Optional review or feedback for this specific project.</p>
+                      </div>
+
+                      <div className="space-y-4 text-xs">
+                        <div className="space-y-1.5">
+                          <label className="font-bold text-slate-600 uppercase tracking-wider block">Feedback Quote</label>
+                          <textarea
+                            rows={3}
+                            value={editingProject.testimonial?.text || ''}
+                            onChange={(e) =>
+                              setEditingProject({
+                                ...editingProject,
+                                testimonial: { ...(editingProject.testimonial || {}), text: e.target.value },
+                              })
+                            }
+                            placeholder="What the client or stakeholders said about this project delivery."
+                            className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none resize-none leading-relaxed"
+                          />
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-1.5">
+                            <label className="font-bold text-slate-600 uppercase tracking-wider block">Author Name</label>
+                            <input
+                              type="text"
+                              value={editingProject.testimonial?.author || ''}
+                              onChange={(e) =>
+                                setEditingProject({
+                                  ...editingProject,
+                                  testimonial: { ...(editingProject.testimonial || {}), author: e.target.value },
+                                })
+                              }
+                              placeholder="e.g. Jay Patel"
+                              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                            />
+                          </div>
+                          <div className="space-y-1.5">
+                            <label className="font-bold text-slate-600 uppercase tracking-wider block">Author Role / Organization</label>
+                            <input
+                              type="text"
+                              value={editingProject.testimonial?.position || ''}
+                              onChange={(e) =>
+                                setEditingProject({
+                                  ...editingProject,
+                                  testimonial: { ...(editingProject.testimonial || {}), position: e.target.value },
+                                })
+                              }
+                              placeholder="e.g. Lead Engineer / Creator"
+                              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-900 rounded-xl outline-none"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Sticky Action Bar */}
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-200">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab('projects');
+                          setEditingProject(null);
+                        }}
+                        className="px-5 py-2.5 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                      >
+                        Cancel & Return
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={handleSaveProject}
+                        disabled={savingData}
+                        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-sm transition-all"
+                      >
+                        {savingData ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                        <span>Save Project Changes</span>
+                      </button>
                     </div>
                   </div>
                 )}
@@ -1640,131 +2040,6 @@ export default function AdminDashboard() {
 
               {/* Form content */}
               <form onSubmit={handleEditorSubmit} className="flex-1 p-6 overflow-y-auto space-y-5">
-                
-                {/* --- A. PROJECTS FORM FIELDS --- */}
-                {editorType === 'projects' && (
-                  <div className="space-y-4 text-xs">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Project Title</label>
-                        <input name="title" type="text" defaultValue={editItem?.title || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" required />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Subtitle</label>
-                        <input name="subtitle" type="text" defaultValue={editItem?.subtitle || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Unique Slug</label>
-                        <input name="slug" type="text" defaultValue={editItem?.slug || ''} placeholder="e.g. trade-buddy-broker" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" required />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Category</label>
-                        <input name="category" type="text" defaultValue={editItem?.category || 'Web Application'} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" required />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Cover Image URL</label>
-                        <input name="image" type="text" defaultValue={editItem?.image || ''} placeholder="e.g. /erp-system.jpg or URL" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" required />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Featured Project</label>
-                        <select name="featured" defaultValue={editItem?.featured ? 'true' : 'false'} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none">
-                          <option value="false">No (Normal)</option>
-                          <option value="true">Yes (Show on Homepage)</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Description</label>
-                      <textarea name="description" rows={2} defaultValue={editItem?.description || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none resize-none" required />
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Live Website URL</label>
-                        <input name="liveUrl" type="text" defaultValue={editItem?.liveUrl || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">GitHub Repository URL</label>
-                        <input name="githubUrl" type="text" defaultValue={editItem?.githubUrl || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-3 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Start Date</label>
-                        <input name="startDate" type="text" placeholder="YYYY-MM-DD" defaultValue={editItem?.startDate || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">End Date</label>
-                        <input name="endDate" type="text" placeholder="YYYY-MM-DD or Present" defaultValue={editItem?.endDate || 'Present'} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Project Status</label>
-                        <input name="status" type="text" placeholder="Live, Completed..." defaultValue={editItem?.status || 'Live'} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Technologies (comma-separated)</label>
-                        <input name="technologies" type="text" defaultValue={editItem?.technologies?.join(', ') || ''} placeholder="e.g. Next.js, Django, Redis" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" required />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Client / Org</label>
-                        <input name="client" type="text" defaultValue={editItem?.client || 'NJ Tech Studio'} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                      </div>
-                    </div>
-
-                    <div className="border-t border-slate-100 pt-3 space-y-3">
-                      <h5 className="font-bold text-xs uppercase tracking-wider text-indigo-600">Full Project Case Study</h5>
-                      <div className="space-y-3">
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Project Overview</label>
-                          <textarea name="overview" rows={2} defaultValue={editItem?.content?.overview || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none resize-none" />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">The Challenge</label>
-                          <textarea name="challenge" rows={2} defaultValue={editItem?.content?.challenge || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none resize-none" />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">The Solution</label>
-                          <textarea name="solution" rows={2} defaultValue={editItem?.content?.solution || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none resize-none" />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Results achieved</label>
-                          <input name="results" type="text" defaultValue={editItem?.content?.results || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-slate-150 pt-3 space-y-3">
-                      <h5 className="font-bold text-xs uppercase tracking-wider text-indigo-600">Project Testimonial</h5>
-                      <div className="space-y-3">
-                        <div className="space-y-1">
-                          <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Client Feedback Text</label>
-                          <textarea name="testimonialText" rows={2} defaultValue={editItem?.testimonial?.text || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none resize-none" />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-1">
-                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Author Name</label>
-                            <input name="testimonialAuthor" type="text" defaultValue={editItem?.testimonial?.author || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                          </div>
-                          <div className="space-y-1">
-                            <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Author Position / Role</label>
-                            <input name="testimonialPos" type="text" defaultValue={editItem?.testimonial?.position || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
 
                 {/* --- B. TESTIMONIALS FORM FIELDS --- */}
                 {editorType === 'testimonials' && (
@@ -1807,40 +2082,6 @@ export default function AdminDashboard() {
                     <div className="space-y-1">
                       <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Video Description</label>
                       <textarea name="description" rows={3} defaultValue={editItem?.description || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none resize-none" required />
-                    </div>
-                  </div>
-                )}
-
-                {/* --- D. HOME SECTIONS FORM FIELDS --- */}
-                {editorType === 'solutions' && (
-                  <div className="space-y-4 text-sm">
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Section Label (Mini Header)</label>
-                        <input name="label" type="text" defaultValue={editItem?.label || ''} placeholder="e.g. WEB + AI DEVELOPMENT" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none" required />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Layout Side</label>
-                        <select name="layout" defaultValue={editItem?.layout || 'left'} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-850 rounded-lg outline-none">
-                          <option value="left">Text Left / Image Right</option>
-                          <option value="right">Text Right / Image Left</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Main Title</label>
-                      <input name="title" type="text" defaultValue={editItem?.title || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Cover Image Path</label>
-                      <input name="image" type="text" defaultValue={editItem?.image || ''} placeholder="e.g. /web-development.jpg" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
-                    </div>
-
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Detailed Description</label>
-                      <textarea name="description" rows={4} defaultValue={editItem?.description || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
                     </div>
                   </div>
                 )}

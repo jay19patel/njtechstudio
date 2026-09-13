@@ -1,42 +1,44 @@
 [
   {
     "id": 1,
-    "label": "CONTENT & YOUTUBE CREATION",
-    "title": "CREATIVE TECH CONTENT THAT TEACHES & ENTERTAINS",
-    "description": "I create fun, engaging and value-packed content around programming, startups, software development and real-world tech journeys. With a joyful delivery style, I turn complex tech topics into simple, enjoyable and relatable experiences through YouTube, reels and storytelling.",
-    "image": "/content-creation.png",
-    "layout": "left"
+    "num": "01",
+    "tag": "Fintech & Algorithmic Trading",
+    "title": "Trade Buddy Broker",
+    "description": "Automated algorithmic cryptocurrency trading system executing technical setups via Delta Exchange APIs with distributed Celery workers. Sub-second execution, zero manual stress, and live WebUI telemetry.",
+    "actionText": "Explore Case Study",
+    "icon": "Rocket",
+    "isLight": false,
+    "slug": "trade-buddy-broker",
+    "image": "/trade-buddy.png",
+    "tech": ["Python", "Celery", "Delta Exchange", "Docker"],
+    "badge": "Live System"
   },
   {
     "id": 2,
-    "label": "WEB + AI DEVELOPMENT",
-    "title": "MODERN WEB APPS SUPERCHARGED WITH AI",
-    "description": "I build fast, scalable and intelligent applications using Next.js, React, FastAPI, Django and GenAI tools. From backend APIs to smart automation, vector search, AI agents and real-time dashboards — your digital product becomes faster, smarter and future-ready.",
-    "image": "/web-development.jpg",
-    "layout": "right"
+    "num": "02",
+    "tag": "AI Search & Publishing",
+    "title": "Bloger Menia",
+    "description": "Full-stack developer platform built in Django with pgvector embeddings for semantic AI vector search, curated reading playlists, and one-click LinkedIn publishing.",
+    "actionText": "Explore Case Study",
+    "icon": "Code2",
+    "isLight": true,
+    "slug": "bloger-menia",
+    "image": "/blogermenia-home.png",
+    "tech": ["Django", "Vector Search", "PostgreSQL", "Redis"],
+    "badge": "Live Platform"
   },
   {
     "id": 3,
-    "label": "ERP & BUSINESS AUTOMATION",
-    "title": "CUSTOM ERP FOR SMALL & MEDIUM BUSINESSES",
-    "description": "Automate your business with tailored ERP systems built using Frappe/ERPNext + React. From inventory and HR to approvals and finance dashboards — I deliver fast, clean and efficient workflows that boost productivity and reduce manual work.",
-    "image": "/erp-system.jpg",
-    "layout": "left"
-  },
-  {
-    "id": 4,
-    "label": "IOT & SMART AUTOMATION",
-    "title": "CONNECT DEVICES WITH REAL-WORLD SOFTWARE",
-    "description": "I design IoT-enabled systems that combine sensors, cloud services and smart automation. From real-time monitoring to device dashboards and industry automation — I bridge hardware, software and AI to bring ideas to life.",
-    "image": "/iot-automation.jpg",
-    "layout": "right"
-  },
-  {
-    "id": 5,
-    "label": "SCHOOL & COLLEGE PROJECTS",
-    "title": "HIGH-SCORING MODERN STUDENT PROJECTS",
-    "description": "Helping students build impactful, presentation-ready academic projects using Web Development, Python, AI, ML, automation and IoT. Clean code, proper documentation and impressive UI — perfect for final-year submissions and demos.",
-    "image": "/student-projects.jpg",
-    "layout": "left"
+    "num": "03",
+    "tag": "Enterprise SaaS",
+    "title": "Office NJTechStudio",
+    "description": "Internal project and sprint management dashboard engineered with Next.js and Django REST. Real-time Kanban boards, role-based access, and automated standup reports.",
+    "actionText": "Explore Case Study",
+    "icon": "Layers",
+    "isLight": false,
+    "slug": "office-njtechstudio",
+    "image": "/office-tasks.png",
+    "tech": ["Next.js", "Django REST", "MongoDB", "Redux"],
+    "badge": "Internal SaaS"
   }
 ]

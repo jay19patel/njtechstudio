@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
 
 export default function TestimonialSection() {
@@ -47,34 +48,40 @@ export default function TestimonialSection() {
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
-          setTestimonials(data);
+          setTestimonials(prev => {
+            if (JSON.stringify(prev) === JSON.stringify(data)) return prev;
+            return data;
+          });
         }
       })
       .catch(err => console.error('Error fetching testimonials:', err));
   }, []);
 
-  // Duplicate for seamless infinite scroll - only 2 rows
   const row1 = [...testimonials, ...testimonials];
   const row2 = [...testimonials, ...testimonials];
 
-
   return (
-    <MovingTextBg text="TESTIMONIALS" textColor="text-gray-400">
-      <section className="bg-transparent pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 relative">
-        <div className="mb-8 sm:mb-12 px-4 sm:px-6 lg:px-8 relative z-10 max-w-7xl mx-auto">
-          <h3 className="text-gray-900 text-3xl sm:text-4xl md:text-5xl font-semibold text-left">
-            What Clients <span className="text-indigo-800">Say</span>
-          </h3>
-          <p className="text-left text-gray-600 text-sm sm:text-base mt-2 sm:mt-3 max-w-2xl">
-            Real feedback from real clients who trusted me to build their tech solutions.
-          </p>
+    <MovingTextBg text="TESTIMONIALS" textColor="text-white" className="bg-black">
+      <section className="relative w-full bg-transparent text-white pt-20 pb-24 overflow-hidden border-t border-zinc-900">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 mb-12 text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-white mb-4">
+              What clients <span className="bg-indigo-900/50 text-indigo-300 px-2 pb-1 inline-block -mx-2 mt-2 rounded-sm border border-indigo-500/20">say.</span>
+            </h2>
+            <p className="text-zinc-400 text-lg max-w-2xl mx-auto">
+              Real feedback from real clients who trusted me to build their tech solutions.
+            </p>
+          </motion.div>
         </div>
 
-        <div className="p-4 overflow-x-hidden relative">
-          {/* Left Gradient */}
-          <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-24 z-10 bg-gradient-to-r from-white to-transparent"></div>
+        <div className="p-4 overflow-x-hidden relative max-w-[1600px] mx-auto z-10">
+          <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-32 z-10 bg-gradient-to-r from-black to-transparent pointer-events-none"></div>
 
-          {/* Row 1 - Left to Right */}
           <div className="flex items-center mb-6">
             <div className="flex gap-4 sm:gap-6 animate-scroll-left">
               {row1.map((testimonial, idx) => (
@@ -83,7 +90,6 @@ export default function TestimonialSection() {
             </div>
           </div>
 
-          {/* Row 2 - Right to Left */}
           <div className="flex items-center">
             <div className="flex gap-4 sm:gap-6 animate-scroll-right">
               {row2.map((testimonial, idx) => (
@@ -92,43 +98,30 @@ export default function TestimonialSection() {
             </div>
           </div>
 
-          {/* Right Gradient */}
-          <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-24 z-10 bg-gradient-to-l from-white to-transparent"></div>
+          <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-32 z-10 bg-gradient-to-l from-black to-transparent pointer-events-none"></div>
         </div>
 
         <style jsx>{`
           @keyframes scroll-left {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(-50%);
-            }
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
           }
-
           @keyframes scroll-right {
-            0% {
-              transform: translateX(-50%);
-            }
-            100% {
-              transform: translateX(0);
-            }
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
           }
-
           .animate-scroll-left {
             animation: scroll-left 60s linear infinite;
             will-change: transform;
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
           }
-
           .animate-scroll-right {
             animation: scroll-right 60s linear infinite;
             will-change: transform;
             transform: translate3d(0, 0, 0);
             backface-visibility: hidden;
           }
-
           .animate-scroll-left:hover, .animate-scroll-right:hover {
             animation-play-state: paused;
           }
@@ -140,17 +133,22 @@ export default function TestimonialSection() {
 
 const TestimonialCard = ({ testimonial }) => {
   return (
-    <div className="shrink-0 w-[350px] sm:w-[450px] md:w-[500px] bg-white border border-gray-300 p-6 sm:p-8 shadow-sm hover:shadow-md transition-shadow duration-300">
-      {/* Testimonial Text */}
-      <p className="text-gray-700 text-sm sm:text-base leading-relaxed mb-6">
+    <div className="shrink-0 w-[300px] sm:w-[400px] bg-zinc-950 border border-zinc-800 rounded-3xl p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-zinc-700 transition-colors duration-300 flex flex-col justify-between">
+      <p className="text-zinc-300 text-sm sm:text-[15px] leading-relaxed mb-8 font-medium">
         &quot;{testimonial.text}&quot;
       </p>
-
-      {/* Author Name - Bottom */}
-      <div className="border-t border-gray-200 pt-4">
-        <p className="text-sm sm:text-base font-medium text-gray-900">
-          — {testimonial.name}
-        </p>
+      <div className="flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 font-bold text-sm">
+           {testimonial.name.charAt(0)}
+        </div>
+        <div>
+          <p className="text-sm font-semibold text-white tracking-tight">
+            {testimonial.name}
+          </p>
+          <p className="text-[11px] text-zinc-500 font-medium uppercase tracking-wider">
+            {testimonial.role}
+          </p>
+        </div>
       </div>
     </div>
   );

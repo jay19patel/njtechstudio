@@ -1,18 +1,18 @@
 import HeroSection from "./components/HeroSection";
-import SolutionsSection from "./components/SolutionsSection";
+import CodingFeaturesSection from "./components/CodingFeaturesSection";
+import ProjectsSection from "./components/ProjectsSection";
 import WhyChooseUs from "./components/WhyChooseUs";
-import LatestProjects from "./components/LatestProjects";
 import FAQSection from "./components/faqSection";
 import YoutubeSection from "./components/YoutubeSection";
 import TestimonialSection from "./components/TestimonialSection";
 
 export default function Home() {
   return (
-    <div>
+    <div className="bg-[#fcfcfd]">
       <HeroSection />
-      <SolutionsSection />
+      <CodingFeaturesSection />
+      <ProjectsSection />
       <WhyChooseUs />
-      <LatestProjects />
       <YoutubeSection />
       <TestimonialSection />
       <FAQSection />

@@ -12,7 +12,7 @@ import MovingTextBg from "../components/MovingTextBg";
 const AVATAR_COLORS = ["#6366F1", "#8B5CF6", "#EC4899", "#F59E0B", "#10B981"];
 const VISITOR_ID_KEY = "channel_visitor_id";
 
-// Anonymous per-browser identity — avoids relying on users to type a real name/designation
+// Anonymous per-browser identity
 const getOrCreateVisitorId = () => {
   let id = localStorage.getItem(VISITOR_ID_KEY);
   if (!id) {
@@ -29,21 +29,14 @@ const getOrCreateVisitorId = () => {
 export default function ChannelPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  // Infinite Scroll Count
   const [visibleCount, setVisibleCount] = useState(3);
-
-  // Social States
   const [likes, setLikes] = useState({});
   const [comments, setComments] = useState({});
-
-  // UI states
   const [expandedComments, setExpandedComments] = useState({});
   const [expandedText, setExpandedText] = useState({});
   const [commentInputs, setCommentInputs] = useState({});
   const [visitorId, setVisitorId] = useState("");
 
-  // Auto-scroll Refs
   const commentsContainerRefs = useRef({});
   const commentsEndRefs = useRef({});
 
@@ -65,7 +58,6 @@ export default function ChannelPage() {
           const localComments = {};
 
           sorted.forEach((post) => {
-            // Load Likes
             const savedLike = localStorage.getItem(`channel_like_${post.id}`);
             const baseLikes = post.likesCount || Math.floor(Math.random() * 18) + 12;
             if (savedLike) {
@@ -74,12 +66,10 @@ export default function ChannelPage() {
               localLikes[post.id] = { count: baseLikes, liked: false };
             }
 
-            // Load Comments
             const savedComments = localStorage.getItem(`channel_comments_${post.id}`);
             if (savedComments) {
               localComments[post.id] = JSON.parse(savedComments);
             } else {
-              // Prepopulate with realistic LinkedIn-style professional comments
               localComments[post.id] = [
                 {
                   id: "c1",
@@ -110,7 +100,6 @@ export default function ChannelPage() {
       });
   }, []);
 
-  // Infinite Scroll Trigger
   useEffect(() => {
     if (loading || visibleCount >= posts.length) return;
 
@@ -154,7 +143,6 @@ export default function ChannelPage() {
 
     if (!text.trim()) return;
 
-    // Ensure comments section is open
     setExpandedComments((prev) => ({ ...prev, [postId]: true }));
 
     setComments((prev) => {
@@ -173,10 +161,8 @@ export default function ChannelPage() {
       };
     });
 
-    // Clear input
     setCommentInputs((prev) => ({ ...prev, [postId]: "" }));
 
-    // Scroll to newest comment
     setTimeout(() => {
       const container = commentsContainerRefs.current[postId];
       if (container) {
@@ -224,7 +210,6 @@ export default function ChannelPage() {
     }));
   };
 
-  // Helper for human-readable relative time
   const getRelativeTimeString = (dateStr) => {
     try {
       const postDate = new Date(dateStr);
@@ -253,33 +238,34 @@ export default function ChannelPage() {
   const visiblePosts = posts.slice(0, visibleCount);
 
   return (
-    <div className="bg-slate-50 text-slate-900 min-h-screen relative">
-      <MovingTextBg text="NJTECHSTUDIO" textColor="text-gray-400" isFixed={true}>
+    <div className="bg-[#fcfcfd] text-zinc-900 min-h-screen relative">
+      <MovingTextBg text="UPDATES" textColor="text-gray-400" isFixed={true}>
         
         {/* Main Feed Container */}
         <div className="max-w-xl mx-auto pt-28 pb-20 px-4">
           
           {/* Channel Header Profile Summary */}
-          <div className="bg-white border-2 border-zinc-900 p-6 mb-8 text-center shadow-md relative overflow-hidden group">
-            {/* Design accents */}
-            <div className="absolute top-0 left-0 w-full h-1.5 bg-indigo-900" />
+          <div className="bg-white border border-zinc-200 rounded-3xl p-8 mb-8 text-center shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-full h-1.5 bg-indigo-500" />
             
-            <div className="w-16 h-16 border-2 border-indigo-900 bg-zinc-950 flex items-center justify-center mx-auto mb-3 shadow-md">
-              <span className="text-white font-black text-xl tracking-tighter" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
+            <div className="w-20 h-20 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <span className="text-zinc-900 font-bold text-2xl tracking-tighter">
                 NJ
               </span>
             </div>
             
-            <h1 className="text-2xl font-black text-slate-950 flex items-center justify-center gap-1.5 leading-tight">
-              <span>NJ Tech Studio Channel</span>
-              <CheckCircle2 className="w-5 h-5 text-blue-500 fill-blue-500 shrink-0" />
+            <h1 className="text-2xl font-bold text-zinc-900 flex items-center justify-center gap-2 leading-tight">
+              <span>NJ Tech Studio</span>
+              <CheckCircle2 className="w-5 h-5 text-indigo-500 fill-indigo-50" />
             </h1>
             
-            <p className="text-xs text-indigo-900 font-mono font-bold uppercase tracking-widest mt-1 flex items-center justify-center gap-1">
-              <span>// TECHNOLOGY & DESIGN STUDIO</span>
-            </p>
+            <div className="mt-2">
+              <span className="px-3 py-1 bg-zinc-100 border border-zinc-200 text-zinc-600 text-[10px] font-bold uppercase tracking-wider rounded-full shadow-sm inline-block">
+                Technology & Design Studio
+              </span>
+            </div>
             
-            <p className="text-xs text-slate-600 mt-3 max-w-sm mx-auto leading-relaxed font-medium">
+            <p className="text-sm text-zinc-500 mt-4 max-w-sm mx-auto leading-relaxed">
               Sharing our latest engineering updates, live workshops, open-source releases, and behind-the-scenes logs in real time.
             </p>
           </div>
@@ -287,13 +273,13 @@ export default function ChannelPage() {
           {/* Feed Content */}
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <RefreshCw className="w-6 h-6 text-indigo-800 animate-spin" />
-              <p className="text-slate-500 text-xs font-bold uppercase tracking-wider">Loading updates...</p>
+              <RefreshCw className="w-6 h-6 text-indigo-500 animate-spin" />
+              <p className="text-zinc-500 text-xs font-bold uppercase tracking-wider">Loading updates...</p>
             </div>
           ) : visiblePosts.length === 0 ? (
-            <div className="text-center py-20 bg-white border-2 border-zinc-300 shadow-sm">
-              <MessageSquare className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-              <p className="text-slate-500 text-sm font-semibold">No announcements posted yet.</p>
+            <div className="text-center py-20 bg-white border border-zinc-200 rounded-3xl shadow-sm">
+              <MessageSquare className="w-12 h-12 text-zinc-300 mx-auto mb-3" />
+              <p className="text-zinc-500 text-sm font-medium">No announcements posted yet.</p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -315,53 +301,51 @@ export default function ChannelPage() {
                     initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
-                    className="bg-white border-2 border-zinc-200 hover:border-indigo-900 shadow-md transition-colors duration-300 flex flex-col"
+                    className="bg-white border border-zinc-200 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.08)] transition-all duration-300 flex flex-col overflow-hidden"
                   >
                     {/* Header */}
-                    <div className="p-4 flex items-center justify-between border-b border-slate-200 bg-white">
+                    <div className="p-5 flex items-center justify-between border-b border-zinc-100 bg-white">
                       <div className="flex items-center gap-3">
-                        {/* Custom Studio Avatar Ring */}
-                        <div className="w-10 h-10 border border-indigo-900 bg-zinc-950 flex items-center justify-center shrink-0">
-                          <span className="text-white font-black text-sm tracking-tighter" style={{ fontFamily: "'Jersey 10', sans-serif" }}>
+                        <div className="w-11 h-11 rounded-full border border-zinc-200 bg-zinc-50 flex items-center justify-center shrink-0">
+                          <span className="text-zinc-900 font-bold text-sm tracking-tighter">
                             NJ
                           </span>
                         </div>
                         
                         <div>
                           <div className="flex items-center gap-1.5">
-                            <span className="font-extrabold text-[14px] sm:text-base text-slate-900 leading-none">
+                            <span className="font-semibold text-[15px] text-zinc-900 leading-none">
                               NJ Tech Studio
                             </span>
-                            <CheckCircle2 className="w-4 h-4 text-blue-500 fill-blue-500 shrink-0" />
-                            <span className="text-[10px] text-slate-400">• Author</span>
+                            <CheckCircle2 className="w-4 h-4 text-indigo-500 fill-indigo-50 shrink-0" />
                           </div>
                           
-                          <div className="flex items-center gap-1.5 mt-1 text-[11px] text-slate-400 font-semibold leading-none">
+                          <div className="flex items-center gap-1.5 mt-1.5 text-[11px] text-zinc-400 font-medium leading-none">
                             <span>{getRelativeTimeString(post.date)}</span>
                             <span>•</span>
-                            <span className="px-2 py-0.5 bg-indigo-950 border border-indigo-800 text-white text-[9px] font-bold uppercase tracking-wider">
+                            <span className="text-zinc-500 uppercase tracking-widest font-semibold text-[9px]">
                               {post.category || "Update"}
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      <button className="text-slate-400 hover:text-slate-600 p-1.5 hover:bg-slate-100 transition-colors">
-                        <MoreHorizontal className="w-4 h-4" />
+                      <button className="text-zinc-400 hover:text-zinc-600 w-8 h-8 rounded-full hover:bg-zinc-100 flex items-center justify-center transition-colors">
+                        <MoreHorizontal className="w-5 h-5" />
                       </button>
                     </div>
 
                     {/* Content Text */}
-                    <div className="px-5 pt-4 pb-3 space-y-2">
-                      <h2 className="text-base sm:text-lg font-bold text-slate-950 leading-snug">
+                    <div className="px-6 pt-5 pb-4 space-y-3">
+                      <h2 className="text-lg sm:text-xl font-semibold text-zinc-900 leading-snug tracking-tight">
                         {post.title}
                       </h2>
-                      <p className="text-[13px] sm:text-[14px] text-slate-700 leading-relaxed whitespace-pre-line">
+                      <p className="text-[14px] sm:text-[15px] text-zinc-600 leading-relaxed whitespace-pre-line">
                         {renderedContent}{" "}
                         {shouldTruncate && (
                           <button
                             onClick={() => toggleTextExpansion(post.id)}
-                            className="font-bold text-indigo-800 hover:underline cursor-pointer focus:outline-none ml-1"
+                            className="font-medium text-indigo-600 hover:text-indigo-700 hover:underline cursor-pointer focus:outline-none ml-1"
                           >
                             {isTextExpanded ? "show less" : "see more"}
                           </button>
@@ -371,7 +355,7 @@ export default function ChannelPage() {
 
                     {/* Image block */}
                     {post.image && (
-                      <div className="relative w-full max-h-[440px] bg-slate-100 border-y border-slate-200 flex items-center justify-center overflow-hidden">
+                      <div className="relative w-full max-h-[440px] bg-zinc-50 border-y border-zinc-100 flex items-center justify-center overflow-hidden">
                         <img
                           src={post.image}
                           alt={post.title}
@@ -382,23 +366,22 @@ export default function ChannelPage() {
                     )}
 
                     {/* Action Bar (Likes and Comments) */}
-                    <div className="px-4 py-2.5 border-t border-slate-200 flex items-center justify-between bg-slate-50">
-                      <div className="flex items-center gap-2">
-                        {/* Like pop trigger */}
+                    <div className="px-5 py-3 border-t border-zinc-100 flex items-center justify-between bg-zinc-50/50">
+                      <div className="flex items-center gap-3">
                         <motion.button
-                          whileTap={{ scale: 1.1 }}
+                          whileTap={{ scale: 1.05 }}
                           onClick={() => handleLike(post.id)}
-                          className={`flex items-center gap-1.5 py-1.5 px-3 border border-gray-300 bg-white hover:border-indigo-900 transition-all font-bold text-xs cursor-pointer ${
-                            postLikes.liked ? "text-rose-600 border-rose-400" : "text-slate-700"
+                          className={`flex items-center gap-1.5 py-2 px-3 rounded-full transition-all font-medium text-sm cursor-pointer ${
+                            postLikes.liked ? "bg-red-50 text-red-600" : "bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-100"
                           }`}
                         >
-                          <Heart className={`w-4 h-4 transition-colors ${postLikes.liked ? "fill-rose-600" : ""}`} />
+                          <Heart className={`w-4 h-4 transition-colors ${postLikes.liked ? "fill-red-600" : ""}`} />
                           <span>{postLikes.count}</span>
                         </motion.button>
 
                         <button
                           onClick={() => toggleComments(post.id)}
-                          className="flex items-center gap-1.5 py-1.5 px-3 border border-gray-300 bg-white text-slate-700 hover:border-indigo-900 transition-all font-bold text-xs cursor-pointer"
+                          className="flex items-center gap-1.5 py-2 px-3 rounded-full bg-white border border-zinc-200 text-zinc-600 hover:bg-zinc-100 transition-all font-medium text-sm cursor-pointer"
                         >
                           <MessageSquare className="w-4 h-4" />
                           <span>{postComments.length}</span>
@@ -411,7 +394,7 @@ export default function ChannelPage() {
                           href={post.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-white bg-indigo-900 border border-indigo-950 py-1.5 px-3.5 hover:bg-indigo-800 transition-all shrink-0 shadow-xs"
+                          className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white bg-zinc-900 py-2 px-4 rounded-full hover:bg-black transition-all shrink-0 shadow-sm"
                         >
                           <span>{post.linkText || "Explore"}</span>
                           <ExternalLink className="w-3.5 h-3.5" />
@@ -427,40 +410,38 @@ export default function ChannelPage() {
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="border-t border-slate-200 bg-slate-50 overflow-hidden"
+                          className="border-t border-zinc-100 bg-zinc-50 overflow-hidden"
                         >
-                          <div className="p-4 sm:p-5 space-y-4">
+                          <div className="p-5 space-y-5">
                             
                             {/* Comments List */}
                             {postComments.length > 0 && (
                               <div
                                 ref={(el) => (commentsContainerRefs.current[post.id] = el)}
-                                className="space-y-3.5 max-h-64 overflow-y-auto pr-1 no-scrollbar scroll-smooth"
+                                className="space-y-4 max-h-64 overflow-y-auto pr-2 no-scrollbar scroll-smooth"
                               >
                                 {postComments.map((cmt) => (
-                                  <div key={cmt.id} className="flex gap-2.5 items-start">
-                                    {/* Generated avatar */}
-                                    <div className="shrink-0 border border-slate-300 overflow-hidden">
-                                      <Avatar size={32} name={cmt.author} variant="beam" colors={AVATAR_COLORS} />
+                                  <div key={cmt.id} className="flex gap-3 items-start">
+                                    <div className="shrink-0 rounded-full border border-zinc-200 overflow-hidden bg-white">
+                                      <Avatar size={36} name={cmt.author} variant="beam" colors={AVATAR_COLORS} />
                                     </div>
-                                    {/* comment bubble */}
-                                    <div className="flex-1 bg-white border border-slate-200 p-3 text-xs">
-                                      <div className="flex justify-between items-start mb-0.5">
+                                    <div className="flex-1 bg-white border border-zinc-200 rounded-2xl p-3.5 shadow-sm text-sm">
+                                      <div className="flex justify-between items-start mb-1">
                                         <div>
-                                          <span className="font-extrabold text-slate-900 block leading-tight">
+                                          <span className="font-semibold text-zinc-900 block leading-tight">
                                             {cmt.author}
                                           </span>
                                           {cmt.headline && (
-                                            <span className="text-[10px] text-slate-500 block mt-0.5 leading-none font-medium">
+                                            <span className="text-[11px] text-zinc-500 block mt-0.5 leading-none">
                                               {cmt.headline}
                                             </span>
                                           )}
                                         </div>
-                                        <span className="text-[10px] text-slate-400 shrink-0">
+                                        <span className="text-[11px] text-zinc-400 shrink-0">
                                           {getRelativeTimeString(cmt.date)}
                                         </span>
                                       </div>
-                                      <p className="text-slate-700 leading-relaxed mt-1.5 whitespace-pre-wrap">
+                                      <p className="text-zinc-600 leading-relaxed mt-2 whitespace-pre-wrap">
                                         {cmt.text}
                                       </p>
                                     </div>
@@ -473,17 +454,17 @@ export default function ChannelPage() {
                             {/* Add Comment Form */}
                             <form
                               onSubmit={(e) => handleAddComment(e, post.id)}
-                              className="space-y-2 mt-2 pt-2 border-t border-slate-200"
+                              className="space-y-3 mt-2 pt-4 border-t border-zinc-200/60"
                             >
-                              <div className="flex items-center gap-1.5 px-0.5 text-[10px] text-slate-500 font-semibold">
-                                <div className="shrink-0 border border-slate-300 overflow-hidden">
-                                  <Avatar size={18} name={visitorId} variant="beam" colors={AVATAR_COLORS} />
+                              <div className="flex items-center gap-2 px-1 text-xs text-zinc-500">
+                                <div className="shrink-0 rounded-full border border-zinc-200 overflow-hidden">
+                                  <Avatar size={20} name={visitorId} variant="beam" colors={AVATAR_COLORS} />
                                 </div>
                                 <span>
-                                  Commenting as <span className="text-slate-900 font-bold">{visitorId}</span>
+                                  Commenting as <span className="text-zinc-900 font-semibold">{visitorId}</span>
                                 </span>
                               </div>
-                              <div className="flex gap-2 items-center">
+                              <div className="flex gap-2 items-center relative">
                                 <input
                                   type="text"
                                   placeholder="Write a comment..."
@@ -493,13 +474,13 @@ export default function ChannelPage() {
                                     ...commentInputs,
                                     [post.id]: e.target.value
                                   })}
-                                  className="flex-1 px-3 py-2 bg-white border border-slate-300 text-xs outline-none focus:border-indigo-900 text-slate-900 font-medium"
+                                  className="flex-1 px-4 py-3 bg-white border border-zinc-200 rounded-full text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10 text-zinc-900 transition-all pr-12 placeholder:text-zinc-400"
                                 />
                                 <button
                                   type="submit"
-                                  className="p-2.5 bg-indigo-900 hover:bg-indigo-800 text-white transition-colors border border-indigo-950 shrink-0 cursor-pointer shadow-xs"
+                                  className="absolute right-1.5 p-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full transition-colors cursor-pointer shadow-sm"
                                 >
-                                  <Send className="w-3.5 h-3.5" />
+                                  <Send className="w-4 h-4" />
                                 </button>
                               </div>
                             </form>
@@ -518,9 +499,9 @@ export default function ChannelPage() {
           {/* Loader for Infinite Scroll */}
           {!loading && visibleCount < posts.length && (
             <div id="infinite-scroll-trigger" className="flex items-center justify-center py-8">
-              <div className="flex items-center gap-2 bg-white border border-gray-300 py-2 px-4 shadow-xs">
-                <RefreshCw className="w-3.5 h-3.5 text-indigo-900 animate-spin" />
-                <span className="text-slate-600 text-xs font-bold uppercase tracking-wider">Loading more updates...</span>
+              <div className="flex items-center gap-2 bg-white border border-zinc-200 py-2.5 px-5 rounded-full shadow-sm">
+                <RefreshCw className="w-4 h-4 text-zinc-400 animate-spin" />
+                <span className="text-zinc-600 text-xs font-semibold uppercase tracking-wider">Loading more...</span>
               </div>
             </div>
           )}

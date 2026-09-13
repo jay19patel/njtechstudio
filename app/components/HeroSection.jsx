@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef, useMemo } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { ArrowRight, Sparkles } from "lucide-react";
 import MovingTextBg from "./MovingTextBg";
+import { useContactModal } from "../context/ContactModalContext";
 
 const DURATION = 0.25;
 const STAGGER = 0.025;
@@ -13,7 +16,7 @@ const FlipLink = ({ children }) => {
       initial="initial"
       whileHover="hovered"
       className="relative inline-block overflow-hidden cursor-pointer select-none"
-      style={{ lineHeight: 1.2 }}
+      style={{ lineHeight: 1.15 }}
     >
       <div>
         {children.split("").map((l, i) => (
@@ -46,7 +49,7 @@ const FlipLink = ({ children }) => {
               ease: "easeInOut",
               delay: STAGGER * i
             }}
-            className="inline-block"
+            className="inline-block text-indigo-600"
             key={i}
           >
             {l}
@@ -58,32 +61,25 @@ const FlipLink = ({ children }) => {
 };
 
 export default function HeroSection() {
+  const { openContactModal } = useContactModal();
+
   const [displayedMessages, setDisplayedMessages] = useState([]);
   const [currentTypingIndex, setCurrentTypingIndex] = useState(-1);
   const [typingProgress, setTypingProgress] = useState("");
   const messagesRef = useRef(null);
 
-  const containerRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  const textY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-  const chatY = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
-
-  // Updated scripted conversation (text only)
+  // Scripted client conversation
   const scriptedConversation = useMemo(() => ([
     { role: "user", content: "Hey Jay, heard you build modern Python-based applications? Need help with a custom automation tool." },
-    { role: "assistant", content: "Absolutely! I specialize in Python + JavaScript development—FastAPI, Django, React, Next.js and automation systems. What would you like to automate?" },
-    { role: "user", content: "We need data scraping, processing, and a clean dashboard to visualize everything." },
-    { role: "assistant", content: "Perfect! I'll build you a fast, scalable solution with smart automation, clean APIs, and an interactive dashboard. Smooth performance guaranteed!" },
-    { role: "assistant", content: "Processing your tool...", pending: true },
-    { role: "assistant", content: "Done! Your automation system is live—faster workflows, centralized dashboards, and seamless integrations. Let’s take it even further! 🚀" },
-    { role: "user", content: "This is fantastic! Clean UI, quick delivery, and the automation works perfectly. Highly recommend!" }
+    { role: "assistant", content: "Absolutely! I specialize in Python + JavaScript development—FastAPI, Django, React, Next.js and autonomous AI systems. What would you like to automate?" },
+    { role: "user", content: "We need automated data ingestion, AI-driven analysis, and a clean dashboard for our team." },
+    { role: "assistant", content: "Perfect! I'll build you a fast, scalable solution with clean APIs, smart agent workflows, and an ultra-responsive UI." },
+    { role: "assistant", content: "Processing your architecture...", pending: true },
+    { role: "assistant", content: "Done! Your automation system is live—faster workflows, centralized telemetry, and seamless integrations. 🚀" },
+    { role: "user", content: "This is fantastic! Clean UI, rapid delivery, and runs smoothly under load. Highly recommend!" }
   ]), []);
 
-  // Auto-scroll
+  // Auto-scroll inside chat
   useEffect(() => {
     const el = messagesRef.current;
     if (el) el.scrollTop = el.scrollHeight;
@@ -92,21 +88,10 @@ export default function HeroSection() {
   // Typing animation control
   useEffect(() => {
     let isCancelled = false;
-    const timeouts = [];
-
-    const safeTimeout = (fn, delay) => {
-      const id = setTimeout(() => {
-        if (!isCancelled) fn();
-      }, delay);
-      timeouts.push(id);
-      return id;
-    };
 
     const typeMessage = (fullText, role, pending = false) =>
       new Promise((resolve) => {
         const align = role === "user" ? "right" : "left";
-
-        if (isCancelled) return resolve();
 
         setDisplayedMessages((prev) => {
           const next = [
@@ -119,7 +104,8 @@ export default function HeroSection() {
         });
 
         if (pending) {
-          safeTimeout(() => {
+          setTimeout(() => {
+            if (isCancelled) return;
             setDisplayedMessages((prev) => {
               const lastIndex = prev.length - 1;
               return prev.map((m, idx) =>
@@ -131,266 +117,274 @@ export default function HeroSection() {
             setCurrentTypingIndex(-1);
             setTypingProgress("");
             resolve();
-          }, 2000);
+          }, 1800);
           return;
         }
 
         let i = 0;
-        const speed = 20;
+        const speed = 18;
 
-        const tick = () => {
-          if (isCancelled) return resolve();
-          i += 1;
-          const slice = fullText.slice(0, i);
-          setTypingProgress(slice);
+        const interval = setInterval(() => {
+          if (isCancelled) {
+            clearInterval(interval);
+            return;
+          }
+          i++;
+          const partial = fullText.slice(0, i);
+          setTypingProgress(partial);
 
           if (i >= fullText.length) {
+            clearInterval(interval);
             setDisplayedMessages((prev) => {
               const lastIndex = prev.length - 1;
               return prev.map((m, idx) =>
                 idx === lastIndex
-                  ? { ...m, isTyping: false, displayedContent: fullText, pending: false }
+                  ? { ...m, isTyping: false, displayedContent: fullText }
                   : m
               );
             });
             setCurrentTypingIndex(-1);
             setTypingProgress("");
-            return resolve();
+            resolve();
           }
-
-          safeTimeout(tick, speed);
-        };
-
-        safeTimeout(tick, speed);
+        }, speed);
       });
 
-    const play = async () => {
-      if (isCancelled) return;
-      setDisplayedMessages([]);
-      setCurrentTypingIndex(-1);
-      setTypingProgress("");
-
-      for (let i = 0; i < scriptedConversation.length; i++) {
+    const runScript = async () => {
+      for (const msg of scriptedConversation) {
         if (isCancelled) break;
-        const msg = scriptedConversation[i];
         await typeMessage(msg.content, msg.role, msg.pending);
-        await new Promise((r) => safeTimeout(r, 350));
+        await new Promise((r) => setTimeout(r, 900));
       }
     };
 
-    const start = safeTimeout(() => play(), 350);
+    runScript();
 
     return () => {
       isCancelled = true;
-      timeouts.forEach((id) => clearTimeout(id));
     };
   }, [scriptedConversation]);
 
   return (
-    <MovingTextBg text="NJTECHSTUDIO" textColor="text-gray-400">
-      <section ref={containerRef} className="relative w-full min-h-screen overflow-hidden flex items-center justify-center pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20">
+    <MovingTextBg text="NJ TECH STUDIO" textColor="text-gray-400" className="bg-[#fcfcfd]">
+      <section className="relative w-full bg-transparent text-zinc-900 pt-28 sm:pt-32 pb-16 lg:pb-24 overflow-hidden border-b border-zinc-100">
         
-        {/* Mixed Media & Morphing Neumorphic Background */}
-        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-          {/* Morphing Blob 1 */}
-          <motion.div 
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 90, 180, 270, 360],
-              borderRadius: ["40% 60% 70% 30%", "30% 70% 60% 40%", "40% 60% 70% 30%"]
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="absolute top-[10%] -left-[10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-indigo-500/10 blur-[80px]"
-          />
+        {/* Subtle radial ambient light */}
+        <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-50/60 via-transparent to-transparent pointer-events-none" />
 
-          {/* Morphing Blob 2 */}
-          <motion.div 
-            animate={{
-              scale: [1, 1.3, 1],
-              rotate: [360, 270, 180, 90, 0],
-              borderRadius: ["60% 40% 30% 70%", "70% 30% 40% 60%", "60% 40% 30% 70%"]
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            className="absolute bottom-[0%] right-[0%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-indigo-600/10 blur-[80px]"
-          />
-
-          {/* Doodle 1: Floating Star */}
-          <motion.svg
-            animate={{ rotate: 360, y: [0, -20, 0] }}
-            transition={{ 
-              rotate: { duration: 40, repeat: Infinity, ease: "linear" },
-              y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
-            }}
-            className="absolute top-[20%] right-[15%] w-12 h-12 text-indigo-400/30 drop-shadow-xl hidden md:block"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1"
-          >
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
-          </motion.svg>
-
-          {/* Doodle 2: Squiggle */}
-          <motion.svg
-            animate={{ rotate: -15, y: [0, 20, 0], x: [0, 10, 0] }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-[25%] left-[5%] w-16 h-16 text-zinc-400/30 drop-shadow-xl hidden md:block"
-            viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"
-          >
-            <path d="M10 50 Q 25 20 40 50 T 70 50 T 100 50" />
-          </motion.svg>
-        </div>
-
-        <div className="w-full h-full flex items-center justify-center relative z-10">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 overflow-visible">
-            <div className="grid grid-cols-1 gap-8 sm:gap-10 md:gap-14 items-center lg:grid-cols-12 lg:gap-32 overflow-visible">
-              <motion.div style={{ y: textY }} className="w-full xl:col-span-5 lg:col-span-6 2xl:-mx-5 xl:-mx-0 overflow-visible">
-                <motion.div
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.8, delay: 0.2 }}
-                  className="mb-4 w-fit mx-auto lg:mx-0 bg-zinc-900"
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          {/* Main Hero Split Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            
+            {/* Left Content */}
+            <div className="lg:col-span-6 text-center lg:text-left space-y-6">
+              
+              {/* Interactive Sticker Hover Pill Badge */}
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
+                className="mb-4 w-fit mx-auto lg:mx-0 rounded-full bg-zinc-900 shadow-sm"
+              >
+                <button
+                  type="button"
+                  onClick={openContactModal}
+                  className="flex origin-top-left items-center justify-start rounded-full border border-zinc-900 bg-white p-1 text-xs sm:text-sm transition-transform duration-200 hover:-rotate-2 cursor-pointer shadow-xs group"
                 >
-                  <a
-                    href="#"
-                    className="flex origin-top-left items-center justify-start border border-zinc-900 bg-white p-0.5 text-xs sm:text-sm transition-transform hover:-rotate-1"
+                  <span className="rounded-full bg-indigo-600 px-3 py-1 font-semibold text-white shadow-2xs">
+                    Ready to innovate?
+                  </span>
+                  <span className="ml-2.5 mr-2 inline-block font-semibold text-zinc-900">
+                    Let&apos;s connect
+                  </span>
+                  <svg
+                    stroke="currentColor"
+                    fill="none"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="mr-2 inline-block text-zinc-700 hidden sm:block group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                    height="1.1em"
+                    width="1.1em"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <span className="bg-indigo-800 px-2 sm:px-3 py-0.5 font-medium text-white">
-                      Hey I’m NJ!
-                    </span>
-                    <span className="ml-2 mr-1 inline-block font-medium text-gray-900">
-                      Software Developer with Creativity at its Peak 🎥✨
-                    </span>
-                    <svg
-                      stroke="currentColor"
-                      fill="none"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="mr-2 inline-block text-gray-700 hidden sm:block"
-                      height="1em"
-                      width="1em"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <line x1="7" y1="17" x2="17" y2="7"></line>
-                      <polyline points="7 7 17 7 17 17"></polyline>
-                    </svg>
-                  </a>
-                </motion.div>
-
-                <div className="py-4 sm:py-6 md:py-8 text-center lg:text-left">
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.4 }}
-                    className="text-gray-900 font-extrabold text-[8vw] sm:text-[7vw] md:text-[6vw] lg:text-[5vw] leading-tight tracking-tighter flex flex-col gap-0 sm:gap-1"
-                  >
-                    <FlipLink>Code That</FlipLink>
-                    <FlipLink>Creates Magic</FlipLink>
-                    <FlipLink>And Turns Ideas</FlipLink>
-                    <FlipLink>Into Reality</FlipLink>
-
-                  </motion.div>
-                </div>
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </button>
               </motion.div>
 
-              {/* RIGHT SIDE CHAT UI */}
-              <motion.div style={{ y: chatY }} className="w-full lg:col-span-6 flex justify-center lg:justify-end mt-8 lg:mt-0 relative">
-                <div className="relative w-full max-w-2xl px-4 sm:px-0 z-10">
-                  <div className="relative border-2 border-indigo-900 bg-white p-4 sm:p-6 md:p-8 shadow-2xl">
-                    <div className="flex items-center gap-2 sm:gap-2.5 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-gray-200">
-                      <div className="flex items-center gap-1.5 sm:gap-2">
-                        <div className="w-3 h-3 bg-red-500 hover:scale-110 transition-transform cursor-pointer"></div>
-                        <div className="w-3 h-3 bg-yellow-500 hover:scale-110 transition-transform cursor-pointer"></div>
-                        <div className="w-3 h-3 bg-green-500 hover:scale-110 transition-transform cursor-pointer"></div>
-                      </div>
-                      <div className="flex-1 ml-2 sm:ml-4 bg-gray-50 px-2 sm:px-4 py-1.5 sm:py-2 border border-gray-200">
-                        <p className="text-[10px] sm:text-xs text-gray-600 font-medium truncate">🔒 njtechstudio.com/chat</p>
-                      </div>
+              {/* FlipLink Interactive Heading */}
+              <div className="py-2">
+                <motion.div
+                  initial={{ opacity: 0, y: 25 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2 }}
+                  className="text-zinc-900 font-extrabold text-[9vw] sm:text-[7vw] md:text-[5.5vw] lg:text-[4.2rem] leading-[1.08] tracking-tight flex flex-col gap-0 sm:gap-1"
+                >
+                  <FlipLink>Code That</FlipLink>
+                  <FlipLink>Creates Magic</FlipLink>
+                  <FlipLink>And Turns Ideas</FlipLink>
+                  <FlipLink>Into Reality</FlipLink>
+                </motion.div>
+              </div>
+
+              {/* Tagline / Subtitle */}
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.35 }}
+                className="text-zinc-600 text-base sm:text-lg max-w-xl mx-auto lg:mx-0 leading-relaxed font-normal"
+              >
+                We build intelligent web applications, AI automation agents, and scalable backend platforms tailored for ambitious startups and businesses.
+              </motion.p>
+
+              {/* Action Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.45 }}
+                className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2"
+              >
+                <button
+                  onClick={openContactModal}
+                  className="w-full sm:w-auto px-7 py-3.5 bg-zinc-900 hover:bg-black text-white rounded-full text-sm font-semibold transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer group"
+                >
+                  <span>Start your project</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+                <Link
+                  href="/projects"
+                  className="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-zinc-50 border border-zinc-200 text-zinc-800 rounded-full text-sm font-semibold transition-all shadow-xs text-center"
+                >
+                  Explore our work
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Right Interactive Chat UI */}
+            <div className="lg:col-span-6 flex justify-center lg:justify-end w-full">
+              <div className="relative w-full max-w-xl">
+                
+                {/* Subtle ambient blur behind chat card */}
+                <div className="absolute -top-6 -left-6 w-36 h-36 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute -bottom-6 -right-6 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                {/* Chat Container */}
+                <div className="relative rounded-3xl border border-zinc-200/80 bg-white/95 backdrop-blur-md shadow-[0_12px_45px_rgb(0,0,0,0.06)] overflow-hidden">
+                  
+                  {/* Window Bar */}
+                  <div className="flex items-center gap-2 px-5 py-3.5 border-b border-zinc-100 bg-zinc-50/70">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-rose-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-amber-400"></div>
+                      <div className="w-3 h-3 rounded-full bg-emerald-400"></div>
                     </div>
+                    <div className="flex-1 ml-3 bg-white rounded-lg px-3 py-1 border border-zinc-200/60 shadow-2xs">
+                      <p className="text-[11px] text-zinc-500 font-medium font-mono truncate">
+                        🔒 njtechstudio.in/chat
+                      </p>
+                    </div>
+                    <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                      Live
+                    </span>
+                  </div>
 
-                    {/* Chat Messages */}
-                    <div className="flex flex-col gap-3 sm:gap-4">
-                      <div ref={messagesRef} className="bg-gray-50 p-3 sm:p-4 border border-zinc-200 h-[240px] sm:h-[280px] overflow-y-auto flex flex-col gap-2 sm:gap-3 custom-scrollbar">
-                        {displayedMessages.map((m, idx) => {
-                          let displayText = m.displayedContent;
-                          const isTypingThisMessage = idx === currentTypingIndex && m.isTyping;
-                          if (isTypingThisMessage) {
-                            displayText = typingProgress;
-                          }
+                  {/* Chat Messages Log */}
+                  <div className="p-4 sm:p-5">
+                    <div
+                      ref={messagesRef}
+                      className="bg-zinc-50/60 rounded-2xl p-4 border border-zinc-100 h-[260px] sm:h-[300px] overflow-y-auto flex flex-col gap-3 custom-scrollbar"
+                    >
+                      {displayedMessages.map((m, idx) => {
+                        let displayText = m.displayedContent;
+                        const isTypingThisMessage = idx === currentTypingIndex && m.isTyping;
+                        if (isTypingThisMessage) {
+                          displayText = typingProgress;
+                        }
 
-                          return (
-                            <div key={idx} className={`flex ${m.align === "right" ? "justify-end" : "justify-start"} animate-slideIn`}>
-                              <div className={
+                        return (
+                          <div
+                            key={idx}
+                            className={`flex ${m.align === "right" ? "justify-end" : "justify-start"} animate-fadeIn`}
+                          >
+                            <div
+                              className={
                                 m.align === "right"
-                                  ? "max-w-[85%] bg-indigo-900 text-white border border-indigo-950 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm shadow-md"
-                                  : "max-w-[85%] bg-white text-gray-900 border border-gray-300 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm shadow-sm"
-                              }>
-                                {m.pending ? (
-                                  <span className="inline-flex items-center gap-2">
-                                    <span className="text-xs sm:text-sm font-medium">Processing your request</span>
-                                    <span className="inline-flex gap-1">
-                                      <span className="w-1.5 h-1.5 bg-current animate-bounce" style={{ animationDelay: '-0.3s' }}></span>
-                                      <span className="w-1.5 h-1.5 bg-current animate-bounce" style={{ animationDelay: '-0.15s' }}></span>
-                                      <span className="w-1.5 h-1.5 bg-current animate-bounce"></span>
-                                    </span>
+                                  ? "max-w-[85%] bg-zinc-900 text-white rounded-2xl rounded-tr-xs px-4 py-2.5 text-xs sm:text-[13px] shadow-sm leading-relaxed"
+                                  : "max-w-[85%] bg-white text-zinc-800 border border-zinc-200/80 rounded-2xl rounded-tl-xs px-4 py-2.5 text-xs sm:text-[13px] shadow-2xs leading-relaxed"
+                              }
+                            >
+                              {m.pending ? (
+                                <span className="inline-flex items-center gap-2 text-indigo-600 font-medium text-xs">
+                                  <span>{displayText || m.content}</span>
+                                  <span className="inline-flex gap-1">
+                                    <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: "-0.3s" }}></span>
+                                    <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce" style={{ animationDelay: "-0.15s" }}></span>
+                                    <span className="w-1.5 h-1.5 bg-indigo-600 rounded-full animate-bounce"></span>
                                   </span>
-                                ) : (
-                                  <span className="leading-relaxed">
-                                    {displayText}
-                                    {isTypingThisMessage && displayText.length < m.content.length && (
-                                      <span className="inline-block w-0.5 h-3 sm:h-4 bg-current ml-1 animate-pulse"></span>
-                                    )}
-                                  </span>
-                                )}
-                              </div>
+                                </span>
+                              ) : (
+                                <span>
+                                  {displayText}
+                                  {isTypingThisMessage && displayText.length < m.content.length && (
+                                    <span className="inline-block w-0.5 h-3.5 bg-indigo-500 ml-1 animate-pulse"></span>
+                                  )}
+                                </span>
+                              )}
                             </div>
-                          );
-                        })}
-                      </div>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
-                </div>
-              </motion.div>
 
-              <style jsx>{`
-              .custom-scrollbar::-webkit-scrollbar {
-                width: 6px;
-              }
-              .custom-scrollbar::-webkit-scrollbar-track {
-                background: transparent;
-              }
-              .custom-scrollbar::-webkit-scrollbar-thumb {
-                background: #c7d2fe;
-                border-radius: 10px;
-              }
-              .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-                background: #a5b4fc;
-              }
-              @keyframes slideIn {
-                from {
-                  opacity: 0;
-                  transform: translateY(10px);
-                }
-                to {
-                  opacity: 1;
-                  transform: translateY(0);
-                }
-              }
-              .animate-slideIn {
-                animation: slideIn 0.3s ease-out;
-              }
-            `}</style>
+                  {/* Chat Footer indicator */}
+                  <div className="px-5 py-2.5 border-t border-zinc-100 bg-white flex items-center justify-between text-[11px] text-zinc-400">
+                    <span className="flex items-center gap-1.5">
+                      <Sparkles className="w-3 h-3 text-indigo-500" /> Powered by NJTechStudio Engine
+                    </span>
+                    <span className="font-mono text-zinc-400">FastAPI + Next.js</span>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </div>
+
         </div>
       </section>
+
+      <style jsx>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #e4e4e7;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #cbd5e1;
+        }
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.25s ease-out;
+        }
+      `}</style>
     </MovingTextBg>
   );
 }

@@ -1,26 +1,30 @@
 "use client";
+
 import AboutSection from "../components/AboutSection";
 import TechSkillSection from "../components/TechSkillSection";
 import MovingTextBg from "../components/MovingTextBg";
 
 export default function AboutPage() {
   return (
-    <div className="bg-background text-foreground min-h-screen">
-      <MovingTextBg text="ABOUT US " textColor="text-gray-400">
-        {/* Edgy Left-Aligned Hero Title Section */}
-        <section className="relative w-full pt-32 lg:pt-40 pb-6 lg:pb-10 px-4 sm:px-8 lg:px-16">
+    <div className="bg-[#fcfcfd] text-zinc-900 min-h-screen">
+      <MovingTextBg text="ABOUT US" textColor="text-zinc-400">
+        {/* Left-Aligned Hero Title Section */}
+        <section className="relative w-full pt-32 lg:pt-40 pb-8 lg:pb-12 px-4 sm:px-8 lg:px-16 border-b border-zinc-200/80">
           <div className="relative z-10 max-w-7xl mx-auto text-left space-y-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-zinc-900 border border-zinc-700 text-white text-xs font-mono font-bold uppercase tracking-widest shadow-md">
-            // 01 . ABOUT US
-          </div>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold rounded-full shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></span>
+              <span>01 - About Us</span>
+            </div>
 
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[0.9] tracking-tighter uppercase text-gray-900">
-              ABOUT THE <br />
-              <span className="text-indigo-800">STUDIO & FOUNDER</span>
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[1.1] tracking-tight text-zinc-900 max-w-4xl">
+              About the <br />
+              <span className="bg-indigo-100 text-indigo-950 px-2 pb-1 inline-block -mx-2 mt-2 rounded-sm border border-indigo-200/60">
+                Studio & Founder
+              </span>
             </h1>
 
-            <div className="max-w-2xl text-left pt-2 border-l-2 border-indigo-900 pl-4 sm:pl-6">
-              <p className="text-base sm:text-lg md:text-xl text-gray-600 leading-relaxed font-medium">
+            <div className="max-w-2xl text-left pt-4">
+              <p className="text-base sm:text-lg md:text-xl text-zinc-500 leading-relaxed">
                 Driven by engineering excellence, built with clarity, and crafted for long-term digital impact.
               </p>
             </div>

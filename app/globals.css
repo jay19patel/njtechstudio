@@ -139,29 +139,28 @@
 
 .moving-text-bg .moving-text-container {
   position: absolute;
-  top: 50%;
-  left: 0;
+  inset: 0;
   width: 100%;
   height: 100%;
-  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: space-evenly;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .moving-text-bg .moving-text-row {
   white-space: nowrap;
-  font-size: 180px;
+  font-size: 160px;
   font-weight: 900;
   font-family: 'Jersey 10', 'Arial Black', sans-serif;
-  line-height: 0.9;
-  opacity: 0.08;
+  line-height: 0.85;
+  opacity: 0.065;
   display: flex;
   gap: 3rem;
   letter-spacing: -0.02em;
   text-transform: uppercase;
+  user-select: none;
   /* Hardware/GPU acceleration for smooth rendering */
   will-change: transform;
   transform: translate3d(0, 0, 0);
@@ -169,48 +168,47 @@
   perspective: 1000px;
 }
 
+/* Visibility boost for dark background sections */
+.bg-black .moving-text-row,
+.bg-zinc-950 .moving-text-row {
+  opacity: 0.08;
+}
+
 /* Responsive font sizes for MovingTextBg */
 @media (max-width: 640px) {
   .moving-text-bg .moving-text-row {
-    font-size: 200px;
-    gap: 2rem;
-    opacity: 0.1;
-  }
-  .moving-text-bg .moving-text-container {
-    gap: 0.5rem;
+    font-size: 110px;
+    gap: 1.5rem;
   }
 }
 
 @media (min-width: 641px) and (max-width: 768px) {
   .moving-text-bg .moving-text-row {
-    font-size: 140px;
-    gap: 2.5rem;
-    opacity: 0.09;
+    font-size: 130px;
+    gap: 2rem;
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .moving-text-bg .moving-text-row {
-    font-size: 160px;
+    font-size: 150px;
     gap: 2.5rem;
-    opacity: 0.08;
   }
 }
 
 @media (min-width: 1025px) {
   .moving-text-bg .moving-text-row {
-    font-size: 200px;
+    font-size: 170px;
     gap: 3rem;
-    opacity: 0.08;
   }
 }
 
 .moving-text-bg .moving-text-row:nth-child(odd) {
-  animation: moveTextLeft 60s linear infinite;
+  animation: moveTextLeft var(--scroll-duration, 60s) linear infinite;
 }
 
 .moving-text-bg .moving-text-row:nth-child(even) {
-  animation: moveTextRight 60s linear infinite;
+  animation: moveTextRight var(--scroll-duration, 60s) linear infinite;
 }
 
 @keyframes moveTextLeft {
