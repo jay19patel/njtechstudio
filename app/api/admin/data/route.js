@@ -11,7 +11,6 @@ const FILES_MAP = {
   solutions: path.join(process.cwd(), 'app', 'data', 'solutions.json'),
   skills: path.join(process.cwd(), 'app', 'data', 'tools.json'),
   faqs: path.join(process.cwd(), 'app', 'data', 'faqs.json'),
-  channel: path.join(process.cwd(), 'app', 'data', 'channel.json'),
 };
 
 export async function GET(request) {
@@ -19,14 +18,15 @@ export async function GET(request) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
 
+    // blog posts live in Vercel Blob
+    if (type === 'channel') return NextResponse.json(await readJson('posts'));
+
     if (!type || !FILES_MAP[type]) {
       return NextResponse.json(
         { error: 'Invalid type parameter specified' },
         { status: 400 }
       );
     }
-
-    if (type === 'channel') return NextResponse.json(await readJson('posts'));
 
     const filePath = FILES_MAP[type];
     
@@ -66,6 +66,15 @@ export async function POST(request) {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
 
+    if (type === 'channel') {
+      const bodyData = await request.json();
+      if (!Array.isArray(bodyData)) {
+        return NextResponse.json({ error: 'Blog posts must be an array' }, { status: 400 });
+      }
+      await updateJson('posts', () => bodyData);
+      return NextResponse.json({ success: true, message: `${type} updated successfully` });
+    }
+
     if (!type || !FILES_MAP[type]) {
       return NextResponse.json(
         { error: 'Invalid type parameter specified' },
@@ -74,15 +83,6 @@ export async function POST(request) {
     }
 
     const bodyData = await request.json();
-
-    if (type === 'channel') {
-      if (!Array.isArray(bodyData)) {
-        return NextResponse.json({ error: 'Blog posts must be an array' }, { status: 400 });
-      }
-      await updateJson('posts', () => bodyData);
-      return NextResponse.json({ success: true, message: `${type} updated successfully` });
-    }
-
     const filePath = FILES_MAP[type];
 
     // 3. Write data to JSON file

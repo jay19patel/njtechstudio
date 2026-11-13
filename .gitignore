@@ -41,8 +41,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# visitor likes/comments (runtime data)
-/app/data/blog-engagement.json
 
 # never commit installers, secrets or personal docs
 *.dmg
