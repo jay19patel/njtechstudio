@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { verifyRequest } from '@/lib/auth';
+import { readJson, updateJson } from '@/lib/json-store';
 
 const FILES_MAP = {
   projects: path.join(process.cwd(), 'public', 'projects.json'),
@@ -24,6 +25,8 @@ export async function GET(request) {
         { status: 400 }
       );
     }
+
+    if (type === 'channel') return NextResponse.json(await readJson('posts'));
 
     const filePath = FILES_MAP[type];
     
@@ -71,6 +74,15 @@ export async function POST(request) {
     }
 
     const bodyData = await request.json();
+
+    if (type === 'channel') {
+      if (!Array.isArray(bodyData)) {
+        return NextResponse.json({ error: 'Blog posts must be an array' }, { status: 400 });
+      }
+      await updateJson('posts', () => bodyData);
+      return NextResponse.json({ success: true, message: `${type} updated successfully` });
+    }
+
     const filePath = FILES_MAP[type];
 
     // 3. Write data to JSON file

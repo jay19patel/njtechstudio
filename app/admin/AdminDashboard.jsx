@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   LayoutDashboard, Mail, FolderGit2, MessageSquareQuote, Youtube, 
@@ -8,6 +9,14 @@ import {
   CheckCircle2, XCircle, ExternalLink, Clock, Sparkles, AlertCircle,
   Menu, X, ChevronRight, Check, RefreshCw, ArrowLeft, Save
 } from 'lucide-react';
+import BlogEditor from './BlogEditor';
+import BlogApiPanel from './BlogApiPanel';
+import { plainText } from '../blog/posts-format';
+
+// Tab id <-> URL segment, for tabs whose URL differs from their id
+const TAB_TO_PATH = { overview: '', channel: 'blog', 'project-editor': 'projects/edit' };
+const PATH_TO_TAB = { blog: 'channel' };
+const NEW_POST = {};
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -16,8 +25,17 @@ export default function AdminDashboard() {
   const [checkingSession, setCheckingSession] = useState(true);
   const [submittingAuth, setSubmittingAuth] = useState(false);
 
-  // Active tab
-  const [activeTab, setActiveTab] = useState('overview');
+  // Active tab comes from the URL: /admin/<section>[/<sub>]
+  const pathname = usePathname();
+  const [section, sub] = pathname.split('/').slice(2);
+  const navigate = (path) => {
+    // pushState keeps this mounted layout (no refetch) and Next syncs usePathname with it
+    if (path !== pathname) window.history.pushState(null, '', path);
+  };
+  const setActiveTab = (tab) => {
+    const path = TAB_TO_PATH[tab] ?? tab;
+    navigate(path ? `/admin/${path}` : '/admin');
+  };
   
   // Data states
   const [projects, setProjects] = useState([]);
@@ -59,6 +77,17 @@ export default function AdminDashboard() {
     setLeadsPage(1);
   }, [leadsFilter]);
 
+  // /admin/blog/new or /admin/blog/<id> opens the blog editor (works after refresh too)
+  const editingPost = section === 'blog' && sub
+    ? (sub === 'new' ? NEW_POST : channelPosts.find((p) => p.id === sub) || null)
+    : null;
+  const urlTab = PATH_TO_TAB[section] ?? section ?? 'overview';
+  const activeTab = editingPost
+    ? 'blog-editor'
+    : section === 'projects' && sub === 'edit'
+      ? (editingProject ? 'project-editor' : 'projects')
+      : urlTab;
+
   // Reset all paginations on tab change
   useEffect(() => {
     setLeadsPage(1);
@@ -71,7 +100,7 @@ export default function AdminDashboard() {
 
   // Modal / Form Editor states
   const [isEditorOpen, setIsEditorOpen] = useState(false);
-  const [editorType, setEditorType] = useState(''); // projects, testimonials, youtube, solutions, faqs, channel
+  const [editorType, setEditorType] = useState(''); // projects, testimonials, youtube, solutions, faqs
   const [editItem, setEditItem] = useState(null); // null means "new"
 
   // Lead reply dialog state
@@ -290,7 +319,37 @@ export default function AdminDashboard() {
     setEditingProject(null);
   };
 
-  // Modal Edit / Add Item Submit (for testimonials, youtube, faqs, channel)
+  const openBlogEditor = (post) => navigate(`/admin/blog/${post?.id || 'new'}`);
+
+  const closeBlogEditor = (ask = true) => {
+    if (ask && !confirm('Return to blog posts? Any unsaved edits will be lost.')) return;
+    setActiveTab('channel');
+  };
+
+  // Full-page blog editor submit
+  const handleSavePost = (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const itemData = {
+      id: editingPost.id || Date.now().toString(),
+      title: formData.get('title').trim(),
+      category: formData.get('category').trim(),
+      date: new Date(formData.get('date')).toISOString(),
+      image: formData.get('image').trim(),
+      link: formData.get('link').trim(),
+      linkText: formData.get('linkText').trim() || 'Read More',
+      content: formData.get('content')
+    };
+
+    const updated = editingPost.id
+      ? channelPosts.map(c => c.id === editingPost.id ? itemData : c)
+      : [...channelPosts, itemData];
+    setChannelPosts(updated);
+    saveJsonData('channel', updated);
+    closeBlogEditor(false);
+  };
+
+  // Modal Edit / Add Item Submit (for testimonials, youtube, faqs)
   const handleEditorSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -345,26 +404,6 @@ export default function AdminDashboard() {
       setFaqs(updated);
       saveJsonData('faqs', updated);
 
-    } else if (editorType === 'channel') {
-      const itemData = {
-        id: editItem ? editItem.id : Date.now().toString(),
-        title: formData.get('title'),
-        category: formData.get('category'),
-        date: new Date(formData.get('date')).toISOString(),
-        image: formData.get('image') || '',
-        link: formData.get('link') || '',
-        linkText: formData.get('linkText') || 'Read More',
-        content: formData.get('content')
-      };
-
-      let updated;
-      if (editItem) {
-        updated = channelPosts.map(c => c.id === editItem.id ? itemData : c);
-      } else {
-        updated = [...channelPosts, itemData];
-      }
-      setChannelPosts(updated);
-      saveJsonData('channel', updated);
     }
 
     setIsEditorOpen(false);
@@ -453,7 +492,7 @@ export default function AdminDashboard() {
     { id: 'youtube', label: 'YouTube Videos', icon: Youtube },
     { id: 'skills', label: 'Tech Stack', icon: Cpu },
     { id: 'faqs', label: 'FAQs', icon: HelpCircle },
-    { id: 'channel', label: 'Channel Posts', icon: Send },
+    { id: 'channel', label: 'Blog Posts', icon: Send },
   ];
 
   if (checkingSession) {
@@ -639,7 +678,8 @@ export default function AdminDashboard() {
         <nav className={`flex-1 p-4 space-y-1 ${isMobileNavOpen ? 'block' : 'hidden lg:block'}`}>
           {navItems.map((item) => {
             const Icon = item.icon;
-            const isActive = activeTab === item.id;
+            // editors keep their parent section highlighted
+            const isActive = activeTab === item.id || ({ 'blog-editor': 'channel', 'project-editor': 'projects' })[activeTab] === item.id;
             return (
               <button
                 key={item.id}
@@ -688,7 +728,7 @@ export default function AdminDashboard() {
         <header className="px-8 py-5 border-b border-slate-200 flex items-center justify-between bg-white shadow-xxs">
           <div className="flex items-center gap-3">
             <h1 className="text-lg font-bold uppercase tracking-wider text-slate-800">
-              {navItems.find(n => n.id === activeTab)?.label}
+              {navItems.find(n => n.id === activeTab)?.label || (activeTab === 'blog-editor' && 'Blog Editor')}
             </h1>
             {loadingData && (
               <RefreshCw className="w-4 h-4 text-indigo-600 animate-spin" />
@@ -715,7 +755,8 @@ export default function AdminDashboard() {
         </header>
 
         {/* Dashboard Panels */}
-        <div className="flex-1 p-8 overflow-y-auto">
+        {/* overflow-x-clip (not overflow-auto) so sticky toolbars inside the editors keep working */}
+        <div className="flex-1 p-8 min-w-0 overflow-x-clip">
           {loadingData && projects.length === 0 ? (
             <div className="h-96 flex items-center justify-center">
               <div className="flex flex-col items-center gap-3">
@@ -1233,6 +1274,72 @@ export default function AdminDashboard() {
                       </div>
                     )}
                   </div>
+                )}
+
+                {/* --- FULL-PAGE BLOG EDITOR --- */}
+                {activeTab === 'blog-editor' && editingPost && (
+                  <form onSubmit={handleSavePost} className="space-y-6">
+                    {/* Top Action Bar */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <button
+                          type="button"
+                          onClick={() => closeBlogEditor()}
+                          className="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl transition-colors"
+                          title="Back to Blog Posts"
+                        >
+                          <ArrowLeft className="w-5 h-5" />
+                        </button>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-full border border-indigo-100">
+                              Blog Studio
+                            </span>
+                            <span className="text-xs text-slate-300">•</span>
+                            <span className="text-xs font-semibold text-slate-500">
+                              {editingPost.id ? 'Editing Post' : 'New Post'}
+                            </span>
+                          </div>
+                          <h3 className="text-xl font-bold text-slate-900 mt-0.5 truncate">
+                            {editingPost.title || 'Untitled Post'}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        {editingPost.id && (
+                          <a
+                            href={`/blog/${editingPost.id}`}
+                            target="_blank"
+                            className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors flex items-center gap-1.5"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" /> View live
+                          </a>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => closeBlogEditor()}
+                          className="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          disabled={savingData}
+                          className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 disabled:bg-indigo-400 text-white text-xs font-bold rounded-xl flex items-center gap-2 shadow-sm transition-all"
+                        >
+                          {savingData ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
+                          <span>{editingPost.id ? 'Save Changes' : 'Publish Post'}</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <BlogEditor
+                      key={editingPost.id || 'new'}
+                      item={editingPost}
+                      categories={channelPosts.map((p) => p.category).filter(Boolean)}
+                    />
+                  </form>
                 )}
 
                 {/* --- 6. FULL-PAGE PROJECT EDITOR --- */}
@@ -1830,24 +1937,22 @@ export default function AdminDashboard() {
                 {activeTab === 'channel' && (
                   <div className="space-y-6">
                     <div className="flex justify-between items-center">
-                      <h3 className="text-lg font-bold text-slate-800">Channel Updates & Posts</h3>
+                      <h3 className="text-lg font-bold text-slate-800">Blog Posts</h3>
                       <button
-                        onClick={() => {
-                          setEditorType('channel');
-                          setEditItem(null);
-                          setIsEditorOpen(true);
-                        }}
+                        onClick={() => openBlogEditor()}
                         className="px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-colors shadow-sm"
                       >
-                        <Plus className="w-4 h-4" /> Add Post
+                        <Plus className="w-4 h-4" /> New Post
                       </button>
                     </div>
+
+                    <BlogApiPanel />
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {paginatedChannel.length === 0 ? (
                         <div className="col-span-full py-12 text-center bg-white border border-slate-200 border-dashed rounded-2xl">
                           <Send className="w-8 h-8 text-slate-400 mx-auto mb-2" />
-                          <p className="text-slate-500 text-sm font-medium">No channel posts found. Create one now!</p>
+                          <p className="text-slate-500 text-sm font-medium">No blog posts yet. Write your first one!</p>
                         </div>
                       ) : (
                         paginatedChannel.map((post) => (
@@ -1876,8 +1981,8 @@ export default function AdminDashboard() {
                                 <h4 className="font-bold text-base text-slate-800 leading-tight">
                                   {post.title}
                                 </h4>
-                                <p className="text-xs text-slate-505 leading-relaxed line-clamp-3 whitespace-pre-line">
-                                  {post.content}
+                                <p className="text-xs text-slate-500 leading-relaxed line-clamp-3">
+                                  {plainText(post.content)}
                                 </p>
                                 {post.link && (
                                   <div className="text-[11px] font-bold text-indigo-650 flex items-center gap-1">
@@ -1888,12 +1993,16 @@ export default function AdminDashboard() {
                               </div>
                             </div>
                             <div className="px-5 py-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-1.5 shrink-0">
+                              <a
+                                href={`/blog/${post.id}`}
+                                target="_blank"
+                                title="View post"
+                                className="p-2 bg-white hover:bg-slate-100 text-slate-655 rounded-lg transition-colors border border-slate-200"
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                              </a>
                               <button
-                                onClick={() => {
-                                  setEditorType('channel');
-                                  setEditItem(post);
-                                  setIsEditorOpen(true);
-                                }}
+                                onClick={() => openBlogEditor(post)}
                                 className="p-2 bg-white hover:bg-slate-100 text-slate-655 rounded-lg transition-colors border border-slate-200"
                               >
                                 <Edit className="w-3.5 h-3.5" />
@@ -2101,51 +2210,6 @@ export default function AdminDashboard() {
                 )}
 
                 {/* --- F. CHANNEL POSTS FORM FIELDS --- */}
-                {editorType === 'channel' && (
-                  <div className="space-y-4 text-sm">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Title</label>
-                      <input name="title" type="text" defaultValue={editItem?.title || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Category</label>
-                      <input name="category" type="text" defaultValue={editItem?.category || 'Announcement'} placeholder="e.g. Announcement, Event, Tech Update, Insight" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Date</label>
-                      <input 
-                        name="date" 
-                        type="datetime-local" 
-                        defaultValue={
-                          editItem?.date 
-                            ? new Date(new Date(editItem.date).getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) 
-                            : new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16)
-                        } 
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" 
-                        required 
-                      />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Image URL (Optional)</label>
-                      <input name="image" type="text" defaultValue={editItem?.image || ''} placeholder="e.g. /content-creation.png or Unsplash URL" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Button Link (Optional)</label>
-                        <input name="link" type="text" defaultValue={editItem?.link || ''} placeholder="e.g. https://github.com/..." className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" />
-                      </div>
-                      <div className="space-y-1">
-                        <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Button Text (Optional)</label>
-                        <input name="linkText" type="text" defaultValue={editItem?.linkText || 'Read More'} placeholder="e.g. Read More" className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" />
-                      </div>
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-500 uppercase tracking-widest">Content / Post Text</label>
-                      <textarea name="content" rows={5} defaultValue={editItem?.content || ''} className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-indigo-500 focus:bg-white text-slate-855 rounded-lg outline-none" required />
-                    </div>
-                  </div>
-                )}
-
                 {/* Actions footer */}
                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 shrink-0">
                   <button

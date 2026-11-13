@@ -15,7 +15,7 @@ async function getProjectSlugs() {
 }
 
 export default async function sitemap() {
-  const staticRoutes = ["", "/about", "/projects", "/channel"].map((route) => ({
+  const staticRoutes = ["", "/about", "/projects", "/blog"].map((route) => ({
     url: `${SITE_URL}${route}`,
     lastModified: new Date().toISOString(),
   }));

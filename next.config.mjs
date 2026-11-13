@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ["via.placeholder.com", "images.unsplash.com", "randomuser.me", "img.youtube.com", "i.ytimg.com"],
   },
+  async redirects() {
+    return [{ source: "/channel", destination: "/blog", permanent: true }];
+  },
 };
 
 export default nextConfig;

@@ -68,7 +68,7 @@ export default function Navbar() {
     if (!path || path === "/") return "Home";
     if (path.startsWith("/about")) return "About";
     if (path.startsWith("/projects")) return "Projects";
-    if (path.startsWith("/channel")) return "Channel";
+    if (path.startsWith("/blog")) return "Blog";
     return "Studio";
   };
 
@@ -111,7 +111,7 @@ export default function Navbar() {
     { label: "Home", href: "/", num: "01", desc: "Return to Homepage" },
     { label: "About", href: "/about", num: "02", desc: "Studio & Founder Bio" },
     { label: "Projects", href: "/projects", num: "03", desc: "Crafted Solutions & Apps" },
-    { label: "Channel", href: "/channel", num: "04", desc: "Tech Content & Videos" },
+    { label: "Blog", href: "/blog", num: "04", desc: "Articles & Studio Notes" },
   ];
 
   const socialLinks = [

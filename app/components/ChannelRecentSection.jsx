@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowRight, Calendar, Tag, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
+import { plainText } from "../blog/posts-format";
 
 export default function ChannelRecentSection() {
   const [recentPosts, setRecentPosts] = useState([]);
@@ -44,10 +45,10 @@ export default function ChannelRecentSection() {
             </div>
             <div className="shrink-0">
               <Link
-                href="/channel"
+                href="/blog"
                 className="inline-flex items-center px-5 py-2.5 rounded-full bg-indigo-150 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300 font-bold hover:bg-indigo-200 dark:hover:bg-indigo-900/60 transition-all text-sm group"
               >
-                View Channel Feed
+                Read the Blog
                 <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
@@ -97,11 +98,11 @@ export default function ChannelRecentSection() {
                     </div>
 
                     <h3 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                      {post.title}
+                      <Link href={`/blog/${post.id}`}>{post.title}</Link>
                     </h3>
                     
                     <p className="text-sm sm:text-base text-gray-600 dark:text-zinc-300 leading-relaxed whitespace-pre-line line-clamp-4">
-                      {post.content}
+                      {plainText(post.content)}
                     </p>
                   </div>
                 </div>
