@@ -68,7 +68,7 @@ export default function MaintenanceGate({ children, initialConfig = null }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#fcfcfd] text-zinc-900 overflow-y-auto selection:bg-indigo-100">
       
-      {/* 1. Moving Text Background (Animated marquee sliding behind content) */}
+      {/* Moving Text Background (Animated marquee sliding behind content) */}
       <MovingTextBg
         text="NJ TECH STUDIO · MAINTENANCE · STANDBY"
         textColor="text-zinc-400"
@@ -76,19 +76,7 @@ export default function MaintenanceGate({ children, initialConfig = null }) {
         isFixed={true}
         rows="auto"
       >
-        {/* 2. Precision Engineering Grid Matrix Overlay */}
-        <div
-          aria-hidden="true"
-          className="fixed inset-0 pointer-events-none z-1 bg-[linear-gradient(to_right,#0000000c_1px,transparent_1px),linear-gradient(to_bottom,#0000000c_1px,transparent_1px)] bg-[size:3.5rem_3.5rem]"
-        />
-        
-        {/* Subtle Radial Glow */}
-        <div
-          aria-hidden="true"
-          className="fixed inset-0 pointer-events-none z-1 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-100/50 via-transparent to-transparent"
-        />
-
-        {/* 3. Foreground Content Card */}
+        {/* Foreground Content Card */}
         <div className="min-h-screen w-full flex items-center justify-center px-4 sm:px-6 py-12 relative z-10">
           <div className="max-w-2xl w-full mx-auto bg-white/95 backdrop-blur-md border border-zinc-200/90 rounded-3xl p-8 sm:p-12 text-center shadow-[0_20px_70px_rgba(0,0,0,0.06)] relative overflow-hidden">
             
