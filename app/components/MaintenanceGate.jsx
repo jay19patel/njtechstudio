@@ -8,9 +8,10 @@ import { API_BASE_URL } from "@/lib/api";
 /**
  * MaintenanceGate:
  * Matches the clean, professional, light aesthetic of NJTechStudio (#fcfcfd, indigo accents, subtle borders).
- * Activates when:
- * 1. Admin turns maintenance_mode ON in backend CMS Settings.
- * 2. Backend engine is unreachable (automatic standby protection).
+ * Features:
+ * - Animated continuous moving text in the background (MovingTextBg)
+ * - Engineering grid line matrix pattern
+ * - Automatic detection when backend goes offline or when maintenance_mode is toggled in CMS
  */
 export default function MaintenanceGate({ children, initialConfig = null }) {
   const [config, setConfig] = useState(initialConfig);
@@ -39,7 +40,6 @@ export default function MaintenanceGate({ children, initialConfig = null }) {
 
   useEffect(() => {
     checkStatus();
-    // Re-check periodically so site auto-restores when maintenance is turned off
     const interval = setInterval(checkStatus, 25000);
     return () => clearInterval(interval);
   }, [checkStatus]);
@@ -67,15 +67,35 @@ export default function MaintenanceGate({ children, initialConfig = null }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#fcfcfd] text-zinc-900 overflow-y-auto selection:bg-indigo-100">
-      <MovingTextBg text="MAINTENANCE" textColor="text-zinc-300/80" className="bg-[#fcfcfd]" isFixed={true}>
+      
+      {/* 1. Moving Text Background (Animated marquee sliding behind content) */}
+      <MovingTextBg
+        text="NJ TECH STUDIO · MAINTENANCE · STANDBY"
+        textColor="text-zinc-400"
+        className="bg-[#fcfcfd]"
+        isFixed={true}
+        rows="auto"
+      >
+        {/* 2. Precision Engineering Grid Matrix Overlay */}
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 pointer-events-none z-1 bg-[linear-gradient(to_right,#0000000c_1px,transparent_1px),linear-gradient(to_bottom,#0000000c_1px,transparent_1px)] bg-[size:3.5rem_3.5rem]"
+        />
+        
+        {/* Subtle Radial Glow */}
+        <div
+          aria-hidden="true"
+          className="fixed inset-0 pointer-events-none z-1 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-100/50 via-transparent to-transparent"
+        />
+
+        {/* 3. Foreground Content Card */}
         <div className="min-h-screen w-full flex items-center justify-center px-4 sm:px-6 py-12 relative z-10">
-          
-          <div className="max-w-2xl w-full mx-auto bg-white border border-zinc-200/90 rounded-3xl p-8 sm:p-12 text-center shadow-[0_20px_70px_rgba(0,0,0,0.06)] relative overflow-hidden">
+          <div className="max-w-2xl w-full mx-auto bg-white/95 backdrop-blur-md border border-zinc-200/90 rounded-3xl p-8 sm:p-12 text-center shadow-[0_20px_70px_rgba(0,0,0,0.06)] relative overflow-hidden">
             
-            {/* Top Studio Brand Identifier */}
+            {/* Studio Header Row */}
             <div className="flex items-center justify-between border-b border-zinc-100 pb-6 mb-8">
-              <div className="flex items-center gap-2 text-left">
-                <div className="w-8 h-8 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-bold text-xs tracking-tight">
+              <div className="flex items-center gap-2.5 text-left">
+                <div className="w-8 h-8 rounded-xl bg-zinc-900 text-white flex items-center justify-center font-bold text-xs tracking-tight shadow-xs">
                   NJ
                 </div>
                 <div>
@@ -84,22 +104,22 @@ export default function MaintenanceGate({ children, initialConfig = null }) {
                 </div>
               </div>
 
-              {/* Status pill */}
+              {/* Status pill badge */}
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-600 animate-pulse" />
                 <span>Routine Maintenance</span>
               </div>
             </div>
 
-            {/* Central Icon */}
+            {/* Pulsing Icon */}
             <div className="relative w-16 h-16 mx-auto mb-6 flex items-center justify-center">
               <span className="absolute inset-0 rounded-2xl bg-indigo-500/10 animate-ping opacity-75" />
-              <div className="relative w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200/80 flex items-center justify-center text-indigo-600 shadow-sm">
+              <div className="relative w-14 h-14 rounded-2xl bg-indigo-50 border border-indigo-200/80 flex items-center justify-center text-indigo-600 shadow-xs">
                 <ShieldAlert className="w-7 h-7" />
               </div>
             </div>
 
-            {/* Heading & Paragraph */}
+            {/* Heading & Details */}
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-medium tracking-tight text-zinc-900 leading-tight mb-4">
               {title}
             </h1>
@@ -113,7 +133,7 @@ export default function MaintenanceGate({ children, initialConfig = null }) {
               <span>{uptime}</span>
             </div>
 
-            {/* Actions */}
+            {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 border-t border-zinc-100">
               <button
                 type="button"
@@ -139,7 +159,6 @@ export default function MaintenanceGate({ children, initialConfig = null }) {
             </p>
 
           </div>
-
         </div>
       </MovingTextBg>
     </div>
