@@ -1,4 +1,4 @@
-import { getPosts } from "./posts";
+import { getPostsWithStatus } from "./posts";
 import BlogList from "./BlogList";
 
 export const dynamic = "force-dynamic";
@@ -9,5 +9,6 @@ export const metadata = {
 };
 
 export default async function BlogPage() {
-  return <BlogList posts={await getPosts()} />;
+  const { posts, isOffline } = await getPostsWithStatus();
+  return <BlogList posts={posts} isOffline={isOffline} />;
 }

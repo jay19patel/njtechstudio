@@ -1,81 +1,69 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
-import { getPosts } from "../../../blog/posts";
-import { readJson, updateJson } from "@/lib/json-store";
+import { API_BASE_URL } from "@/lib/api";
 
-const MAX_COMMENT = 1000;
-const COMMENT_COOLDOWN_MS = 15_000;
-
-// Same IP -> same id. Only the salted hash is stored, never the raw IP.
-function visitorFrom(request) {
+/**
+ * Proxies blog comments and likes straight to Django CMS backend database.
+ */
+export async function GET(request, { params }) {
+  const { id } = await params;
   const ip =
     request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
     request.headers.get("x-real-ip") ||
-    "unknown";
-  const hash = crypto
-    .createHash("sha256")
-    .update(`${process.env.ADMIN_SECRET_KEY || "njtechstudio"}:${ip}`)
-    .digest("hex");
-  return { hash, name: `Guest-${hash.slice(0, 6).toUpperCase()}` };
-}
+    "";
 
-const view = (entry, visitor) => ({
-  likes: entry.likes.length,
-  liked: entry.likes.includes(visitor.hash),
-  comments: entry.comments.map(({ id, author, text, date }) => ({ id, author, text, date })),
-  me: visitor.name,
-});
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/cms/blog/${id}/engagement/`, {
+      headers: {
+        Accept: "application/json",
+        ...(ip ? { "X-Forwarded-For": ip } : {}),
+      },
+      cache: "no-store",
+    });
 
-const emptyEntry = () => ({ likes: [], comments: [] });
+    if (!res.ok) {
+      return NextResponse.json(
+        { likes: 0, liked: false, comments: [], me: "Guest-ANON" },
+        { status: res.status }
+      );
+    }
 
-export async function GET(request, { params }) {
-  const { id } = await params;
-  const store = await readJson("engagement");
-  return NextResponse.json(view(store[id] || emptyEntry(), visitorFrom(request)));
+    const data = await res.json();
+    return NextResponse.json(data);
+  } catch (err) {
+    console.error("Failed to fetch blog engagement from Django:", err);
+    return NextResponse.json(
+      { likes: 0, liked: false, comments: [], me: "Guest-OFFLINE" },
+      { status: 503 }
+    );
+  }
 }
 
 export async function POST(request, { params }) {
   const { id } = await params;
-  const posts = await getPosts();
-  if (!posts.some((p) => p.id === id)) {
-    return NextResponse.json({ error: "Post not found" }, { status: 404 });
-  }
+  const ip =
+    request.headers.get("x-forwarded-for")?.split(",")[0].trim() ||
+    request.headers.get("x-real-ip") ||
+    "";
 
-  const visitor = visitorFrom(request);
-  const body = await request.json().catch(() => ({}));
-
-  if (body.action === "like") {
-    const store = await updateJson("engagement", (store) => {
-      const e = (store[id] ||= emptyEntry());
-      e.likes = e.likes.includes(visitor.hash)
-        ? e.likes.filter((h) => h !== visitor.hash)
-        : [...e.likes, visitor.hash];
+  try {
+    const body = await request.json().catch(() => ({}));
+    const res = await fetch(`${API_BASE_URL}/api/cms/blog/${id}/engagement/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(ip ? { "X-Forwarded-For": ip } : {}),
+      },
+      body: JSON.stringify(body),
     });
-    return NextResponse.json(view(store[id], visitor));
-  }
 
-  if (body.action === "comment") {
-    const text = typeof body.text === "string" ? body.text.trim() : "";
-    if (!text || text.length > MAX_COMMENT) {
-      return NextResponse.json({ error: `Comment must be 1-${MAX_COMMENT} characters` }, { status: 400 });
-    }
-    const store = await updateJson("engagement", (store) => {
-      const e = (store[id] ||= emptyEntry());
-      const last = e.comments.findLast((c) => c.authorHash === visitor.hash);
-      if (last && Date.now() - new Date(last.date).getTime() < COMMENT_COOLDOWN_MS) return false;
-      e.comments.push({
-        id: crypto.randomUUID(),
-        author: visitor.name,
-        authorHash: visitor.hash,
-        text,
-        date: new Date().toISOString(),
-      });
-    });
-    if (!store) {
-      return NextResponse.json({ error: "Please wait a few seconds before commenting again" }, { status: 429 });
-    }
-    return NextResponse.json(view(store[id], visitor));
+    const data = await res.json();
+    return NextResponse.json(data, { status: res.status });
+  } catch (err) {
+    console.error("Failed to post blog engagement to Django:", err);
+    return NextResponse.json(
+      { error: "Backend service unreachable." },
+      { status: 503 }
+    );
   }
-
-  return NextResponse.json({ error: "Unknown action" }, { status: 400 });
 }

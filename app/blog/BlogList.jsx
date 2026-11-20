@@ -31,7 +31,7 @@ function Cover({ post, className }) {
   );
 }
 
-export default function BlogList({ posts = [] }) {
+export default function BlogList({ posts = [], isOffline = false }) {
   const [category, setCategory] = useState("All");
   const [query, setQuery] = useState("");
 
@@ -60,7 +60,7 @@ export default function BlogList({ posts = [] }) {
             </p>
           </header>
 
-          {posts.length === 0 ? (
+          {isOffline ? (
             <div className="py-12">
               <BackendStatusCard
                 title="Blog Articles Offline"
@@ -71,37 +71,39 @@ export default function BlogList({ posts = [] }) {
           ) : (
             <>
               {/* Filters */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((c) => (
-                    <button
-                      key={c}
-                      onClick={() => setCategory(c)}
-                      className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors cursor-pointer ${
-                        category === c ? "bg-zinc-900 text-white border-zinc-900" : "bg-white text-zinc-600 border-zinc-200 hover:border-zinc-400"
-                      }`}
-                    >
-                      {c}
-                    </button>
-                  ))}
+              {posts.length > 0 && (
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((c) => (
+                      <button
+                        key={c}
+                        onClick={() => setCategory(c)}
+                        className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors cursor-pointer ${
+                          category === c ? "bg-zinc-900 text-white border-zinc-900" : "bg-white text-zinc-600 border-zinc-200 hover:border-zinc-400"
+                        }`}
+                      >
+                        {c}
+                      </button>
+                    ))}
+                  </div>
+                  <label className="relative sm:w-64">
+                    <span className="sr-only">Search articles</span>
+                    <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="search"
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search articles..."
+                      className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-full text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10"
+                    />
+                  </label>
                 </div>
-                <label className="relative sm:w-64">
-                  <span className="sr-only">Search articles</span>
-                  <Search className="w-4 h-4 text-zinc-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="search"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search articles..."
-                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-zinc-200 rounded-full text-sm outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/10"
-                  />
-                </label>
-              </div>
+              )}
 
               {filtered.length === 0 ? (
                 <div className="text-center py-20 bg-white border border-zinc-200 rounded-3xl">
                   <FileText className="w-12 h-12 text-zinc-300 mx-auto mb-3" />
-                  <p className="text-zinc-500 text-sm font-medium">No articles match your search.</p>
+                  <p className="text-zinc-500 text-sm font-medium">{posts.length ? "No articles match your search." : "No articles published yet."}</p>
                 </div>
               ) : (
                 <>
