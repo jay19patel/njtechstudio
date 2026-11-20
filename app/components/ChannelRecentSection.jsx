@@ -81,8 +81,8 @@ export default function ChannelRecentSection() {
           ) : isError || recentPosts.length === 0 ? (
             <div className="py-6">
               <BackendStatusCard
-                title="Updates Feed Offline"
-                resourceName="channel live updates"
+                title="Updates Feed Unavailable"
+                resourceName="channel updates"
                 onRetry={loadPosts}
                 theme="light"
               />

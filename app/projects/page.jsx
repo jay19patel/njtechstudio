@@ -156,7 +156,7 @@ export default function ProjectsPage() {
             ) : isError || projects.length === 0 ? (
               <div className="py-12">
                 <BackendStatusCard
-                  title="Projects Service Offline"
+                  title="Projects Unavailable"
                   resourceName="project catalog"
                   onRetry={loadProjects}
                   theme="light"

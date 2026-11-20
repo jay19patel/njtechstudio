@@ -102,7 +102,7 @@ export default function FAQSection() {
                   </div>
                 ) : isError || faqItems.length === 0 ? (
                   <BackendStatusCard
-                    title="FAQs Offline"
+                    title="FAQs Unavailable"
                     resourceName="FAQ entries"
                     onRetry={loadFaqs}
                     theme="light"

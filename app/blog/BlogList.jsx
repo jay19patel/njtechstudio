@@ -63,8 +63,8 @@ export default function BlogList({ posts = [], isOffline = false }) {
           {isOffline ? (
             <div className="py-12">
               <BackendStatusCard
-                title="Blog Articles Offline"
-                resourceName="blog posts feed"
+                title="Articles Temporarily Unavailable"
+                resourceName="articles feed"
                 theme="light"
               />
             </div>

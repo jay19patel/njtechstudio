@@ -384,7 +384,7 @@ export default function ProjectDetailPage() {
       <div className="min-h-screen bg-[#fcfcfd] flex items-center justify-center px-4">
         <div className="max-w-xl w-full">
           <BackendStatusCard
-            title={hasError ? "Project Offline" : "Project Not Found"}
+            title={hasError ? "Project Unavailable" : "Project Not Found"}
             resourceName={`project "${slug}"`}
             onRetry={fetchProject}
             theme="light"

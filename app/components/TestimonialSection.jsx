@@ -79,7 +79,7 @@ export default function TestimonialSection() {
         ) : isError || testimonials.length === 0 ? (
           <div className="px-4 py-8">
             <BackendStatusCard
-              title="Client Reviews Offline"
+              title="Client Reviews Unavailable"
               resourceName="client testimonials"
               onRetry={loadTestimonials}
               theme="dark"

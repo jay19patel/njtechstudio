@@ -68,8 +68,8 @@ export default function YoutubeSection() {
             ) : isError || cards.length === 0 ? (
               <div className="py-6">
                 <BackendStatusCard
-                  title="Video Tutorials Offline"
-                  resourceName="YouTube video feed"
+                  title="Video Tutorials Unavailable"
+                  resourceName="video tutorials"
                   onRetry={loadVideos}
                   theme="light"
                 />
