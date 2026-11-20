@@ -1,64 +1,42 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import MovingTextBg from "./MovingTextBg";
+import BackendStatusCard from "./BackendStatusCard";
+import { getTestimonials } from "@/lib/api";
 
 export default function TestimonialSection() {
-  const [testimonials, setTestimonials] = useState([
-    {
-      id: 1,
-      name: "Videoly Client",
-      role: "Operations Manager",
-      text: "Jay transformed our workflow! Custom ERP with Frappe automated approvals, bookings, and coordination. Management speed increased by 30%! 🎉",
-    },
-    {
-      id: 2,
-      name: "Sayaji Infotech",
-      role: "HR Manager",
-      text: "Built AI-powered talent acquisition automation with GenAI and vector search. Manual screening reduced by ~50%, candidates matched smarter! 🚀",
-    },
-    {
-      id: 3,
-      name: "Startup Founder",
-      role: "CEO",
-      text: "Shipped MVP in 3 weeks with Next.js & FastAPI. Clean code, fast performance, excellent communication. Highly recommend! 💡",
-    },
-    {
-      id: 4,
-      name: "Meril Life Client",
-      role: "Manufacturing Lead",
-      text: "Healthcare manufacturing automation with C# + IoT integration. Reduced manual processing by over 50%! ⭐",
-    },
-    {
-      id: 5,
-      name: "Tech Company",
-      role: "CTO",
-      text: "Multi-microservices trading platform with event-driven architecture. Sub-250ms execution, automated strategies, real-time risk management! ⚡",
-    },
-    {
-      id: 6,
-      name: "E-commerce Business",
-      role: "Product Manager",
-      text: "Built entire e-commerce platform with React & Django. Scalable, fast, handles thousands of orders daily. Game changer! 🎯",
-    },
-  ]);
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
-  useEffect(() => {
-    fetch('/api/admin/data?type=testimonials')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setTestimonials(prev => {
-            if (JSON.stringify(prev) === JSON.stringify(data)) return prev;
-            return data;
-          });
-        }
-      })
-      .catch(err => console.error('Error fetching testimonials:', err));
+  const loadTestimonials = useCallback(async () => {
+    setLoading(true);
+    setIsError(false);
+    try {
+      const data = await getTestimonials();
+      if (Array.isArray(data) && data.length > 0) {
+        setTestimonials(data);
+        setIsError(false);
+      } else {
+        setTestimonials([]);
+        setIsError(true);
+      }
+    } catch (err) {
+      console.error("Error fetching testimonials:", err);
+      setTestimonials([]);
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const row1 = [...testimonials, ...testimonials];
-  const row2 = [...testimonials, ...testimonials];
+  useEffect(() => {
+    loadTestimonials();
+  }, [loadTestimonials]);
+
+  const row1 = testimonials.length > 0 ? [...testimonials, ...testimonials] : [];
+  const row2 = testimonials.length > 0 ? [...testimonials, ...testimonials] : [];
 
   return (
     <MovingTextBg text="TESTIMONIALS" textColor="text-white" className="bg-black">
@@ -79,27 +57,57 @@ export default function TestimonialSection() {
           </motion.div>
         </div>
 
-        <div className="p-4 overflow-x-hidden relative max-w-[1600px] mx-auto z-10">
-          <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-32 z-10 bg-gradient-to-r from-black to-transparent pointer-events-none"></div>
-
-          <div className="flex items-center mb-6">
-            <div className="flex gap-4 sm:gap-6 animate-scroll-left">
-              {row1.map((testimonial, idx) => (
-                <TestimonialCard key={`row1-${idx}`} testimonial={testimonial} />
-              ))}
-            </div>
+        {loading ? (
+          <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-zinc-950 border border-zinc-800 rounded-3xl p-6 h-48 flex flex-col justify-between">
+                <div className="space-y-3">
+                  <div className="h-4 bg-zinc-800 rounded w-full" />
+                  <div className="h-4 bg-zinc-800 rounded w-4/5" />
+                  <div className="h-4 bg-zinc-800 rounded w-2/3" />
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-zinc-800" />
+                  <div className="space-y-1.5 flex-1">
+                    <div className="h-3 bg-zinc-800 rounded w-1/3" />
+                    <div className="h-2.5 bg-zinc-900 rounded w-1/4" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-
-          <div className="flex items-center">
-            <div className="flex gap-4 sm:gap-6 animate-scroll-right">
-              {row2.map((testimonial, idx) => (
-                <TestimonialCard key={`row2-${idx}`} testimonial={testimonial} />
-              ))}
-            </div>
+        ) : isError || testimonials.length === 0 ? (
+          <div className="px-4 py-8">
+            <BackendStatusCard
+              title="Client Reviews Offline"
+              resourceName="client testimonials"
+              onRetry={loadTestimonials}
+              theme="dark"
+            />
           </div>
+        ) : (
+          <div className="p-4 overflow-x-hidden relative max-w-[1600px] mx-auto z-10">
+            <div className="absolute top-0 bottom-0 left-0 w-16 sm:w-32 z-10 bg-gradient-to-r from-black to-transparent pointer-events-none"></div>
 
-          <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-32 z-10 bg-gradient-to-l from-black to-transparent pointer-events-none"></div>
-        </div>
+            <div className="flex items-center mb-6">
+              <div className="flex gap-4 sm:gap-6 animate-scroll-left">
+                {row1.map((testimonial, idx) => (
+                  <TestimonialCard key={`row1-${idx}`} testimonial={testimonial} />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center">
+              <div className="flex gap-4 sm:gap-6 animate-scroll-right">
+                {row2.map((testimonial, idx) => (
+                  <TestimonialCard key={`row2-${idx}`} testimonial={testimonial} />
+                ))}
+              </div>
+            </div>
+
+            <div className="absolute top-0 bottom-0 right-0 w-16 sm:w-32 z-10 bg-gradient-to-l from-black to-transparent pointer-events-none"></div>
+          </div>
+        )}
 
         <style jsx>{`
           @keyframes scroll-left {
@@ -139,7 +147,7 @@ const TestimonialCard = ({ testimonial }) => {
       </p>
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 font-bold text-sm">
-           {testimonial.name.charAt(0)}
+          {testimonial.name?.charAt(0) || "U"}
         </div>
         <div>
           <p className="text-sm font-semibold text-white tracking-tight">

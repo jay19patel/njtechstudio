@@ -147,7 +147,22 @@ export async function POST(request) {
         await transporter.sendMail(adminMailOptions);
         await transporter.sendMail(userMailOptions);
 
-        // Save submission to JSON database
+        // Save submission to Django CMS Leads CRM API
+        try {
+            const { submitLeadInquiry } = await import('@/lib/api');
+            await submitLeadInquiry({
+                name,
+                email,
+                phone,
+                subject,
+                message,
+                inquiry_type: type || 'Contact Form',
+            });
+        } catch (cmsErr) {
+            console.error('Failed forwarding lead to Django CMS:', cmsErr);
+        }
+
+        // Also save submission to local JSON backup
         try {
             const SUBMISSIONS_PATH = path.join(process.cwd(), 'app', 'data', 'submissions.json');
             let submissions = [];

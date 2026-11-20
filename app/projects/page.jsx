@@ -1,54 +1,63 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ExternalLink, Calendar, Code2, Filter, Search } from 'lucide-react';
 import MovingTextBg from '../components/MovingTextBg';
-import initialProjects from '../../public/projects.json';
+import BackendStatusCard from '../components/BackendStatusCard';
+import { getProjects } from '@/lib/api';
 
 export default function ProjectsPage() {
-  const [projects, setProjects] = useState(initialProjects);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
-  const [categories, setCategories] = useState(() => ['All', ...new Set(initialProjects.map(p => p.category))]);
+  const [categories, setCategories] = useState(['All']);
 
-  useEffect(() => {
-    // Load fresh projects data without flashing
-    fetch('/projects.json')
-      .then(res => res.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0) {
-          setProjects(prev => {
-            if (JSON.stringify(prev) === JSON.stringify(data)) return prev;
-            return data;
-          });
-
-          const uniqueCategories = ['All', ...new Set(data.map(p => p.category))];
-          setCategories(prev => {
-            if (JSON.stringify(prev) === JSON.stringify(uniqueCategories)) return prev;
-            return uniqueCategories;
-          });
-        }
-      })
-      .catch(err => console.error('Error loading projects:', err));
+  const loadProjects = useCallback(async () => {
+    setLoading(true);
+    setIsError(false);
+    try {
+      const data = await getProjects();
+      if (Array.isArray(data) && data.length > 0) {
+        setProjects(data);
+        const uniqueCategories = ['All', ...new Set(data.map(p => p.category).filter(Boolean))];
+        setCategories(uniqueCategories);
+        setIsError(false);
+      } else {
+        setProjects([]);
+        setCategories(['All']);
+        setIsError(true);
+      }
+    } catch (err) {
+      console.error('Error loading projects:', err);
+      setProjects([]);
+      setCategories(['All']);
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Derive the filtered list instead of syncing it via a second effect
+  useEffect(() => {
+    loadProjects();
+  }, [loadProjects]);
+
+  // Derive the filtered list
   const filteredProjects = useMemo(() => {
     let filtered = projects;
 
-    // Filter by category
     if (selectedCategory !== 'All') {
       filtered = filtered.filter(p => p.category === selectedCategory);
     }
 
-    // Filter by search query
     if (searchQuery) {
       filtered = filtered.filter(p =>
-        p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.technologies.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()))
+        p.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.technologies?.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
@@ -101,32 +110,59 @@ export default function ProjectsPage() {
               </div>
 
               {/* Category Filter */}
-              <div className="flex items-center gap-4 flex-wrap">
-                <div className="flex items-center gap-2 text-zinc-500">
-                  <Filter className="w-4 h-4" />
-                  <span className="font-bold uppercase text-[10px] tracking-widest">Filter:</span>
+              {categories.length > 1 && (
+                <div className="flex items-center gap-4 flex-wrap">
+                  <div className="flex items-center gap-2 text-zinc-500">
+                    <Filter className="w-4 h-4" />
+                    <span className="font-bold uppercase text-[10px] tracking-widest">Filter:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((category) => (
+                      <button
+                        key={category}
+                        type="button"
+                        onClick={() => setSelectedCategory(category)}
+                        className={`px-4 py-2 font-bold uppercase text-[10px] tracking-widest rounded-full transition-all duration-300 cursor-pointer ${
+                          selectedCategory === category
+                            ? 'bg-indigo-600 text-white border border-indigo-500 shadow-md'
+                            : 'bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300 hover:text-zinc-900 shadow-xs'
+                        }`}
+                      >
+                        {category}
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      type="button"
-                      onClick={() => setSelectedCategory(category)}
-                      className={`px-4 py-2 font-bold uppercase text-[10px] tracking-widest rounded-full transition-all duration-300 cursor-pointer ${
-                        selectedCategory === category
-                          ? 'bg-indigo-600 text-white border border-indigo-500 shadow-md'
-                          : 'bg-white text-zinc-600 border border-zinc-200 hover:border-zinc-300 hover:text-zinc-900 shadow-xs'
-                      }`}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              )}
             </div>
 
-            {/* Projects Grid */}
-            {filteredProjects.length > 0 ? (
+            {/* Loading Skeletons */}
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 animate-pulse">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="bg-white border border-zinc-200 rounded-3xl overflow-hidden h-96 flex flex-col">
+                    <div className="h-56 bg-zinc-200 w-full" />
+                    <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                      <div className="h-6 bg-zinc-200 rounded w-2/3" />
+                      <div className="h-4 bg-zinc-100 rounded w-full" />
+                      <div className="flex gap-2">
+                        <div className="h-6 bg-zinc-200 rounded w-16" />
+                        <div className="h-6 bg-zinc-200 rounded w-20" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : isError || projects.length === 0 ? (
+              <div className="py-12">
+                <BackendStatusCard
+                  title="Projects Service Offline"
+                  resourceName="project catalog"
+                  onRetry={loadProjects}
+                  theme="light"
+                />
+              </div>
+            ) : filteredProjects.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 {filteredProjects.map((project) => (
                   <div
@@ -148,84 +184,57 @@ export default function ProjectsPage() {
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Code2 className="w-16 h-16 text-zinc-300" />
+                        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-indigo-50 to-zinc-100">
+                          <Code2 className="w-12 h-12 text-indigo-400" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                      {/* Category Badge */}
                       <div className="absolute top-4 left-4 z-10">
-                        <span className="px-3 py-1.5 bg-white/90 backdrop-blur-md border border-zinc-200 text-zinc-800 text-[10px] font-bold uppercase tracking-widest rounded-full shadow-xs">
+                        <span className="inline-block px-3 py-1 bg-white/90 backdrop-blur-md border border-zinc-200/80 text-zinc-900 text-[11px] font-bold uppercase tracking-wider rounded-full shadow-xs">
                           {project.category}
                         </span>
                       </div>
                     </div>
 
-                    {/* Project Content */}
-                    <div className="p-6 sm:p-8 relative z-10 pointer-events-none flex-1 flex flex-col justify-between">
+                    {/* Card Content */}
+                    <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between">
                       <div>
-                        {/* Title */}
-                        <h3 className="text-xl sm:text-2xl font-bold text-zinc-900 mb-2 group-hover:text-indigo-600 transition-colors tracking-tight">
+                        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 mb-2 group-hover:text-indigo-600 transition-colors">
                           {project.title}
-                        </h3>
-
-                        {/* Subtitle */}
-                        <p className="text-sm font-semibold text-indigo-600 mb-4">
-                          {project.subtitle}
-                        </p>
-
-                        {/* Description */}
-                        <p className="text-sm sm:text-base text-zinc-500 mb-6 line-clamp-3 leading-relaxed">
+                        </h2>
+                        <p className="text-zinc-500 text-sm leading-relaxed line-clamp-2 mb-6">
                           {project.description}
                         </p>
                       </div>
 
-                      <div>
-                        {/* Technologies */}
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {project.technologies.slice(0, 4).map((tech, index) => (
+                      {/* Tech Stack Pills */}
+                      <div className="space-y-4 pt-4 border-t border-zinc-100">
+                        <div className="flex flex-wrap gap-1.5">
+                          {project.technologies?.slice(0, 4).map((tech, idx) => (
                             <span
-                              key={index}
-                              className="px-3 py-1 bg-zinc-50 border border-zinc-200 text-zinc-600 font-semibold text-[10px] uppercase tracking-wider rounded-full"
+                              key={idx}
+                              className="px-2.5 py-1 bg-zinc-50 border border-zinc-200/60 text-zinc-600 text-xs font-medium rounded-lg"
                             >
                               {tech}
                             </span>
                           ))}
-                          {project.technologies.length > 4 && (
-                            <span className="px-3 py-1 bg-zinc-50 border border-zinc-200 text-zinc-400 font-medium text-[10px] rounded-full">
-                              +{project.technologies.length - 4}
+                          {project.technologies?.length > 4 && (
+                            <span className="px-2 py-1 text-xs text-zinc-400 font-medium">
+                              +{project.technologies.length - 4} more
                             </span>
                           )}
                         </div>
 
-                        {/* Footer */}
-                        <div className="flex items-center justify-between pt-5 border-t border-zinc-100 pointer-events-auto">
-                          {/* Date */}
-                          <div className="flex items-center gap-2 text-zinc-400">
-                            <Calendar className="w-4 h-4" />
-                            <span className="text-[10px] font-bold uppercase tracking-wider">
-                              {new Date(project.endDate || project.startDate).toLocaleDateString('en-US', {
-                                month: 'short',
-                                year: 'numeric'
-                              })}
+                        {/* View Case Study CTA */}
+                        <div className="flex items-center justify-between pt-2">
+                          <span className="text-xs font-semibold uppercase tracking-wider text-indigo-600 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                            View Case Study &rarr;
+                          </span>
+                          {project.completion_date && (
+                            <span className="text-xs text-zinc-400 flex items-center gap-1">
+                              <Calendar className="w-3.5 h-3.5" />
+                              {project.completion_date}
                             </span>
-                          </div>
-
-                          {/* Links */}
-                          <div className="flex items-center gap-3">
-                            {project.liveUrl && (
-                              <a
-                                href={project.liveUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="text-[10px] font-bold uppercase tracking-wider text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1.5 relative z-20"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                {project.liveUrl.replace(/^https?:\/\//, '')} <ExternalLink className="w-3.5 h-3.5" />
-                              </a>
-                            )}
-                          </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -233,16 +242,18 @@ export default function ProjectsPage() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-20 border border-zinc-200 rounded-3xl bg-white shadow-xs">
-                <Code2 className="w-16 h-16 text-zinc-300 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-zinc-900 mb-2">
-                  No Projects Found
-                </h3>
-                <p className="text-zinc-500 text-sm">
-                  Try adjusting your search or filter criteria
-                </p>
+              <div className="text-center py-16 bg-white border border-zinc-200 rounded-3xl p-8">
+                <p className="text-zinc-600 font-medium">No projects matched your filters.</p>
+                <button
+                  type="button"
+                  onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
+                  className="mt-4 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-indigo-500 transition-colors"
+                >
+                  Clear Filters
+                </button>
               </div>
             )}
+
           </div>
         </section>
       </MovingTextBg>

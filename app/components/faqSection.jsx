@@ -1,62 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { ChevronDown, HelpCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import MovingTextBg from "./MovingTextBg";
-
-const DEFAULT_FAQS = [
-  {
-    id: 1,
-    question: "What kind of projects do you take on?",
-    answer:
-      "We specialize in AI-powered applications (GenAI, LangChain, vector search), full-stack ERP systems (Frappe / ERPNext + React), scalable web apps (Next.js, FastAPI, Django), and custom automation tools. From early MVPs to high-availability production systems, we engineer solutions designed to scale reliably.",
-  },
-  {
-    id: 2,
-    question: "How fast can you deliver?",
-    answer:
-      "Speed depends on project scope! A focused automation tool or prototype typically takes 1-2 weeks. A custom web platform or AI pipeline is typically 3-6 weeks. Full ERP systems or complex microservice platforms range 6-10 weeks. We work in rapid weekly sprints with transparent daily git progress.",
-  },
-  {
-    id: 3,
-    question: "Do you offer post-launch support and maintenance?",
-    answer:
-      "Absolutely! We provide comprehensive post-launch support including proactive bug fixes, server performance tuning, feature additions, and security patches. Whether you need ongoing retainer maintenance or on-demand support, we're here for the long haul.",
-  },
-  {
-    id: 4,
-    question: "Can you help integrate AI and LLMs into our existing software?",
-    answer:
-      "100%! We've integrated autonomous AI agents, semantic vector search (OpenSearch/Qdrant), document extraction (RAG), and tailored LLM workflows into existing codebases. From prompt architecture to fine-tuning and latency optimization, we handle the entire AI lifecycle.",
-  },
-  {
-    id: 5,
-    question: "What is your primary technology stack?",
-    answer:
-      "Backend: Python (FastAPI, Django, Flask, Frappe), Node.js. Frontend: Next.js, React, TypeScript, TailwindCSS. Databases: PostgreSQL, Redis, MongoDB. AI/ML: LangChain, LangGraph, Vector DBs, OpenAI APIs. Cloud & DevOps: Docker, GCP, Vercel, CI/CD pipelines.",
-  },
-];
+import BackendStatusCard from "./BackendStatusCard";
+import { getFaqs } from "@/lib/api";
 
 export default function FAQSection() {
-  // All items closed by default
   const [openItem, setOpenItem] = useState(null);
-  const [faqItems, setFaqItems] = useState(DEFAULT_FAQS);
+  const [faqItems, setFaqItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  const loadFaqs = useCallback(async () => {
+    setLoading(true);
+    setIsError(false);
+    try {
+      const data = await getFaqs();
+      if (Array.isArray(data) && data.length > 0) {
+        setFaqItems(data);
+        setIsError(false);
+      } else {
+        setFaqItems([]);
+        setIsError(true);
+      }
+    } catch (err) {
+      console.error("Error fetching FAQs:", err);
+      setFaqItems([]);
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    fetch("/api/admin/data?type=faqs")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setFaqItems((prev) => {
-            if (JSON.stringify(prev) === JSON.stringify(data)) return prev;
-            return data;
-          });
-        }
-      })
-      .catch((err) => console.error("Error fetching FAQs:", err));
-  }, []);
+    loadFaqs();
+  }, [loadFaqs]);
 
   const toggleItem = (id) => {
     setOpenItem(openItem === id ? null : id);
@@ -66,7 +47,6 @@ export default function FAQSection() {
     <MovingTextBg text="FAQS" textColor="text-gray-400" className="bg-[#fcfcfd]">
       <section className="relative w-full bg-transparent text-zinc-900 py-16 sm:py-20 lg:py-28 overflow-hidden border-t border-zinc-100">
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
-          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -74,7 +54,7 @@ export default function FAQSection() {
             transition={{ duration: 0.6 }}
             className="flex flex-col lg:flex-row items-stretch justify-between gap-8 lg:gap-12"
           >
-            {/* Dynamic Full-Height Image on Left: automatically scales with accordion */}
+            {/* Dynamic Full-Height Image on Left */}
             <div className="w-full lg:w-5/12 flex flex-col">
               <div className="relative w-full h-full min-h-[380px] lg:min-h-[500px] rounded-3xl overflow-hidden bg-white border border-zinc-200/90 shadow-[0_8px_30px_rgb(0,0,0,0.04)] transition-all duration-300">
                 <Image
@@ -111,59 +91,71 @@ export default function FAQSection() {
 
               {/* Accordion List */}
               <div className="space-y-3 flex-1">
-                {faqItems.map((item) => {
-                  const isOpen = openItem === item.id;
-                  return (
-                    <div
-                      key={item.id}
-                      className={`rounded-2xl border transition-all duration-200 overflow-hidden bg-white ${
-                        isOpen
-                          ? "border-indigo-300 ring-2 ring-indigo-500/10 shadow-xs"
-                          : "border-zinc-200 hover:border-zinc-300 shadow-2xs"
-                      }`}
-                    >
-                      {/* Trigger Button */}
-                      <button
-                        type="button"
-                        onClick={() => toggleItem(item.id)}
-                        className="flex w-full items-center justify-between px-5 sm:px-6 py-4.5 text-left focus:outline-none cursor-pointer"
-                      >
-                        <span className="text-[15px] sm:text-base font-semibold text-zinc-900 pr-4">
-                          {item.question}
-                        </span>
-                        <div
-                          className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0 ${
-                            isOpen
-                              ? "bg-indigo-600 text-white"
-                              : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
-                          }`}
-                        >
-                          <ChevronDown
-                            className={`w-4 h-4 transition-transform duration-200 ${
-                              isOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </div>
-                      </button>
-
-                      {/* Expandable Answer */}
+                {loading ? (
+                  <div className="space-y-3 animate-pulse">
+                    {[1, 2, 3, 4].map((i) => (
+                      <div key={i} className="h-16 bg-white border border-zinc-200 rounded-2xl flex items-center px-6 justify-between">
+                        <div className="h-4 bg-zinc-200 rounded w-3/4" />
+                        <div className="w-8 h-8 rounded-full bg-zinc-100" />
+                      </div>
+                    ))}
+                  </div>
+                ) : isError || faqItems.length === 0 ? (
+                  <BackendStatusCard
+                    title="FAQs Offline"
+                    resourceName="FAQ entries"
+                    onRetry={loadFaqs}
+                    theme="light"
+                  />
+                ) : (
+                  faqItems.map((item) => {
+                    const isOpen = openItem === item.id;
+                    return (
                       <div
-                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                        key={item.id}
+                        className={`rounded-2xl border transition-all duration-200 overflow-hidden bg-white ${
+                          isOpen
+                            ? "border-indigo-300 ring-2 ring-indigo-500/10 shadow-xs"
+                            : "border-zinc-200 hover:border-zinc-300 shadow-2xs"
                         }`}
                       >
-                        <p className="text-zinc-600 leading-relaxed text-sm sm:text-[15px] px-5 sm:px-6 pb-5 pt-1">
-                          {item.answer}
-                        </p>
+                        {/* Trigger Button */}
+                        <button
+                          type="button"
+                          onClick={() => toggleItem(item.id)}
+                          className="flex w-full items-center justify-between px-5 sm:px-6 py-4.5 text-left focus:outline-none cursor-pointer"
+                        >
+                          <span className="text-[15px] sm:text-base font-semibold text-zinc-900 pr-4">
+                            {item.question}
+                          </span>
+                          <div
+                            className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0 ${
+                              isOpen
+                                ? "bg-indigo-600 text-white"
+                                : "bg-zinc-100 text-zinc-500 hover:bg-zinc-200"
+                            }`}
+                          >
+                            <ChevronDown
+                              className={`w-4 h-4 transition-transform duration-200 ${
+                                isOpen ? "rotate-180" : ""
+                              }`}
+                            />
+                          </div>
+                        </button>
+
+                        {/* Expandable Answer */}
+                        {isOpen && (
+                          <div className="px-5 sm:px-6 pb-5 pt-1 text-sm sm:text-base text-zinc-600 leading-relaxed border-t border-zinc-100">
+                            {item.answer}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })
+                )}
               </div>
             </div>
-
           </motion.div>
-
         </div>
       </section>
     </MovingTextBg>

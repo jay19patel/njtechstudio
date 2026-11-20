@@ -3,37 +3,40 @@ import Header from "./components/Header";
 import Footer from "./components/Footer.jsx";
 import { TransitionProvider } from "./context/TransitionContext";
 import { ContactModalProvider } from "./context/ContactModalContext";
+import { getSiteConfig } from "@/lib/api";
 
 const SITE_URL = "https://njtechstudio.in";
-const SITE_TITLE = "NJ Tech Studio";
-const SITE_DESCRIPTION = "Professional web development and design services";
 
-export const metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: SITE_TITLE,
-    template: `%s | ${SITE_TITLE}`,
-  },
-  description: SITE_DESCRIPTION,
-  // favicon.ico / icon.png / apple-icon.png in app/ are picked up
-  // automatically by Next.js's file-convention metadata — no explicit
-  // `icons` field needed here.
-  manifest: "/site.webmanifest",
-  openGraph: {
-    type: "website",
-    url: SITE_URL,
-    siteName: SITE_TITLE,
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    images: [{ url: "/icon.png" }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    images: ["/icon.png"],
-  },
-};
+export async function generateMetadata() {
+  const config = (await getSiteConfig()) || {};
+  const siteName = config.brand_name || "NJTechStudio";
+  const title = config.meta_title || "NJTechStudio | AI Automation & Web Development";
+  const description = config.meta_description || "Professional web development, AI automation, and custom full-stack solutions.";
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: title,
+      template: `%s | ${siteName}`,
+    },
+    description,
+    manifest: "/site.webmanifest",
+    openGraph: {
+      type: "website",
+      url: SITE_URL,
+      siteName,
+      title,
+      description,
+      images: [{ url: "/icon.png" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ["/icon.png"],
+    },
+  };
+}
 
 export const viewport = {
   width: "device-width",

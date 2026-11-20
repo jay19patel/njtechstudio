@@ -100,11 +100,6 @@ export default function Navbar() {
     if (!isChatOpen) setIsChatOpen(true);
   };
 
-  // Hide Navbar completely on the admin panel
-  if (pathname && pathname.startsWith("/admin")) {
-    return null;
-  }
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const menuLinks = [
@@ -429,13 +424,6 @@ export default function Navbar() {
                         {social.name}
                       </a>
                     ))}
-                    <Link
-                      href="/admin"
-                      onClick={toggleMenu}
-                      className="text-zinc-500 hover:text-zinc-900 text-xs sm:text-sm font-medium transition-colors"
-                    >
-                      Admin
-                    </Link>
                   </div>
                 </div>
               </div>

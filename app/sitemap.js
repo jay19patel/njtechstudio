@@ -1,18 +1,6 @@
-import { promises as fs } from "fs";
-import path from "path";
+import { getProjects, getBlogPosts } from "@/lib/api";
 
 const SITE_URL = "https://njtechstudio.in";
-
-async function getProjectSlugs() {
-  try {
-    const filePath = path.join(process.cwd(), "public", "projects.json");
-    const raw = await fs.readFile(filePath, "utf-8");
-    const projects = JSON.parse(raw);
-    return projects.map((project) => project.slug).filter(Boolean);
-  } catch {
-    return [];
-  }
-}
 
 export default async function sitemap() {
   const staticRoutes = ["", "/about", "/projects", "/blog"].map((route) => ({
@@ -20,11 +8,31 @@ export default async function sitemap() {
     lastModified: new Date().toISOString(),
   }));
 
-  const slugs = await getProjectSlugs();
-  const projectRoutes = slugs.map((slug) => ({
-    url: `${SITE_URL}/projects/${slug}`,
-    lastModified: new Date().toISOString(),
-  }));
+  let projectRoutes = [];
+  try {
+    const projects = await getProjects();
+    projectRoutes = (projects || [])
+      .filter((p) => p.slug)
+      .map((p) => ({
+        url: `${SITE_URL}/projects/${p.slug}`,
+        lastModified: p.updated_at || new Date().toISOString(),
+      }));
+  } catch (err) {
+    console.warn("Sitemap: Failed to load dynamic projects:", err);
+  }
 
-  return [...staticRoutes, ...projectRoutes];
+  let blogRoutes = [];
+  try {
+    const posts = await getBlogPosts();
+    blogRoutes = (posts || [])
+      .filter((post) => post.slug || post.id)
+      .map((post) => ({
+        url: `${SITE_URL}/blog/${post.slug || post.id}`,
+        lastModified: post.date || new Date().toISOString(),
+      }));
+  } catch (err) {
+    console.warn("Sitemap: Failed to load dynamic blogs:", err);
+  }
+
+  return [...staticRoutes, ...projectRoutes, ...blogRoutes];
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,7 +23,8 @@ import {
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import MovingTextBg from '../../components/MovingTextBg';
-import initialProjects from '../../../public/projects.json';
+import BackendStatusCard from '../../components/BackendStatusCard';
+import { getProjectBySlug } from '@/lib/api';
 
 const TECH_ICON_MAP = {
   python: "/icons/devicon/python.svg",
@@ -94,37 +95,36 @@ function getTechIcon(name) {
 export default function ProjectDetailPage() {
   const params = useParams();
   const slug = params.slug;
-  const initialProject = Array.isArray(initialProjects) ? initialProjects.find(p => p.slug === slug) : null;
-  const [project, setProject] = useState(initialProject || null);
-  const [isLoading, setIsLoading] = useState(!initialProject);
+  const [project, setProject] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const [activeGalleryImage, setActiveGalleryImage] = useState(0);
   const [copiedIndex, setCopiedIndex] = useState(null);
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const response = await fetch('/projects.json');
-        const projects = await response.json();
-        const foundProject = projects.find(p => p.slug === slug);
-
-        if (!foundProject) {
-          setIsLoading(false);
-          return;
-        }
-
-        setProject(prev => {
-          if (JSON.stringify(prev) === JSON.stringify(foundProject)) return prev;
-          return foundProject;
-        });
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching project:', error);
-        setIsLoading(false);
+  const fetchProject = useCallback(async () => {
+    setIsLoading(true);
+    setHasError(false);
+    try {
+      const foundProject = await getProjectBySlug(slug);
+      if (!foundProject) {
+        setProject(null);
+        setHasError(true);
+      } else {
+        setProject(foundProject);
+        setHasError(false);
       }
-    };
-
-    fetchProject();
+    } catch (error) {
+      console.error('Error fetching project:', error);
+      setProject(null);
+      setHasError(true);
+    } finally {
+      setIsLoading(false);
+    }
   }, [slug]);
+
+  useEffect(() => {
+    fetchProject();
+  }, [fetchProject]);
 
   const formatCode = (code) => {
     return code.trim().replace(/\r\n/g, '\n').replace(/\r/g, '\n');
@@ -382,19 +382,22 @@ export default function ProjectDetailPage() {
   if (!project) {
     return (
       <div className="min-h-screen bg-[#fcfcfd] flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white border border-zinc-200 rounded-3xl p-8 text-center shadow-lg">
-          <Code2 className="w-12 h-12 text-zinc-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-zinc-900 mb-2">Project Not Found</h1>
-          <p className="text-zinc-500 text-sm mb-6">
-            The project you are looking for does not exist or has moved.
-          </p>
-          <Link
-            href="/projects"
-            className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-zinc-900 hover:bg-black text-white rounded-full text-xs font-semibold transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to All Projects
-          </Link>
+        <div className="max-w-xl w-full">
+          <BackendStatusCard
+            title={hasError ? "Project Offline" : "Project Not Found"}
+            resourceName={`project "${slug}"`}
+            onRetry={fetchProject}
+            theme="light"
+          />
+          <div className="text-center mt-6">
+            <Link
+              href="/projects"
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 bg-zinc-900 hover:bg-black text-white rounded-full text-xs font-semibold transition-colors"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to All Projects
+            </Link>
+          </div>
         </div>
       </div>
     );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
@@ -10,7 +10,8 @@ import {
   ExternalLink,
 } from "lucide-react";
 import MovingTextBg from "./MovingTextBg";
-import defaultProjects from "../../public/projects.json";
+import BackendStatusCard from "./BackendStatusCard";
+import { getProjects } from "@/lib/api";
 
 // Real brand icons mapping from public/icons/devicon and public/icons/flaticon
 const TECH_ICON_MAP = {
@@ -48,21 +49,34 @@ const TECH_ICON_MAP = {
 };
 
 export default function ProjectsSection() {
-  const [projects, setProjects] = useState(defaultProjects);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  const loadProjects = useCallback(async () => {
+    setLoading(true);
+    setIsError(false);
+    try {
+      const data = await getProjects();
+      if (Array.isArray(data) && data.length > 0) {
+        setProjects(data);
+        setIsError(false);
+      } else {
+        setProjects([]);
+        setIsError(true);
+      }
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+      setProjects([]);
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    fetch("/api/admin/data?type=projects")
-      .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setProjects((prev) => {
-            if (JSON.stringify(prev) === JSON.stringify(data)) return prev;
-            return data;
-          });
-        }
-      })
-      .catch((err) => console.error("Error fetching projects:", err));
-  }, []);
+    loadProjects();
+  }, [loadProjects]);
 
   return (
     <MovingTextBg text="PROJECTS" textColor="text-white" className="bg-black">
@@ -95,9 +109,33 @@ export default function ProjectsSection() {
             </div>
           </div>
 
-          {/* Authentic Asymmetric Bento Grid: No awkward blank spaces, perfectly balanced cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-            {projects.map((item, idx) => {
+          {/* State Handling: Loading Skeletons vs Offline Card vs Bento Grid */}
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+              {[1, 2, 3].map((n) => (
+                <div key={n} className="h-72 rounded-3xl bg-zinc-900/60 border border-zinc-800 p-6 flex flex-col justify-between">
+                  <div className="space-y-3">
+                    <div className="w-16 h-4 bg-zinc-800 rounded-md" />
+                    <div className="w-48 h-6 bg-zinc-800 rounded-md" />
+                    <div className="w-full h-12 bg-zinc-800/60 rounded-md" />
+                  </div>
+                  <div className="flex gap-2">
+                    <div className="w-16 h-6 bg-zinc-800 rounded-full" />
+                    <div className="w-16 h-6 bg-zinc-800 rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : isError || projects.length === 0 ? (
+            <BackendStatusCard
+              title="Projects Unavailable"
+              resourceName="portfolio case studies"
+              onRetry={loadProjects}
+              theme="dark"
+            />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+              {projects.map((item, idx) => {
               const total = projects.length;
               const projectNumber = String(idx + 1).padStart(2, "0");
               const technologies = item.technologies || item.tech || [];
@@ -419,6 +457,7 @@ export default function ProjectsSection() {
               );
             })}
           </div>
+          )}
 
         </div>
       </section>

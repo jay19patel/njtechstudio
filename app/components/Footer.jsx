@@ -1,18 +1,10 @@
 "use client";
 
 import { Instagram, Linkedin, Youtube } from "lucide-react";
-import { usePathname } from "next/navigation";
 import Link from "next/link";
 import CTASection from "./CTASection";
 
 export default function Footer() {
-  const pathname = usePathname();
-
-  // Hide Footer completely on the admin panel
-  if (pathname && pathname.startsWith("/admin")) {
-    return null;
-  }
-
   return (
     <footer className="mt-auto">
       <CTASection />
