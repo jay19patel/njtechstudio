@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   Check,
@@ -18,7 +19,26 @@ import {
   Layers,
   Zap,
 } from "lucide-react";
+import { getWorkflowSteps } from "@/lib/api";
 import MovingTextBg from "./MovingTextBg";
+import BackendStatusCard from "./BackendStatusCard";
+
+const ICON_MAP = {
+  GitBranch,
+  Sparkles,
+  ShieldCheck,
+  Rocket,
+  Cpu,
+  Database,
+  Server,
+  Boxes,
+  Network,
+  Search,
+  HardDrive,
+  Layers,
+  Zap,
+  Cloud,
+};
 
 const GcpLogo = ({ className = "w-4 h-4" }) => (
   <img src="/icons/devicon/googlecloud.svg" alt="Google Cloud" className={`${className} object-contain shrink-0`} />
@@ -69,38 +89,35 @@ const VectorDbLogo = ({ className = "w-4 h-4" }) => (
   </svg>
 );
 
-const WORKFLOW_STEPS = [
-  {
-    step: "01",
-    title: "Blueprint & System Architecture",
-    tag: "Discovery & Design",
-    desc: "We transform your raw startup concept into a robust technical blueprint. We design normalized schemas, clean REST/gRPC API contracts, and choose the optimal tech stack (Next.js, Python, FastAPI).",
-    icon: GitBranch,
-  },
-  {
-    step: "02",
-    title: "AI-Accelerated Development",
-    tag: "High Velocity Build",
-    desc: "We build rapidly with modular code and autonomous AI agent workflows. Intelligent data ingestion, vector search, and clean, responsive interfaces that turn early prototypes into production-grade systems.",
-    icon: Sparkles,
-  },
-  {
-    step: "03",
-    title: "Automated QA & Hardening",
-    tag: "Zero Regressions",
-    desc: "Every commit runs through automated test suites, bundle analyzers, and latency audits. We optimize database queries to guarantee sub-50ms API response times before anything goes live.",
-    icon: ShieldCheck,
-  },
-  {
-    step: "04",
-    title: "Production Scale & Deployment",
-    tag: "Multi-Zone Launch",
-    desc: "We deploy containerized microservices across cloud infrastructure (GCP/Vercel) with CI/CD automation, monitoring, and automated failover for continuous 99.9% uptime.",
-    icon: Rocket,
-  },
-];
-
 export default function CodingFeaturesSection() {
+  const [steps, setSteps] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  const loadSteps = useCallback(async () => {
+    setLoading(true);
+    setIsError(false);
+    try {
+      const data = await getWorkflowSteps();
+      if (Array.isArray(data) && data.length > 0) {
+        setSteps(data);
+        setIsError(false);
+      } else {
+        setSteps(null);
+        setIsError(true);
+      }
+    } catch {
+      setSteps(null);
+      setIsError(true);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    loadSteps();
+  }, [loadSteps]);
+
   return (
     <MovingTextBg text="WORKFLOW" textColor="text-gray-400" className="bg-[#fcfcfd]">
       <section className="relative w-full bg-transparent text-zinc-900 py-16 sm:py-20 lg:py-28 overflow-hidden border-t border-zinc-100">
@@ -120,52 +137,83 @@ export default function CodingFeaturesSection() {
             </p>
           </div>
 
-          {/* 4-Step Execution Flow Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {WORKFLOW_STEPS.map((step, idx) => {
-              const StepIcon = step.icon;
-              return (
-                <motion.div
-                  key={step.step}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.1 }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  whileHover={{ y: -4 }}
-                  className="bg-white border border-zinc-200/80 rounded-3xl p-6 sm:p-7 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-zinc-300 transition-[border-color,box-shadow] duration-300 flex flex-col justify-between group"
+          {/* Dynamic Execution Flow Cards: Loading Skeleton vs Error vs Live Cards */}
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {[1, 2, 3, 4].map((n) => (
+                <div
+                  key={n}
+                  className="bg-white border border-zinc-200/80 rounded-3xl p-6 sm:p-7 animate-pulse flex flex-col justify-between"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-5">
-                      <span className="text-xs font-mono font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100/80">
-                        {step.step}
-                      </span>
-                      <div className="w-9 h-9 rounded-xl bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-colors">
-                        <StepIcon className="w-4 h-4" />
+                      <div className="w-10 h-6 bg-zinc-200 rounded-md" />
+                      <div className="w-9 h-9 rounded-xl bg-zinc-100" />
+                    </div>
+                    <div className="w-24 h-4 bg-zinc-200 rounded mb-2" />
+                    <div className="w-40 h-6 bg-zinc-200 rounded mb-4" />
+                    <div className="w-full h-16 bg-zinc-100 rounded" />
+                  </div>
+                  <div className="pt-5 mt-5 border-t border-zinc-100 w-28 h-4 bg-zinc-100 rounded" />
+                </div>
+              ))}
+            </div>
+          ) : isError || !steps || steps.length === 0 ? (
+            <div className="mb-16">
+              <BackendStatusCard
+                title="Execution Flow Unavailable"
+                resourceName="Startup & AI execution steps"
+                onRetry={loadSteps}
+                theme="light"
+              />
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+              {steps.map((step, idx) => {
+                const StepIcon = ICON_MAP[step.icon] || Rocket;
+                return (
+                  <motion.div
+                    key={step.id || step.step_num}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.1 }}
+                    transition={{ duration: 0.5, delay: idx * 0.1 }}
+                    whileHover={{ y: -4 }}
+                    className="bg-white border border-zinc-200/80 rounded-3xl p-6 sm:p-7 shadow-[0_4px_20px_rgb(0,0,0,0.03)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-zinc-300 transition-[border-color,box-shadow] duration-300 flex flex-col justify-between group"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between mb-5">
+                        <span className="text-xs font-mono font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-md border border-indigo-100/80">
+                          {step.step_num}
+                        </span>
+                        <div className="w-9 h-9 rounded-xl bg-zinc-50 border border-zinc-200 flex items-center justify-center text-zinc-600 group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-colors">
+                          <StepIcon className="w-4 h-4" />
+                        </div>
                       </div>
+
+                      <div className="mb-2">
+                        <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">
+                          {step.tag}
+                        </span>
+                        <h3 className="text-lg font-semibold text-zinc-900 tracking-tight mt-1 group-hover:text-indigo-600 transition-colors">
+                          {step.title}
+                        </h3>
+                      </div>
+
+                      <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed mt-3">
+                        {step.description}
+                      </p>
                     </div>
 
-                    <div className="mb-2">
-                      <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider block">
-                        {step.tag}
-                      </span>
-                      <h3 className="text-lg font-semibold text-zinc-900 tracking-tight mt-1 group-hover:text-indigo-600 transition-colors">
-                        {step.title}
-                      </h3>
+                    <div className="pt-5 mt-5 border-t border-zinc-100 flex items-center text-xs font-medium text-zinc-400 group-hover:text-indigo-600 transition-colors">
+                      <span>{step.phase_milestone || `Phase ${step.step_num} Milestone`}</span>
+                      <span className="ml-auto text-indigo-500">→</span>
                     </div>
-
-                    <p className="text-xs sm:text-sm text-zinc-500 leading-relaxed mt-3">
-                      {step.desc}
-                    </p>
-                  </div>
-
-                  <div className="pt-5 mt-5 border-t border-zinc-100 flex items-center text-xs font-medium text-zinc-400 group-hover:text-indigo-600 transition-colors">
-                    <span>Phase {step.step} Milestone</span>
-                    <span className="ml-auto text-indigo-500">→</span>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          )}
 
           {/* Interactive Flow Architecture & CI/CD Pipeline Mockups */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
