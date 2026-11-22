@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { WifiOff, RefreshCw, Server, AlertCircle } from "lucide-react";
+import { WifiOff, RefreshCw, Server } from "lucide-react";
 
 /**
  * High-tech, interactive live status card displayed when backend service

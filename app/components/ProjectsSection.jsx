@@ -48,16 +48,17 @@ const TECH_ICON_MAP = {
   "shadcn ui": "/icons/devicon/tailwindcss.svg",
 };
 
-export default function ProjectsSection() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function ProjectsSection({ initialProjects }) {
+  const [projects, setProjects] = useState(initialProjects || []);
+  const [loading, setLoading] = useState(!initialProjects);
   const [isError, setIsError] = useState(false);
 
-  const loadProjects = useCallback(async () => {
+  const loadProjects = useCallback(async (force = false) => {
+    if (!force && initialProjects && initialProjects.length > 0) return;
     setLoading(true);
     setIsError(false);
     try {
-      const data = await getProjects();
+      const data = await getProjects({ forceReload: force });
       if (Array.isArray(data) && data.length > 0) {
         setProjects(data);
         setIsError(false);
@@ -72,11 +73,13 @@ export default function ProjectsSection() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initialProjects]);
 
   useEffect(() => {
-    loadProjects();
-  }, [loadProjects]);
+    if (!initialProjects || initialProjects.length === 0) {
+      loadProjects();
+    }
+  }, [initialProjects, loadProjects]);
 
   return (
     <MovingTextBg text="PROJECTS" textColor="text-white" className="bg-black">

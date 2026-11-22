@@ -5,16 +5,17 @@ import MovingTextBg from "./MovingTextBg";
 import BackendStatusCard from "./BackendStatusCard";
 import { getTestimonials } from "@/lib/api";
 
-export default function TestimonialSection() {
-  const [testimonials, setTestimonials] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function TestimonialSection({ initialTestimonials }) {
+  const [testimonials, setTestimonials] = useState(initialTestimonials || []);
+  const [loading, setLoading] = useState(!initialTestimonials);
   const [isError, setIsError] = useState(false);
 
-  const loadTestimonials = useCallback(async () => {
+  const loadTestimonials = useCallback(async (force = false) => {
+    if (!force && initialTestimonials && initialTestimonials.length > 0) return;
     setLoading(true);
     setIsError(false);
     try {
-      const data = await getTestimonials();
+      const data = await getTestimonials({ forceReload: force });
       if (Array.isArray(data) && data.length > 0) {
         setTestimonials(data);
         setIsError(false);
@@ -29,11 +30,13 @@ export default function TestimonialSection() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initialTestimonials]);
 
   useEffect(() => {
-    loadTestimonials();
-  }, [loadTestimonials]);
+    if (!initialTestimonials || initialTestimonials.length === 0) {
+      loadTestimonials();
+    }
+  }, [initialTestimonials, loadTestimonials]);
 
   const row1 = testimonials.length > 0 ? [...testimonials, ...testimonials] : [];
   const row2 = testimonials.length > 0 ? [...testimonials, ...testimonials] : [];

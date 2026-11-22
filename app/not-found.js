@@ -1,4 +1,3 @@
-import React from "react";
 import MovingTextBg from "./components/MovingTextBg";
 
 export default function NotFound() {

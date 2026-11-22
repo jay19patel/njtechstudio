@@ -8,17 +8,18 @@ import MovingTextBg from "./MovingTextBg";
 import BackendStatusCard from "./BackendStatusCard";
 import { getFaqs } from "@/lib/api";
 
-export default function FAQSection() {
+export default function FAQSection({ initialFaqs }) {
   const [openItem, setOpenItem] = useState(null);
-  const [faqItems, setFaqItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [faqItems, setFaqItems] = useState(initialFaqs || []);
+  const [loading, setLoading] = useState(!initialFaqs);
   const [isError, setIsError] = useState(false);
 
-  const loadFaqs = useCallback(async () => {
+  const loadFaqs = useCallback(async (force = false) => {
+    if (!force && initialFaqs && initialFaqs.length > 0) return;
     setLoading(true);
     setIsError(false);
     try {
-      const data = await getFaqs();
+      const data = await getFaqs({ forceReload: force });
       if (Array.isArray(data) && data.length > 0) {
         setFaqItems(data);
         setIsError(false);
@@ -33,11 +34,13 @@ export default function FAQSection() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initialFaqs]);
 
   useEffect(() => {
-    loadFaqs();
-  }, [loadFaqs]);
+    if (!initialFaqs || initialFaqs.length === 0) {
+      loadFaqs();
+    }
+  }, [initialFaqs, loadFaqs]);
 
   const toggleItem = (id) => {
     setOpenItem(openItem === id ? null : id);

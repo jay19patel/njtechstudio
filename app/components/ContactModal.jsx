@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, ArrowLeft, Check, Loader2, Sparkles } from "lucide-react";
+import { X, ArrowRight, ArrowLeft, Check, Loader2 } from "lucide-react";
 
 export default function ContactModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);

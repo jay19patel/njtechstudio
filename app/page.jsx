@@ -5,10 +5,11 @@ import WhyChooseUs from "./components/WhyChooseUs";
 import FAQSection from "./components/faqSection";
 import YoutubeSection from "./components/YoutubeSection";
 import TestimonialSection from "./components/TestimonialSection";
-import { getSiteConfig } from "@/lib/api";
+import { getSiteConfig, getHomeOverview } from "@/lib/api";
 
 export async function generateMetadata() {
-  const config = (await getSiteConfig()) || {};
+  const homeData = await getHomeOverview();
+  const config = homeData?.site || (await getSiteConfig()) || {};
   const siteName = config.brand_name || "NJTechStudio";
   const title = config.meta_title || "NJTechStudio | AI Automation & Custom Web Studio";
   const description =
@@ -50,7 +51,8 @@ export async function generateMetadata() {
 }
 
 export default async function Home() {
-  const config = (await getSiteConfig()) || {};
+  const homeData = await getHomeOverview();
+  const config = homeData?.site || (await getSiteConfig()) || {};
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -95,12 +97,12 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <HeroSection />
-      <CodingFeaturesSection />
-      <ProjectsSection />
+      <CodingFeaturesSection initialSteps={homeData?.workflow_steps} />
+      <ProjectsSection initialProjects={homeData?.featured_projects} />
       <WhyChooseUs />
-      <YoutubeSection />
-      <TestimonialSection />
-      <FAQSection />
+      <YoutubeSection initialVideos={homeData?.videos} />
+      <TestimonialSection initialTestimonials={homeData?.testimonials} />
+      <FAQSection initialFaqs={homeData?.faqs} />
     </div>
   );
 }

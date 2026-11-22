@@ -89,16 +89,17 @@ const VectorDbLogo = ({ className = "w-4 h-4" }) => (
   </svg>
 );
 
-export default function CodingFeaturesSection() {
-  const [steps, setSteps] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function CodingFeaturesSection({ initialSteps }) {
+  const [steps, setSteps] = useState(initialSteps || null);
+  const [loading, setLoading] = useState(!initialSteps);
   const [isError, setIsError] = useState(false);
 
-  const loadSteps = useCallback(async () => {
+  const loadSteps = useCallback(async (force = false) => {
+    if (!force && initialSteps) return;
     setLoading(true);
     setIsError(false);
     try {
-      const data = await getWorkflowSteps();
+      const data = await getWorkflowSteps({ forceReload: force });
       if (Array.isArray(data) && data.length > 0) {
         setSteps(data);
         setIsError(false);
@@ -112,11 +113,13 @@ export default function CodingFeaturesSection() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initialSteps]);
 
   useEffect(() => {
-    loadSteps();
-  }, [loadSteps]);
+    if (!initialSteps) {
+      loadSteps();
+    }
+  }, [initialSteps, loadSteps]);
 
   return (
     <MovingTextBg text="WORKFLOW" textColor="text-gray-400" className="bg-[#fcfcfd]">

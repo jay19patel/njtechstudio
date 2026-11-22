@@ -5,17 +5,18 @@ import MovingTextBg from "./MovingTextBg";
 import BackendStatusCard from "./BackendStatusCard";
 import { getVideos } from "@/lib/api";
 
-export default function YoutubeSection() {
+export default function YoutubeSection({ initialVideos }) {
   const [playingVideo, setPlayingVideo] = useState(null);
-  const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [cards, setCards] = useState(initialVideos || []);
+  const [loading, setLoading] = useState(!initialVideos);
   const [isError, setIsError] = useState(false);
 
-  const loadVideos = useCallback(async () => {
+  const loadVideos = useCallback(async (force = false) => {
+    if (!force && initialVideos && initialVideos.length > 0) return;
     setLoading(true);
     setIsError(false);
     try {
-      const data = await getVideos();
+      const data = await getVideos({ forceReload: force });
       if (Array.isArray(data) && data.length > 0) {
         setCards(data);
         setIsError(false);
@@ -30,11 +31,13 @@ export default function YoutubeSection() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initialVideos]);
 
   useEffect(() => {
-    loadVideos();
-  }, [loadVideos]);
+    if (!initialVideos || initialVideos.length === 0) {
+      loadVideos();
+    }
+  }, [initialVideos, loadVideos]);
 
   return (
     <MovingTextBg text="CONTENT" textColor="text-gray-400" className="bg-[#fcfcfd]">

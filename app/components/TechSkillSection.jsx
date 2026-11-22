@@ -5,16 +5,17 @@ import { motion } from "framer-motion";
 import { getSkillsGrouped } from "@/lib/api";
 import BackendStatusCard from "./BackendStatusCard";
 
-export default function TechSkillSection() {
-  const [toolsData, setToolsData] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function TechSkillSection({ initialSkills }) {
+  const [toolsData, setToolsData] = useState(initialSkills || null);
+  const [loading, setLoading] = useState(!initialSkills);
   const [isError, setIsError] = useState(false);
 
-  const loadSkills = useCallback(async () => {
+  const loadSkills = useCallback(async (force = false) => {
+    if (!force && initialSkills) return;
     setLoading(true);
     setIsError(false);
     try {
-      const data = await getSkillsGrouped();
+      const data = await getSkillsGrouped({ forceReload: force });
       if (data && typeof data === "object" && Object.keys(data).length > 0) {
         setToolsData(data);
         setIsError(false);
@@ -28,11 +29,13 @@ export default function TechSkillSection() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [initialSkills]);
 
   useEffect(() => {
-    loadSkills();
-  }, [loadSkills]);
+    if (!initialSkills) {
+      loadSkills();
+    }
+  }, [initialSkills, loadSkills]);
 
   const sectionsConfig = [
     {

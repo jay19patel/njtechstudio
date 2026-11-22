@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { motion, AnimatePresence, useScroll, useMotionValueEvent, MotionConfig } from "framer-motion";
-import MovingTextBg from "./MovingTextBg";
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from "framer-motion";
 import AudioPlayer from "./AudioPlayer";
-import { Menu, X, MessageSquare, Bot, Send, Sparkles, Globe, ChevronUp, Layers } from "lucide-react";
+import { Menu, X, Send, Sparkles, Globe, ChevronUp, Layers } from "lucide-react";
 import { useContactModal } from "../context/ContactModalContext";
+import { useStudioChat } from "@/hooks/use-studio-chat";
+import StudioChat from "./StudioChat";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -17,28 +17,20 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [chatInput, setChatInput] = useState("");
-  const [chatMessages, setChatMessages] = useState([
-    {
-      id: 1,
-      sender: "assistant",
-      text: "👋 Hi! Thanks for visiting NJTechStudio. Ask me anything about custom Web+AI development, ERP automation, or start your project inquiry!",
-    },
-  ]);
+  const chat = useStudioChat();
   const [isNavigating, setIsNavigating] = useState(false);
-  const chatEndRef = useRef(null);
 
   const [hidden, setHidden] = useState(false);
   const router = useRouter();
 
-  const scrollToBottom = () => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
+  const { load: loadChat } = chat;
   useEffect(() => {
-    if (isChatOpen) {
-      scrollToBottom();
-    }
-  }, [chatMessages, isChatOpen]);
+    if (!isChatOpen) return;
+    loadChat();
+    const onKey = (e) => e.key === "Escape" && setIsChatOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isChatOpen, loadChat]);
 
   const handleLogoClick = async (e) => {
     e?.preventDefault();
@@ -74,30 +66,10 @@ export default function Navbar() {
 
   const handleChatSubmit = (e) => {
     e.preventDefault();
-    const text = chatInput.trim();
-    if (!text) return;
-
-    const userMsg = { id: Date.now(), sender: "user", text };
-    const botMsg = {
-      id: Date.now() + 1,
-      sender: "assistant",
-      text: `Thanks for your query: "${text}"! 🚀 Jay Patel from NJ Tech Studio will review your message. Click 'Start A Project' below to share your project details directly!`,
-    };
-
-    setChatMessages((prev) => [...prev, userMsg, botMsg]);
+    if (!chatInput.trim() || chat.busy) return;
+    chat.send(chatInput);
     setChatInput("");
-    if (!isChatOpen) setIsChatOpen(true);
-  };
-
-  const handleQuickPill = (label) => {
-    const userMsg = { id: Date.now(), sender: "user", text: `Tell me about ${label}` };
-    const botMsg = {
-      id: Date.now() + 1,
-      sender: "assistant",
-      text: `Thanks for inquiring about ${label}! 🚀 Click 'Start A Project' below to submit your project requirements directly.`,
-    };
-    setChatMessages((prev) => [...prev, userMsg, botMsg]);
-    if (!isChatOpen) setIsChatOpen(true);
+    setIsChatOpen(true);
   };
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -162,70 +134,7 @@ export default function Navbar() {
               transition={{ duration: 0.25 }}
               className="bg-white/95 backdrop-blur-xl border border-zinc-200/80 text-zinc-900 rounded-3xl p-4 shadow-[0_12px_40px_rgba(0,0,0,0.08)] space-y-3.5 relative overflow-hidden"
             >
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md">
-                    <Bot className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="text-sm font-black text-zinc-900 uppercase tracking-tight">
-                      Studio AI Assistant
-                    </h4>
-                    <p className="text-[11px] text-zinc-500 font-semibold">
-                      Real-time project & deal intelligence
-                    </p>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsChatOpen(false)}
-                  className="w-7 h-7 bg-zinc-50 hover:bg-zinc-100 border border-zinc-200 text-zinc-600 rounded-full flex items-center justify-center transition-colors cursor-pointer"
-                  aria-label="Close assistant"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Scrollable Chat History Log */}
-              <div className="max-h-56 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin">
-                {chatMessages.map((msg) => (
-                  <div
-                    key={msg.id}
-                    className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
-                  >
-                    <div
-                      className={`p-3 rounded-2xl text-xs font-semibold leading-relaxed max-w-[88%] ${
-                        msg.sender === "user"
-                          ? "bg-indigo-600 text-white rounded-tr-none shadow-md"
-                          : "bg-zinc-50 text-zinc-800 border border-zinc-200/80 rounded-tl-none shadow-sm"
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
-                  </div>
-                ))}
-                <div ref={chatEndRef} />
-              </div>
-
-              {/* Quick Action Suggestion Pills */}
-              <div className="flex flex-wrap gap-2 pt-1 border-t border-zinc-100">
-                <button
-                  type="button"
-                  onClick={() => handleQuickPill("Web & AI Dev")}
-                  className="px-3 py-1.5 bg-white hover:bg-zinc-50 border border-zinc-200/80 text-zinc-700 hover:text-zinc-900 rounded-xl text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-                >
-                  <span>📊 Web & AI Dev</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickPill("ERP Systems")}
-                  className="px-3 py-1.5 bg-white hover:bg-zinc-50 border border-zinc-200/80 text-zinc-700 hover:text-zinc-900 rounded-xl text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
-                >
-                  <span>👥 ERP Systems</span>
-                </button>
-              </div>
+              <StudioChat chat={chat} onClose={() => setIsChatOpen(false)} />
             </motion.div>
           )}
         </AnimatePresence>
@@ -280,7 +189,9 @@ export default function Navbar() {
             </div>
             <input
               type="text"
-              placeholder="Ask AI Assistant or start inquiry..."
+              placeholder={chat.busy ? "Assistant is replying…" : "Ask AI Assistant or start inquiry..."}
+              maxLength={2000}
+              aria-label="Message the AI assistant"
               value={chatInput}
               onFocus={() => setIsChatOpen(true)}
               onChange={(e) => {
@@ -291,7 +202,8 @@ export default function Navbar() {
             />
             <button
               type="submit"
-              className="absolute right-1 w-7 h-7 sm:w-8 sm:h-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-md transition-transform active:scale-95 cursor-pointer"
+              disabled={chat.busy || !chatInput.trim()}
+              className="disabled:opacity-50 disabled:cursor-not-allowed absolute right-1 w-7 h-7 sm:w-8 sm:h-8 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full flex items-center justify-center shadow-md transition-transform active:scale-95 cursor-pointer"
               aria-label="Send query"
             >
               <Send className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
@@ -318,7 +230,7 @@ export default function Navbar() {
               <div className="hidden lg:flex lg:col-span-5 flex-col justify-between p-12 xl:p-16 border-r border-zinc-200 bg-white pt-44 lg:pt-48 xl:pt-52 pb-28 xl:pb-32 shadow-[0_8px_30px_rgb(0,0,0,0.02)] z-10">
                 <div className="space-y-6">
                   <div className="inline-block px-3 py-1 bg-zinc-50 border border-zinc-200 text-zinc-500 text-xs font-bold uppercase tracking-widest font-mono shadow-sm">
-                    // STUDIO PHILOSOPHY
+                    {"// STUDIO PHILOSOPHY"}
                   </div>
                   
                   <h3 className="text-3xl xl:text-4xl font-black text-zinc-900 leading-tight">

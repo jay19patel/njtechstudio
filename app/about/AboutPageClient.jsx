@@ -42,6 +42,7 @@ export default function AboutPageClient({ initialData }) {
   const profile = aboutData?.profile || initialData?.profile || {};
   const stats = aboutData?.stats || initialData?.stats || [];
   const blocks = aboutData?.blocks || initialData?.blocks || [];
+  const skills = aboutData?.skills || initialData?.skills || null;
 
   return (
     <div className="bg-[#fcfcfd] text-zinc-900 min-h-screen">
@@ -125,7 +126,7 @@ export default function AboutPageClient({ initialData }) {
         )}
       </MovingTextBg>
 
-      <TechSkillSection />
+      <TechSkillSection initialSkills={skills} />
     </div>
   );
 }
